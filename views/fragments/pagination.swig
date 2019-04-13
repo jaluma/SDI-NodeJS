@@ -1,5 +1,4 @@
 <nav aria-label="pagination">
-	<!--/*@thymesVar id="page" type="org.springframework.data.domain.Page<com.uniovi.entities.Mark>"*/-->
 	<ul class="pagination justify-content-center" th:if="${page != null && page.getTotalPages() > 1}">
 		<li class="page-item">
 			<a class="page-link indigo" href="javascript:clickPageButton(0)"><span aria-hidden="true">&#171;</span></a>
@@ -34,7 +33,6 @@
             window.location.search = searchParams.toString();
             $().load(url);
         }
-
         /*]]>*/
 	</script>
 </nav>

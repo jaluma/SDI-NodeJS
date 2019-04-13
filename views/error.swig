@@ -7,12 +7,13 @@
 			<span>{{ error.status }} - {{ message }}</span>
 		</h1>
 
+		{# temporal #}
 		<pre>{{ error.stack }}</pre>
 
 		<p class="text-center align-middle">
 			<a class="btn btn-outline-danger btn-lg" href="/">
 				<i class="material-icons align-middle">home</i>
-				<span class="align-middle" text="#{error.go_home}"></span>
+				<span class="align-middle">{{ translation.error.go.home }}</span>
 			</a>
 		</p>
 	</div>

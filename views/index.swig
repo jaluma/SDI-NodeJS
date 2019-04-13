@@ -1,12 +1,12 @@
 {% extends 'layout.swig' %}
 
 {#{% set page_title = {{__("index.header")}} %}#}
-{% set page_title = hola %}
+{% block title %} Inicio {% endblock %}
 
 {% block body %}
 
 	<div class="container" style="text-align: center">
-		<h2>{{ __("welcome.message") }}</h2>
+		<h2>{{ translation.welcome.message }}</h2>
 		<div class="col-sm-5" style="display: inline-block;">
 			<div class="card jumbotron jumbotron_flex">
 				<div class="card-body" style="text-align: center">
@@ -15,6 +15,7 @@
 				</div>
 			</div>
 		</div>
+
 		<div class="col-sm-5" style="display: inline-block;">
 			<div class="card jumbotron jumbotron_flex">
 				<div class="card-body" style="text-align: center">
@@ -23,7 +24,6 @@
 				</div>
 			</div>
 		</div>
-
 
 		<div class="card jumbotron">
 			<div class="card-body" style="text-align: center">

@@ -1,78 +1,155 @@
 {
-  "welcome.message": "Welcome@",
-  "language.en": "English",
-  "language.es": "English",
-  "nav.login": "Identíficate",
-  "nav.signup": "Register",
-  "signup.header": "Register as a user",
-  "signup.repitPassword": "Repeat Password:",
-  "footer.text": "©2019 Copyright: SDI - MyWallaPop",
-  "util.send": "Send",
-  "Error.empty": "This field cannot be empty",
-  "Error.signup.email.length": "The email must have a minimum of 6",
-  "Error.signup.email.duplicate": "A user with this email already exists.",
-  "Error.signup.password.length": "The password must be between 6 and 24 characters long.",
-  "Error.signup.passwordConfirm.coincidence": "Passwords do not match",
-  "Error.login.error": "Incorrect user or password.",
-  "Error.buy.insuficient": "You don't have the necessary balance.",
-  "user.email": "Email",
-  "user.name": "Name",
-  "user.lastName": "Surname",
-  "user.password": "Password",
-  "user.list.header": "Users",
-  "nav.users": "User management",
-  "nav.chats": "Chats",
-  "placeholder.search": "search text",
-  "item.header.add": "Sell something",
-  "item.title": "Title",
-  "item.description": "Description",
-  "item.date": "Date",
-  "item.price": "Price €",
-  "item.add": "Sell something",
-  "nav.user.name": "{0}",
-  "nav.user.money": "{0} €",
-  "nav.home": "Home page",
-  "sell.list.header": "Object List",
-  "nav.sells.add": "Add an offer",
-  "nav.sells.list": "List of available offers",
-  "item.buy": "Buy",
-  "item.buyed": "Sold",
-  "nav.title": "MyWallapop",
-  "nav.sales.other": "Buy",
-  "nav.sales.mySales": "My offers",
-  "nav.sells.myList": "List of my offers",
-  "item.seller": "Seller",
-  "sell.list.title": "Buy",
-  "sell.mylist.title": "My offers",
-  "sell.mylist.header": "My products for sale",
-  "user.money": "Balance (€)",
-  "user.details.header": "User details",
-  "home.user.personal": "Personal zone",
-  "index.header": "Home",
-  "index.user.details": "Account details",
-  "login.header": "Login",
-  "index.signup": "Are you already registered?",
-  "index.new": "Are you new?",
-  "index.searching": "Hello, what are you looking for?",
-  "admin.list.header": "User list",
-  "item.add.header": "Sell",
-  "item.details.header": "Product details",
-  "user.signout": "Disconnect",
-  "nav.sells.bought": "My shopping",
-  "user.buyed.list": "Shopping from: {0}",
-  "chat.header": "Conversation",
-  "placeholder.chat": "Write a message",
-  "chat.conversacion": "Chat with {0}",
-  "chat.contact": "Contact",
-  "Error.buy.id": "This object cannot be purchased.",
-  "error.go_home": "Back to Home",
-  "modal.highlighter.title": "Highlight offer",
-  "modal.highlighter.body": "This has a cost of 20€ which will be subtracted from the available balance. Are you sure you want to do this?",
-  "modal.highlighter.button": "Highlight",
-  "item.highlighter.body": "Highlighting objects allows the object to appear on the main tab of other people allowing it to reach many more people. This action has a cost of 20€. It will be deducted from the balance.",
-  "home.highlighter": "Outstanding offers",
-  "error.highlighter": "No tiene el saldo disponible.",
-  "placeholder.search.item": "title or description",
-  "nav.admin.log": "System log",
-  "tooltip.hightlighter": "Hightlighter offer"
+  "welcome": {
+    "message": "Welcome"
+  },
+  "language": {
+    "en": "English",
+    "es": "Spanish"
+  },
+  "nav": {
+    "title": "MyWallapop",
+    "login": "Login",
+    "signup": "Register",
+    "signout": "Disconnect",
+    "users": "User management",
+    "chats": "chats",
+    "home": "Home page",
+    "user": {
+      "name": "%s",
+      "money": "%d %s"
+    },
+    "sell": {
+      "bought": "My purchases",
+      "add": "Add an offer",
+      "list": "List of available offers"
+    },
+    "salts": {
+      "other": "Buy",
+      "mySales": "My offers",
+      "myList": "List of my offers"
+    },
+    "admin": {
+      "log": "System log"
+    }
+  },
+  "signup": {
+    "header": "Register as a user",
+    "Repeat Password": "Repeat Password"
+  },
+  "footer": {
+    "text": "©2019 Copyright: SDI - MyWallaPop, Javier Martínez Álvarez"
+  },
+  "useful": {
+    "send": "Send"
+  },
+  "user": {
+    "email": "Email",
+    "name": "Name",
+    "lastName": "Surname",
+    "password": "Password",
+    "money": "balance",
+    "list": {
+      "header": "Users"
+    },
+    "details": {
+      "header": "User details"
+    },
+    "buyed": {
+      "list": "Purchases of: "
+    },
+    "signout": "Disconnect"
+  },
+  "item": {
+    "title": "Title",
+    "description": "Description",
+    "date": "Date",
+    "price": "Price",
+    "buy": "Buy",
+    "buyed": "Sold",
+    "seller": "Seller",
+    "add": {
+      "header": "Home"
+    },
+    "details": {
+      "header": "Product details"
+    },
+    "highlighter": {
+      "body": "Highlighting objects allows the object to exit in the main tab of other people allowing it to reach many more people. This action has a cost of 20€_ It will be deducted from the balance."
+    }
+  },
+  "sell": {
+    "list": {
+      "header": "List of Objects",
+      "title": "Buy"
+    },
+    "mylist": {
+      "header": "My products for sale",
+      "title": "My offers"
+    }
+  },
+  "home": {
+    "user": {
+      "personal": "Personal zone",
+      "details": "Details of my account"
+    },
+    "Highlighter": "Featured Offers"
+  },
+  "index": {
+    "header": "Home",
+    "signup": "Are you already registered?",
+    "new": "Are you new?",
+    "searching": "Hello, what are you looking for?",
+    "user": {
+      "details": "Account details"
+    }
+  },
+  "chat": {
+    "header": "Conversation",
+    "conversation": "Chat con ",
+    "contact": "Contact"
+  },
+  "login": {
+    "header": "Login"
+  },
+  "admin": {
+    "list": {
+      "header": "List of users"
+    }
+  },
+  "placeholder": {
+    "search": "text to search",
+    "Chat": "Write a message"
+  },
+  "tooltip": {
+    "hightlighter": "Highlight offer"
+  },
+  "modal": {
+    "highlighter": {
+      "title": "Highlight offer",
+      "body": "This has a cost of 20€ that will be subtracted from the available balance. Are you sure you want to do it?",
+      "button": "Highlight"
+    }
+  },
+  "error": {
+    "synup": {
+    },
+    "password": {
+      "length": "Password must be between 6 and 24 characters.",
+      "conincidence": "Passwords do not match."
+    },
+    "login": {
+      "Incorrect": "Incorrect username or password."
+    },
+    "buy": {
+      "insifcient": "He doesn't have the necessary balance."
+    }
+  },
+  "go": {
+    "home": "Back to Home"
+  },
+  "buy": {
+    "id": "This object cannot be bought."
+  },
+  "highlighter": "You don't have the available balance.",
+  "page": "Error..."
 }

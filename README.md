@@ -3,12 +3,13 @@
 ### Prerequisites
 
 ```
-JDK 1.8
+NodeJS
+npm
 ```
 
 ## Construido con
-* Java 1.8.1
-* SpringBoot v2
+* NodeJS
+* Express
 * JQuery, BootStrap
 * Material Design for Bootstrap
 

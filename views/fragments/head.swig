@@ -13,7 +13,6 @@
 
 <link rel="stylesheet" href="/css/style.css">
 
-<script src="/js/languages.js"></script>
 <script src="/js/paramget.js"></script>
 <script src="/js/tableClick.js"></script>
 

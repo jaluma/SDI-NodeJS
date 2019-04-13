@@ -1,5 +1,4 @@
 <div>
-	<!--/*@thymesVar id="searchText" type="java.util.String"*/-->
 	<div class="bmd-form-group bmd-collapse-inline pull-xs-right">
 		<label for="searchText"></label>
 		<input class="form-control" type="text" id="searchText" th:placeholder="#{placeholder.search}"

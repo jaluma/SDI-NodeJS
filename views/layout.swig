@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	{% block head %}{% include 'fragments/head.swig' %}{% endblock %}
-	<title> {{ page_title }} </title>
+	<title>MyWallapop - {% block title %}{% endblock %}</title>
 </head>
 <body>
 {% block nav %}{% include './fragments/nav.swig' %}{% endblock %}

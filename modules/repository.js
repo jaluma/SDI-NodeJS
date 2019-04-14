@@ -1,74 +1,44 @@
-module.exports = class Repositorio {
-    constructor(app) {
-        this.app = app;
-        this.mongo = require('mongodb');
-        this.url = "mongodb://admin:oyp2XjWbzg2xGidG@cluster0-shard-00-00-ixeb7.mongodb.net:27017,cluster0-shard-00-01-ixeb7.mongodb.net:27017,cluster0-shard-00-02-ixeb7.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true";
-        this.page = 4;
-    }
+const mongo = require('mongodb');
 
-    static callback(err, result, funcionCallback) {
-        funcionCallback(err ? null : result);
-    }
+const url = "mongodb://admin:oyp2XjWbzg2xGidG@cluster0-shard-00-00-ixeb7.mongodb.net:27017,cluster0-shard-00-01-ixeb7.mongodb.net:27017,cluster0-shard-00-02-ixeb7.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true";
+const page = 4;
 
-    insert(collection, funcionCallback, item) {
-        this.connection(funcionCallback, (db) => {
-            db.collection(collection).insert(item, (err, result) => {
-                Repositorio.callback(err, result.ops[0]._id, funcionCallback);
-            });
-        });
-    }
+module.exports = {
+    async insert(collection, item) {
+        const db = await mongo.MongoClient.connect(url);
+        let itemR = await db.collection(collection).insertOne(item);
+        return itemR.ops[0];
+    },
 
-    update(collection, funcionCallback, criterio, item) {
-        this.connection(funcionCallback, (db) => {
-            db.collection(collection).update(criterio, {$set: item}, (err, result) => {
-                Repositorio.callback(err, result, funcionCallback);
-            });
-        });
-    }
+    async update(collection, item, filter) {
+        const db = await mongo.MongoClient.connect(url);
+        return await db.collection(collection).updateOne(filter, {$set: item});
+    },
 
-    delete(collection, funcionCallback, criterio) {
-        this.connection(funcionCallback, (db) => {
-            db.collection(collection).remove(criterio, (err, result) => {
-                Repositorio.callback(err, result, funcionCallback);
-            });
-        });
-    }
+    async delete(collection, item) {
+        const db = await mongo.MongoClient.connect(url);
+        return await db.collection(collection).removeOne(item);
+    },
 
-    findAll(collection, funcionCallback, criterio) {
-        this.connection(funcionCallback, (db) => {
-            db.collection(collection).find(criterio).toArray((err, result) => {
-                Repositorio.callback(err, result, funcionCallback);
-            });
-        });
-    }
+    async findOne(collection, filter) {
+        const db = await mongo.MongoClient.connect(url);
+        return await db.collection(collection).findOne(filter);
+    },
 
-    findAllPage(collection, funcionCallback, criterio, pg) {
-        this.connection(funcionCallback, (db) => {
-            db.collection(collection).find(criterio).skip((pg - 1) * 4).limit(this.page).toArray((err, result) => {
-                Repositorio.callback(err, result, funcionCallback);
-            });
-        });
-    }
+    async findAll(collection, filter) {
+        const db = await mongo.MongoClient.connect(url);
+        let cursor = await db.collection(collection).find(filter);
+        return cursor.toArray();
+    },
 
-    size(collection, funcionCallback, criterio) {
-        this.connection(() => {
-        }, (db) => {
-            db.collection(collection).count(criterio, (err, numItems) => {
-                Repositorio.callback(err, numItems, funcionCallback);
-            });
-        });
-    }
+    async findAllPage(collection, filter, pg) {
+        const db = await mongo.MongoClient.connect(url);
+        let cursor = await db.collection(collection).find(filter).skip((pg - 1) * 4).limit(page);
+        return cursor.toArray();
+    },
 
-    connection(funcionCallback, funcionExito) {
-        this.mongo.MongoClient.connect(this.url, (err, db) => {
-            if (err) {
-                funcionCallback(null);
-                return;
-            }
-
-            funcionExito(db);
-        });
-    }
-
+    async count(collection, filter) {
+        const db = await mongo.MongoClient.connect(url);
+        return await db.collection(collection).count(filter);
+    },
 };
-

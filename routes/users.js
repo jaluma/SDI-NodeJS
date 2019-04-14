@@ -1,7 +1,7 @@
 const app = require('../app');
-const superagent = require('superagent');
 
 let router = global.express.Router();
+let rest = app.get("rest");
 
 /* GET users listing. */
 router.get('/login', function (req, res) {
@@ -34,19 +34,38 @@ router.post('/login', function (req, res) {
         password: secPassword
     };
 
-    superagent
-        .post(app.get('url') + '/api/user/login')
-        .send(filter) // sends a JSON post body
-        .set('accept', 'json')
-        .end((err, response) => {
-            if (err) {
-                req.session.error = err;
-                return res.redirect("/login");
-            }
+    let configuracion = {
+        url: app.get('url') + '/api/user/login',
+        method: "post",
+        headers: {
+            "Content-Type": "application/json; charset=utf-8",
+        },
+        body: filter
+    };
 
-            req.session.currentUser = JSON.parse(response.text).user;
-            res.redirect("/success");
-        });
+    rest(configuracion, function (err, response, body) {
+        if (err) {
+            req.session.error = err;
+            return res.redirect("/login");
+        }
+
+        req.session.currentUser = JSON.parse(body).user;
+        res.redirect("/success");
+    });
+
+    // superagent
+    //     .post(app.get('url') + '/api/user/login')
+    //     .send(filter) // sends a JSON post body
+    //     .set('accept', 'json')
+    //     .end((err, response) => {
+    //         if (err) {
+    //             req.session.error = err;
+    //             return res.redirect("/login");
+    //         }
+    //
+    //         req.session.currentUser = JSON.parse(response.text).user;
+    //         res.redirect("/success");
+    //     });
 });
 
 router.post('/signup', async function (req, res) {
@@ -59,18 +78,23 @@ router.post('/signup', async function (req, res) {
         passwordConfirm: req.body.passwordConfirm,
     };
 
-    superagent
-        .post(app.get('url') + '/api/user/add')
-        .send(user) // sends a JSON post body
-        .set('accept', 'json')
-        .end((err, response) => {
-            if (err) {
-                return res.redirect("/signup");
-            }
+    let configuracion = {
+        url: app.get('url') + '/api/signup',
+        method: "post",
+        headers: {
+            "Content-Type": "application/json; charset=utf-8",
+        },
+        body: user
+    };
 
-            req.session.currentUser = JSON.parse(response.text);
-            res.redirect('/success')
-        });
+    await rest(configuracion, await function (err, response, body) {
+        if (err) {
+            return res.redirect("/signup");
+        }
+
+        req.session.currentUser = JSON.parse(body);
+        res.redirect('/success')
+    });
 });
 
 module.exports = router;

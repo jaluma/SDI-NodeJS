@@ -1,13 +1,26 @@
+const repo = require("../repository");
+
 module.exports = {
-    init: function (app) {
-        let repo = require("../repository");
-        this.repositorio = new repo(app);
+    async addUser(usuario) {
+        try {
+            return await repo.insert('users', usuario);
+        } catch (error) {
+            return null;
+        }
     },
-    addUser: function (usuario, funcionCallback) {
-        this.repositorio.insert('users', funcionCallback, usuario);
+    async findOne(filter) {
+        try {
+            return await repo.findOne('users', filter);
+        } catch (error) {
+            return null;
+        }
     },
-    findAllUsers: function (criterio, funcionCallback) {
-        this.repositorio.findAll('users', funcionCallback, criterio);
+    async findAllUsers(filter) {
+        try {
+            return await repo.findAll('users', filter);
+        } catch (error) {
+            return null;
+        }
     },
 
 };

@@ -8,6 +8,13 @@ module.exports = {
             return null;
         }
     },
+    async removeUser(filter) {
+        try {
+            return await repo.delete('users', filter);
+        } catch (error) {
+            return null;
+        }
+    },
     async findOne(filter) {
         try {
             return await repo.findOne('users', filter);

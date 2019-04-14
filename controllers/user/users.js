@@ -1,20 +1,29 @@
-const app = require('../app');
+const app = require('../../app');
 
 let router = global.express.Router();
-let rest = app.get("rest");
+let rest = require("request");
 
 /* GET users listing. */
 router.get('/login', function (req, res) {
     let request = {};
-    if (req.session.error !== null) {
-        request = {error: req.session.error};
+    let error = req.session.error;
+    if (error) {
+        request = {error: error};
+        req.session.error = null;
     }
 
     res.render('login', request);
 });
 
 router.get('/signup', function (req, res) {
-    res.render('signup');
+    let request = {};
+    let error = req.session.error;
+    if (error) {
+        request = {error: error};
+        req.session.error = null;
+    }
+
+    res.render('signup', request);
 });
 
 router.get('/logout', function (req, res) {
@@ -34,38 +43,26 @@ router.post('/login', function (req, res) {
         password: secPassword
     };
 
-    let configuracion = {
-        url: app.get('url') + '/api/user/login',
+    let configuration = {
+        url: app.get('url') + '/api/login',
         method: "post",
         headers: {
             "Content-Type": "application/json; charset=utf-8",
         },
-        body: filter
+        body: JSON.stringify(filter)
     };
 
-    rest(configuracion, function (err, response, body) {
-        if (err) {
-            req.session.error = err;
+    rest(configuration, function (err, response, body) {
+        let error = JSON.parse(body).error;
+        if (err || error) {
+            req.session.error = error;
             return res.redirect("/login");
         }
 
         req.session.currentUser = JSON.parse(body).user;
+        req.session.token = JSON.parse(body).token;
         res.redirect("/success");
     });
-
-    // superagent
-    //     .post(app.get('url') + '/api/user/login')
-    //     .send(filter) // sends a JSON post body
-    //     .set('accept', 'json')
-    //     .end((err, response) => {
-    //         if (err) {
-    //             req.session.error = err;
-    //             return res.redirect("/login");
-    //         }
-    //
-    //         req.session.currentUser = JSON.parse(response.text).user;
-    //         res.redirect("/success");
-    //     });
 });
 
 router.post('/signup', async function (req, res) {
@@ -78,21 +75,24 @@ router.post('/signup', async function (req, res) {
         passwordConfirm: req.body.passwordConfirm,
     };
 
-    let configuracion = {
+    let configuration = {
         url: app.get('url') + '/api/signup',
         method: "post",
         headers: {
             "Content-Type": "application/json; charset=utf-8",
         },
-        body: user
+        body: JSON.stringify(user)
     };
 
-    await rest(configuracion, await function (err, response, body) {
-        if (err) {
+    await rest(configuration, await function (err, response, body) {
+        let error = JSON.parse(body).error;
+        if (err || error) {
+            req.session.error = error;
             return res.redirect("/signup");
         }
 
-        req.session.currentUser = JSON.parse(body);
+        req.session.currentUser = JSON.parse(body).user;
+        req.session.token = JSON.parse(body).token;
         res.redirect('/success')
     });
 });

@@ -10,9 +10,9 @@ const swig = require('swig');
 const bodyParser = require('body-parser');
 const i18n = require("i18n-express");
 const geolang = require("geolang-express");
-const permission = require('permission');
 const csrf = require('csurf');
 const crypto = require('crypto');
+const mongo = require('mongodb');
 
 global.express = express;
 global.__basedir = __dirname;
@@ -71,19 +71,23 @@ app.set('rest', rest);
 app.set('jwt', jwt);
 app.set('encrypt', "javi");
 app.set('crypto', crypto);
+app.set('mongo', mongo);
 
 app.set('url', "https://localhost:8081");
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 module.exports = app;
 
 // interceptors
-require("./routes/interceptors/i_api_users");
 require("./routes/interceptors/i_users");
+require("./routes/interceptors/i_api_users");
+
 // api
 app.use(require("./routes/api/user/api_users"));
-// routes
-app.use(require("./routes/users"));
 
-const rother = require("./routes/other");
+// routes
+app.use(require("./controllers/user/users"));
+app.use(require("./controllers/admin/admins"));
+
+const rother = require("./controllers/other");
 rother.home(app);
 rother.error(app);

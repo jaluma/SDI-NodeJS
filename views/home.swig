@@ -34,9 +34,9 @@
 								<tbody>
 								<tr class="tr-static-height">
 									{% for item in hightlighter_items %}
-										<td class="clickable-row" data-href="/item/details/' {{ item.id }}">{{ translation.item.title }}</td>
-										<td class="clickable-row" data-href="/item/details/' {{ item.id }}">{{ translation.item.description }}</td>
-										<td class="clickable-row" data-href="/item/details/' {{ item.id }}">{{ translation.item.price }}</td>
+										<td class="clickable-row" data-href="/item/details/' + {{ item.id }}">{{ item.title }}</td>
+										<td class="clickable-row" data-href="/item/details/' + {{ item.id }}">{{ item.description }}</td>
+										<td class="clickable-row" data-href="/item/details/' + {{ item.id }}">{{ item.price }}</td>
 									{% endfor %}
 								</tr>
 								</tbody>
@@ -48,12 +48,14 @@
 		</div>
 
 		<div class="mb-3 text-center">
-			<div class="col-sm-12" sec:authorize="hasRole('ROLE_STANDARD')">
+			{% if currentUser.role === "STANDARD_ROLE" %}
+				<div class="col-sm-12">
 				<div class="card" style="height: 100%">
 					<h2 class="card-title card-title-pro">{{ translation.nav.sales.mySales }}</h2>
 					{#					<div th:replace="item/mylist :: tableItems" class="card block"></div>#}
 				</div>
 			</div>
+			{% endif %}
 		</div>
 	</div>
 {% endblock %}

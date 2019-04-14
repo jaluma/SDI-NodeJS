@@ -6,6 +6,18 @@ const router = global.express.Router();
 // services
 let usersService = require(path.join(__basedir, "modules/services/users"));
 
+router.get("/api/user/list", async function (req, res) {
+    let filter = req.body.filter;
+    let users = await usersService.findAllUsers(filter);
+
+    if (users === null || users.length <= 0) {
+        return error(res, "email");
+    }
+
+    res.status(200);
+    return res.json(users);
+});
+
 router.post("/api/signup", async function (req, res) {
     if (req.body.email === null) {
         return error(res, "email");
@@ -13,7 +25,7 @@ router.post("/api/signup", async function (req, res) {
 
     let users = await usersService.findAllUsers({email: req.body.email});
 
-    if (users !== null && users.length > 0) {
+    if (users === null || users.length <= 0) {
         return error(res, "email");
     }
     if (req.body.password === null || req.body.passwordConfirm === null || req.body.password !== req.body.passwordConfirm) {
@@ -54,14 +66,13 @@ router.post("/api/login", async function (req, res) {
         return error(res, "password");
     }
 
-    let secPassword = app.get('crypto').createHmac('sha256', app.get('encrypt')).update(req.body.password).digest('hex');
     let user = {
         email: req.body.email,
-        password: secPassword
+        password: req.body.password
     };
 
     let users = await usersService.findAllUsers(user);
-    if (users == null || users.length === 0) {
+    if (users === null || users.length === 0) {
         return error(res, "login");
     }
 
@@ -78,6 +89,18 @@ router.post("/api/login", async function (req, res) {
     };
     res.status(200);
     res.json(json);
+});
+
+router.delete("/api/user/delete/:id", async function (req, res) {
+    let user = {"_id": app.get('mongo').ObjectID(req.params.id)};
+
+    user = await usersService.removeUser(user);
+    if (user === null) {
+        return error(res, "delete", 500);
+    }
+
+    res.status(200);
+    res.json(user);
 });
 
 function error(res, param, status = 442) {

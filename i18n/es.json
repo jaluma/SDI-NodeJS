@@ -131,7 +131,7 @@
     }
   },
   "error": {
-    "synup": {
+    "signup": {
       "email": {
         "length": "El email debe tener mínimo 6",
         "duplicate": "Un usuario con este correo ya existe."

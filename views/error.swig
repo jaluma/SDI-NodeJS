@@ -1,5 +1,7 @@
 {% extends 'layout.swig' %}
 
+{% block title %} {{ translation.error.page }} {% endblock %}
+
 {% block body %}
 	<div class="container">
 		<h1 class="alert alert-danger text-center">

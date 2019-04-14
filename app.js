@@ -5,13 +5,17 @@ const logger = require('morgan');
 const rest = require('request');
 const jwt = require('jsonwebtoken');
 const expressSession = require('express-session');
-const crypto = require('crypto');
 const fileUpload = require('express-fileupload');
-const mongo = require('mongodb');
 const swig = require('swig');
 const bodyParser = require('body-parser');
 const i18n = require("i18n-express");
 const geolang = require("geolang-express");
+const permission = require('permission');
+const csrf = require('csurf');
+const crypto = require('crypto');
+
+global.express = express;
+global.__basedir = __dirname;
 
 const app = express();
 
@@ -33,6 +37,12 @@ app.use(expressSession({
     resave: true,
     saveUninitialized: true
 }));
+// app.use(csrf({ cookie: true }));
+// app.use(function (req, res, next) {
+//     res.cookie('XSRF-TOKEN', req.csrfToken());
+//     res.locals.csrftoken = req.csrfToken();
+//     next();
+// });
 // post body
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -59,13 +69,21 @@ swig.setDefaults({cache: false});
 // save app variables
 app.set('rest', rest);
 app.set('jwt', jwt);
-app.set('db', '');
-app.set('dbPassword', 'abcdefg');
+app.set('encrypt', "javi");
 app.set('crypto', crypto);
 
+app.set('url', "https://localhost:8081");
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+module.exports = app;
+
+// interceptors
+require("./routes/interceptors/i_api_users");
+require("./routes/interceptors/i_users");
+// api
+app.use(require("./routes/api/user/api_users"));
 // routes
-const rother = require("./routes/rother");
+app.use(require("./routes/users"));
+
+const rother = require("./routes/other");
 rother.home(app);
 rother.error(app);
-
-module.exports = app;

@@ -3,21 +3,19 @@ module.exports = {
         app.get('/', function (req, res) {
             res.render('index');
         });
-    },
-    globalLocals: function (req, res, next) {
-        res.locals({
-            permission: require('permission'),
+        app.get('/home', function (req, res) {
+            // añadir lista de destacados
+            res.render('home');
         });
-        next();
     },
     error: function (app) {
-        const createError = require('http-errors');
         // catch 404 and forward to error handler
-        app.use(function (req, res, next) {
+        app.get(function (req, res, next) {
+            let createError = require('http-errors');
             next(createError(404));
         });
 
-        app.use(function (err, req, res, next) {
+        app.get(function (err, req, res, next) {
             // set locals, only providing error in development
             res.locals.message = err.message;
             res.locals.error = req.app.get('env') === 'development' ? err : {};

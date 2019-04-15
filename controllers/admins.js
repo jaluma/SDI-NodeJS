@@ -5,6 +5,8 @@ let rest = require("request");
 
 /* GET users listing. */
 router.get('/admin/list', async function (req, res) {
+    let page = req.query.page || 1;
+
     let configuration = {
         url: app.get('url') + '/api/user/list',
         method: "get",
@@ -12,11 +14,18 @@ router.get('/admin/list', async function (req, res) {
             "Content-Type": "application/json; charset=utf-8",
             "token": req.session.token
         },
-        body: JSON.stringify({})
+        body: JSON.stringify({
+            page: page
+        })
     };
 
     await rest(configuration, await function (err, response, body) {
-        res.render('admin/list', {usersList: JSON.parse(body)});
+        body = JSON.parse(body);
+        res.render('admin/list', {
+            usersList: body.array,
+            actual: page,
+            totalPages: body.pages
+        });
     });
 });
 

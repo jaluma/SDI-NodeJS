@@ -9,9 +9,19 @@ let itemsService = require(path.join(__basedir, "modules/services/items"));
 /* GET users listing. */
 router.get("/api/item/list", async function (req, res) {
     let filter = req.body.filter;
-    let items = await itemsService.findAllUsers(filter);
+    let pages = req.body.page;
 
-    if (items === null || items.length <= 0) {
+    let items;
+    if (pages) {
+        items = await itemsService.findAllItemsPage(filter, pages);
+    } else {
+        items = {
+            array: await itemsService.findAllItems(filter),
+            pages: 0
+        };
+    }
+
+    if (items === null || items.array.length <= 0) {
         return error(res, "list");
     }
 

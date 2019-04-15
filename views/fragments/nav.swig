@@ -3,12 +3,12 @@
 	{% if currentUser === null %}
 		<a class="navbar-brand" href="/">
 			<img src="/img/logo.png" width="30" height="30" class="d-inline-block align-center" alt="logo">
-			<span>{{ translation.nav.title }}</span>
+			<span>{{ __("nav.title") }}</span>
 		</a>
 	{% else %}
 		<a class="navbar-brand" href="/home">
 			<img src="/img/logo.png" width="30" height="30" class="d-inline-block align-center" alt="logo">
-			<span>{{ translation.nav.title }}</span>
+			<span>{{ __("nav.title") }}</span>
 		</a>
 	{% endif %}
 
@@ -24,10 +24,10 @@
 		<ul class="navbar-nav mr-auto">
 			{% if currentUser !== null and currentUser.role === "ADMIN_ROLE" %}
 				<li class="nav-item">
-					<a class="nav-link" id="adminListMenu" href="/admin/list">{{ translation.nav.users }}</a>
+					<a class="nav-link" id="adminListMenu" href="/admin/list">{{ __("nav.users") }}</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" id="adminLog" href="/admin/logging">{{ translation.nav.log }}</a>
+					<a class="nav-link" id="adminLog" href="/admin/logging">{{ __("nav.log") }}</a>
 				</li>
 			{% endif %}
 
@@ -35,26 +35,26 @@
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" id="mySellsDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
 					   aria-expanded="false">
-						<span>{{ translation.nav.sales.mySales }}</span>
+						<span>{{ __("nav.sales.mySales") }}</span>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right dropdown-info" id="mySellsDropdownMenuButton"
 					     aria-labelledby="mySellsDropdownMenuLink">
-						<a id="add" class="dropdown-item" href="/item/add">{{ translation.nav.sales.add }}</a>
-						<a id="myList" class="dropdown-item" href="/item/mylist">{{ translation.nav.sales.myList }}</a>
+						<a id="add" class="dropdown-item" href="/item/add">{{ __("nav.sales.add") }}</a>
+						<a id="myList" class="dropdown-item" href="/item/mylist">{{ __("nav.sales.myList") }}</a>
 					</div>
 				</li>
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" id="sellsDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						<span>{{ translation.nav.sells.other }}</span>
+						<span>{{ __("nav.sells.other") }}</span>
 					</a>
 					<div class="dropdown-menu dropdown-menu-left dropdown-info" id="sellsDropdownMenuButton" aria-labelledby="sellsDropdownMenuLink">
-						<a id="buy" class="dropdown-item" href="/user/purchases">{{ translation.nav.sells.bought }}</a>
-						<a id="list" class="dropdown-item" href="/item/list">{{ translation.nav.sells.list }}</a>
+						<a id="buy" class="dropdown-item" href="/user/purchases">{{ __("nav.sells.bought") }}</a>
+						<a id="list" class="dropdown-item" href="/item/list">{{ __("nav.sells.list") }}</a>
 					</div>
 				</li>
 				<li class="nav-item">
 					<a id="chat" class="nav-link" href="/chat/list"
-					>{{ translation.nav.chats }}</a>
+					>{{ __("nav.chats") }}</a>
 				</li>
 			{% endif %}
 		</ul>
@@ -66,13 +66,13 @@
 				</a>
 				<div class="dropdown-menu dropdown-menu-right dropdown-info" id="languageDropdownMenuButton"
 				     aria-labelledby="languajeDropdownMenuLink">
-					<a id="btnEnglish" value="EN" class="dropdown-item" href="?clang=en-US">
+					<a id="btnEnglish" value="EN" class="dropdown-item" href="?lang=en">
 						<img src="/img/if_uk_flag.png" style="border: 0; float: left; margin-right: 15px" alt="EN"/>
-						<span>{{ translation.language.en }}</span>
+						<span>{{ __("language.en") }}</span>
 					</a>
-					<a id="btnSpanish" value="ES" class="dropdown-item" href="?clang=es-ES">
+					<a id="btnSpanish" value="ES" class="dropdown-item" href="?lang=es">
 						<img src="/img/if_spain_flag.png" style="border: 0; float: left; margin-right: 15px" alt="ES"/>
-						<span>{{ translation.language.es }}</span>
+						<span>{{ __("language.es") }}</span>
 					</a>
 				</div>
 			</li>
@@ -83,8 +83,8 @@
 				</a>
 				<div id="dropdownMenuAccount" class="dropdown-menu dropdown-menu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-333">
 					{% if currentUser === null %}
-						<a class="dropdown-item signup" href="/signup">{{ translation.nav.signup }}</a>
-						<a class="dropdown-item login" href="/login">{{ translation.nav.login }}</a>
+						<a class="dropdown-item signup" href="/signup">{{ __("nav.signup") }}</a>
+						<a class="dropdown-item login" href="/login">{{ __("nav.login") }}</a>
 					{% else %}
 						<a class="dropdown-item login" href="/user/details/{{ currentUser.id }}">
 							<aside class="profile-card">
@@ -95,7 +95,7 @@
 								</header>
 							</aside>
 						</a>
-						<a class="dropdown-item logout" href="/logout">{{ translation.user.signout }}</a>
+						<a class="dropdown-item logout" href="/logout">{{ __("user.signout") }}</a>
 					{% endif %}
 				</div>
 			</li>

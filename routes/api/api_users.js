@@ -9,14 +9,24 @@ let usersService = require(path.join(__basedir, "modules/services/users"));
 /* GET users listing. */
 router.get("/api/user/list", async function (req, res) {
     let filter = req.body.filter;
-    let users = await usersService.findAllUsers(filter);
+    let pages = req.body.page;
 
-    if (users === null || users.length <= 0) {
-        return error(res, "email");
+    let users;
+    if (pages) {
+        users = await usersService.findAllUsersPage(filter, pages);
+    } else {
+        users = {
+            array: await usersService.findAllUsers(filter),
+            pages: 0
+        };
+    }
+
+    if (users === null || users.array.length <= 0) {
+        return error(res, "find");
     }
 
     // delete param password
-    users.forEach(u => delete u.password);
+    users.array.forEach(u => delete u.password);
 
     res.status(200);
     return res.json(users);
@@ -30,7 +40,7 @@ router.post("/api/signup", async function (req, res) {
 
     let users = await usersService.findAllUsers({email: req.body.email});
 
-    if (users === null || users.length <= 0) {
+    if (users === null || users.length > 0) {
         return error(res, "email");
     }
     if (req.body.password === null || req.body.passwordConfirm === null || req.body.password !== req.body.passwordConfirm) {

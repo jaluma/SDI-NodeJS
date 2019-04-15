@@ -43,12 +43,13 @@ router.get('/item/details/:id', function (req, res) {
             return res.redirect("/item/list");
         }
 
-        request.item = JSON.parse(body)[0];
+        request.item = JSON.parse(body).array[0];
         res.render('item/details', request);
     });
 });
 
 router.get('/item/list', function (req, res) {
+    let page = req.query.page || 1;
     let request = {};
     let error = req.session.error;
     if (error) {
@@ -61,7 +62,10 @@ router.get('/item/list', function (req, res) {
         method: "get",
         headers: {
             "Content-Type": "application/json; charset=utf-8",
-        }
+        },
+        body: JSON.stringify({
+            page: page
+        })
     };
 
     rest(configuration, function (err, response, body) {
@@ -71,8 +75,12 @@ router.get('/item/list', function (req, res) {
             return res.redirect("/home");
         }
 
-        request.itemsList = JSON.parse(body);
-        res.render('item/list', request);
+        body = JSON.parse(body);
+        res.render('item/list', {
+            itemsList: body.array,
+            actual: page,
+            totalPages: body.pages
+        });
     });
 });
 

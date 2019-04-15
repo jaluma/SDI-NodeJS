@@ -13,7 +13,6 @@
 
 <link rel="stylesheet" href="/css/style.css">
 
-<script src="/js/paramget.js"></script>
 <script src="/js/tableClick.js"></script>
 
 <script src="https://code.jquery.com/jquery-3.3.1.js"

@@ -1,6 +1,6 @@
 {% extends 'layout.swig' %}
 
-{% block title %} {{ translation.error.page }} {% endblock %}
+{% block title %} {{ __("error.page") }} {% endblock %}
 
 {% block body %}
 	<div class="container">
@@ -15,7 +15,7 @@
 		<p class="text-center align-middle">
 			<a class="btn btn-outline-danger btn-lg" href="/">
 				<i class="material-icons align-middle">home</i>
-				<span class="align-middle">{{ translation.error.go.home }}</span>
+				<span class="align-middle">{{ __("error.go.home") }}</span>
 			</a>
 		</p>
 	</div>

@@ -30,7 +30,8 @@
     },
     "admin": {
       "log": "Log del sistema"
-    }
+    },
+    "log": "nav.log"
   },
   "signup": {
     "header": "Registráte como usuario",
@@ -158,5 +159,6 @@
     "default": {
       "ico": "http://icons.iconarchive.com/icons/papirus-team/papirus-status/256/avatar-default-icon.png"
     }
-  }
+  },
+  "login.header": "login.header"
 }

@@ -33,8 +33,12 @@ module.exports = {
 
     async findAllPage(collection, filter, pg) {
         const db = await mongo.MongoClient.connect(url);
-        let cursor = await db.collection(collection).find(filter).skip((pg - 1) * 4).limit(page);
-        return cursor.toArray();
+        let cursor = await db.collection(collection).find(filter).skip((pg - 1) * page).limit(page);
+        let pages = Math.trunc(await db.collection(collection).count(filter) / page);
+        return {
+            array: await cursor.toArray(),
+            pages: pages + 1
+        };
     },
 
     async count(collection, filter) {

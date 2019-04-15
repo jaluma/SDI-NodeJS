@@ -8,12 +8,11 @@ const expressSession = require('express-session');
 const fileUpload = require('express-fileupload');
 const swig = require('swig');
 const bodyParser = require('body-parser');
-const i18n = require("i18n-express");
-const geolang = require("geolang-express");
 const csrf = require('csurf');
 const crypto = require('crypto');
 const mongo = require('mongodb');
 const fs = require('fs');
+const i18n = require('i18n');
 
 global.express = express;
 global.__basedir = __dirname;
@@ -52,17 +51,26 @@ app.use(expressSession({
 // post body
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+
 //internatization
-app.use(i18n({
-    translationsPath: path.join(__dirname, 'i18n'),
-    siteLangs: ["es", "en"],
-    textsVarName: 'translation',
-    paramLangName: "clang",
-}));
-app.use(geolang({
-    siteLangs: ["es", "en"],
-    cookieLangName: 'glang'
-}));
+i18n.configure({
+    locales: ['es', 'en'],
+    directory: __dirname + '/i18n',
+    defaultLocale: 'es',
+    queryParameter: 'lang',
+    objectNotation: true,
+    api: {
+        '__': 'translate',
+        '__n': 'translateN'
+    },
+});
+
+app.use(function (req, res, next) {
+    res.locals.__ = res.__ = function () {
+        return i18n.__.apply(req, arguments);
+    };
+    next();
+});
 
 // view engine setup
 app.engine('swig', swig.renderFile);

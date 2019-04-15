@@ -1,37 +1,49 @@
-<nav aria-label="pagination">
-	<ul class="pagination justify-content-center" th:if="${page != null && page.getTotalPages() > 1}">
-		<li class="page-item">
-			<a class="page-link indigo" href="javascript:clickPageButton(0)">
-				<span aria-hidden="true">&#171;</span>
-			</a>
-		</li>
-		{% for page in pages %}
-			<li class="page-item" id="pi-{{ page }}">
-				<a class="page-link" href="javascript:clickPageButton({{ page }})">{{ page }}</a>
+{% if actual and totalPages > 1 %}
+	<nav aria-label="pagination">
+		<ul class="pagination justify-content-center">
+			<li class="page-item">
+				<a class="page-link indigo" href="javascript:clickPageButton(0)">
+					<span aria-hidden="true">&#171;</span>
+				</a>
 			</li>
-		{% endfor %}
-		<li class="page-item">
-			<a class="page-link indigo" href="javascript:clickPageButton( {{ actual }} + 2)">
-				<span aria-hidden="true">&#187;</span>
-			</a>
-		</li>
-	</ul>
-	<script th:inline="javascript">
-        /*<![CDATA[*/
-        function clickPageButton(page) {
-            let searchParams = new URLSearchParams(window.location.search);
-            if (searchParams.get("searchText")) {
-                searchParams.set("searchText", $("#searchText").val());
-            }
-            searchParams.set("page", page);
-            window.location.search = searchParams.toString();
-            // temporal, sustituir por refresh en cliente
-            $().load(url);
-        }
+			{% if actual > 1 %}
+				<li class="page-item" id="pi-{{ actual - 1 }}">
+					<a class="page-link indigo" href="javascript:clickPageButton({{ actual - 1 }})">{{ actual - 1 }}</a>
+				</li>
+			{% endif %}
 
-        // enable diferent class actual page
-        let actual = {{ actual }};
-        $("#pi-{{ actual }}").addClass("indigo-dark");
-        /*]]>*/
-	</script>
-</nav>
+			<li class="page-item" id="pi-{{ actual }}">
+				<a class="page-link indigo_dark" href="javascript:clickPageButton({{ actual }})">{{ actual }}</a>
+			</li>
+
+			{% if actual + 1 <= totalPages %}
+				<li class="page-item" id="pi-{{ actual + 1 }}">
+					<a class="page-link indigo" href="javascript:clickPageButton({{ actual + 1 }})">{{ actual + 1 }}</a>
+				</li>
+			{% endif %}
+			<li class="page-item">
+				<a class="page-link indigo" href="javascript:clickPageButton( {{ totalPages }})">
+					<span aria-hidden="true">&#187;</span>
+				</a>
+			</li>
+		</ul>
+		<script th:inline="javascript">
+            /*<![CDATA[*/
+            function clickPageButton(page) {
+                let searchParams = new URLSearchParams(window.location.search);
+                if (searchParams.get("searchText")) {
+                    searchParams.set("searchText", $("#searchText").val());
+                }
+                searchParams.set("page", page);
+                window.location.search = searchParams.toString();
+                // temporal, sustituir por refresh en cliente
+                $().load(url);
+            }
+
+            // enable diferent class actual page
+            let actual = {{ actual }};
+            $("#pi-{{ actual }}").addClass("indigo-dark");
+            /*]]>*/
+		</script>
+	</nav>
+{% endif %}

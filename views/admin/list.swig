@@ -1,10 +1,10 @@
 {% extends '../layout.swig' %}
 
-{% block title %} {{ translation.admin.list.header }} {% endblock %}
+{% block title %} {{ __("admin.list.header") }} {% endblock %}
 
 {% block body %}
 	<div class="container">
-		<h2 th:text="#{user.list.header}">{{ translation.user.list.header }}</h2>
+		<h2>{{ __("user.list.header") }}</h2>
 
 		<div th:replace="fragments/search"></div>
 		<form name="list" class="form-horizontal" method="post" action="/admin/remove">
@@ -13,9 +13,9 @@
 					<thead>
 					<tr>
 						<th class="check-box-table-cell"></th>
-						<th>{{ translation.user.email }}</th>
-						<th>{{ translation.user.name }}</th>
-						<th>{{ translation.user.lastName }}</th>
+						<th>{{ __("user.email") }}</th>
+						<th>{{ __("user.name") }}</th>
+						<th>{{ __("user.lastName") }}</th>
 						<th></th>
 					</tr>
 					</thead>
@@ -34,7 +34,9 @@
 					{% endfor %}
 					</tbody>
 				</table>
-				<footer th:replace="fragments/pagination"></footer>
+
+				{% include '../fragments/pagination.swig' %}
+
 				<script th:inline="javascript">
                     /*<![CDATA[*/
                     let rows = $('#tableUsers tr').length - 1;

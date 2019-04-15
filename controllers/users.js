@@ -61,7 +61,7 @@ router.get('/user/details/:id', function (req, res) {
             return res.redirect("/user/list");
         }
 
-        request.user = JSON.parse(body)[0];
+        request.user = JSON.parse(body).array[0];
         res.render('user/details', request);
     });
 });

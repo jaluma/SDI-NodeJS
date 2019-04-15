@@ -29,5 +29,12 @@ module.exports = {
             return null;
         }
     },
+    async findAllUsersPage(filter, pg) {
+        try {
+            return await repo.findAllPage('users', filter, pg);
+        } catch (error) {
+            return null;
+        }
+    },
 
 };

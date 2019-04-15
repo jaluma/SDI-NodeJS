@@ -29,9 +29,9 @@ module.exports = {
             return null;
         }
     },
-    async findAllUsersPage(filter, pg) {
+    async findAllUsersPage(filter, pg, page = 10) {
         try {
-            return await repo.findAllPage('users', filter, pg);
+            return await repo.findAllPage('users', filter, pg, page);
         } catch (error) {
             return null;
         }

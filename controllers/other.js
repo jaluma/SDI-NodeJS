@@ -5,6 +5,7 @@ module.exports = {
         });
         app.get('/home', function (req, res) {
             // añadir lista de destacados
+            // añadir lista de mis compras
             res.render('home');
         });
     },
@@ -15,7 +16,7 @@ module.exports = {
             next(createError(404));
         });
 
-        app.get(function (err, req, res, next) {
+        app.get(function (err, req, res) {
             // set locals, only providing error in development
             res.locals.message = err.message;
             res.locals.error = req.app.get('env') === 'development' ? err : {};

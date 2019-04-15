@@ -9,6 +9,7 @@
 		<div th:replace="fragments/search"></div>
 		<form name="list" class="form-horizontal" method="post" action="/admin/remove">
 			<div class="table-responsive">
+
 				<table id="tableUsers" class="table table-hover">
 					<thead>
 					<tr>
@@ -42,7 +43,6 @@
                     let rows = $('#tableUsers tr').length - 1;
                     let value = 460 - (rows * 46) + 15;
                     document.getElementById('tableUsers').style.marginBottom = value + ".px";
-                    }
                     /*]]>*/
 				</script>
 				<button type="submit" id="delete" class="btn btn-primary bmd-btn-fab fab indigo"><i class="material-icons">delete</i></button>

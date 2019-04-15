@@ -9,6 +9,9 @@ let usersService = require(path.join(__basedir, "modules/services/users"));
 /* GET users listing. */
 router.get("/api/user/list", async function (req, res) {
     let filter = req.body.filter;
+    if (filter && filter._id) {
+        filter._id = app.get('mongo').ObjectID(filter._id);
+    }
     let pages = req.body.page;
 
     let users;
@@ -21,7 +24,7 @@ router.get("/api/user/list", async function (req, res) {
         };
     }
 
-    if (users === null || users.array.length <= 0) {
+    if (users === null) {
         return error(res, "find");
     }
 

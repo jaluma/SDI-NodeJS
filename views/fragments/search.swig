@@ -13,20 +13,23 @@
 
 	<script th:inline="javascript">
         /*<![CDATA[*/
-        $("#searchButton").click(function () {
-            let searchParams = new URLSearchParams(window.location.search);
-            let value = $("#searchText").val();
-            searchParams.set("searchText", value);
-            searchParams.set("page", "0");
-            window.location.search = searchParams.toString();
-            $().load(url);
+        const url = require("url");
+        $(document).ready(function () {
+            $("#searchButton").click(function () {
+                let searchParams = new URLSearchParams(window.location.search);
+                let value = $("#searchText").val();
+                searchParams.set("searchText", value);
+                searchParams.set("page", "0");
+                window.location.search = searchParams.toString();
+                $().load(url);
+            });
+            $('#clearButton').click(function () {
+                let searchParams = new URLSearchParams(window.location.search);
+                searchParams.delete("searchText");
+                searchParams.delete("page");
+                window.location.search = searchParams.toString();
+            })
         });
-        $('#clearButton').click(function () {
-            let searchParams = new URLSearchParams(window.location.search);
-            searchParams.delete("searchText");
-            searchParams.delete("page");
-            window.location.search = searchParams.toString();
-        })
         /*]]>*/
 	</script>
 </div>

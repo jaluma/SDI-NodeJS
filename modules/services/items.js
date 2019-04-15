@@ -29,9 +29,9 @@ module.exports = {
             return null;
         }
     },
-    async findAllItemsPage(filter, pg) {
+    async findAllItemsPage(filter, pg, page = 5) {
         try {
-            return await repo.findAllPage('items', filter, pg);
+            return await repo.findAllPage('items', filter, pg, page);
         } catch (error) {
             return null;
         }

@@ -9,6 +9,9 @@ let itemsService = require(path.join(__basedir, "modules/services/items"));
 /* GET users listing. */
 router.get("/api/item/list", async function (req, res) {
     let filter = req.body.filter;
+    if (filter && filter._id) {
+        filter._id = app.get('mongo').ObjectID(filter._id);
+    }
     let pages = req.body.page;
 
     let items;
@@ -21,7 +24,7 @@ router.get("/api/item/list", async function (req, res) {
         };
     }
 
-    if (items === null || items.array.length <= 0) {
+    if (items === null) {
         return error(res, "list");
     }
 
@@ -71,3 +74,9 @@ router.post("/api/item/add", async function (req, res) {
 });
 
 module.exports = router;
+
+function error(res, param, status = 442) {
+    res.status(status);
+    return res.json({error: param});
+}
+

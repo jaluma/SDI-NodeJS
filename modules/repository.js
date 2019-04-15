@@ -1,7 +1,6 @@
 const mongo = require('mongodb');
 
 const url = "mongodb://admin:oyp2XjWbzg2xGidG@cluster0-shard-00-00-ixeb7.mongodb.net:27017,cluster0-shard-00-01-ixeb7.mongodb.net:27017,cluster0-shard-00-02-ixeb7.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true";
-const page = 4;
 
 module.exports = {
     async insert(collection, item) {
@@ -31,7 +30,7 @@ module.exports = {
         return cursor.toArray();
     },
 
-    async findAllPage(collection, filter, pg) {
+    async findAllPage(collection, filter, pg, page) {
         const db = await mongo.MongoClient.connect(url);
         let cursor = await db.collection(collection).find(filter).skip((pg - 1) * page).limit(page);
         let pages = Math.trunc(await db.collection(collection).count(filter) / page);

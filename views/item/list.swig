@@ -7,6 +7,7 @@
 		<h2>{{ __("sell.list.header") }}</h2>
 
 		<div class="table-responsive">
+
 			<table id="tableItems" class="table table-hover">
 				<thead>
 				<tr>
@@ -27,7 +28,7 @@
 							<td class="align-middle clickable-row" data-href="{{ '/item/details/' + item._id }}">
 								<a id="buyButton" class="btn btn-secondary link" href="{{ '/item/buy/' + item._id }}">{{ __("item.buy") }}</a>
 								<a id="chatButton" class="btn btn-secondary link"
-								   href="{{ '/chat/create/' + item.id }}">{{ __("item.contact") }}</a>
+								   href="{{ '/chat/create/' + item.id }}">{{ __("chat.contact") }}</a>
 							</td>
 						{% else %}
 							<td class="align-middle">

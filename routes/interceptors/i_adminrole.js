@@ -16,4 +16,3 @@ router.use(async function (req, res, next) {
 });
 
 app.use("/admin/*", router);
-app.use("/user/details/*", router);

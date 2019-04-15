@@ -48,9 +48,12 @@ router.get('/user/details/:id', function (req, res) {
         method: "get",
         headers: {
             "Content-Type": "application/json; charset=utf-8",
+            "token": req.session.token
         },
         body: JSON.stringify({
-            _id: req.params.id
+            filter: {
+                _id: req.params.id
+            }
         })
     };
 
@@ -58,7 +61,7 @@ router.get('/user/details/:id', function (req, res) {
         let error = JSON.parse(body).error;
         if (err || error) {
             req.session.error = error;
-            return res.redirect("/user/list");
+            return res.redirect("/home");
         }
 
         request.user = JSON.parse(body).array[0];

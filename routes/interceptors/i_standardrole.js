@@ -16,5 +16,4 @@ router.use(async function (req, res, next) {
 });
 
 app.use("/item/**", router);
-app.use("/user/**", router);
 app.use("/chat/**", router);

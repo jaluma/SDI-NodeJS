@@ -5,10 +5,8 @@ const logger = require('morgan');
 const rest = require('request');
 const jwt = require('jsonwebtoken');
 const expressSession = require('express-session');
-const fileUpload = require('express-fileupload');
 const swig = require('swig');
 const bodyParser = require('body-parser');
-const csrf = require('csurf');
 const crypto = require('crypto');
 const mongo = require('mongodb');
 const fs = require('fs');
@@ -42,12 +40,6 @@ app.use(expressSession({
     resave: true,
     saveUninitialized: true
 }));
-// app.use(csrf({ cookie: true }));
-// app.use(function (req, res, next) {
-//     res.cookie('XSRF-TOKEN', req.csrfToken());
-//     res.locals.csrftoken = req.csrfToken();
-//     next();
-// });
 // post body
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -71,6 +63,8 @@ app.use(function (req, res, next) {
     };
     next();
 });
+
+app.use(i18n.init);
 
 // view engine setup
 app.engine('swig', swig.renderFile);

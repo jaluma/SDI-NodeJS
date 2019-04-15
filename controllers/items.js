@@ -30,6 +30,7 @@ router.get('/item/details/:id', function (req, res) {
         method: "get",
         headers: {
             "Content-Type": "application/json; charset=utf-8",
+            "token": req.session.token
         },
         body: JSON.stringify({
             _id: req.params.id
@@ -37,9 +38,9 @@ router.get('/item/details/:id', function (req, res) {
     };
 
     rest(configuration, function (err, response, body) {
-        let error = JSON.parse(body).error;
-        if (err || error) {
-            req.session.error = error;
+        let er = JSON.parse(body).error;
+        if (err || er) {
+            req.session.error = er;
             return res.redirect("/item/list");
         }
 
@@ -50,10 +51,8 @@ router.get('/item/details/:id', function (req, res) {
 
 router.get('/item/list', function (req, res) {
     let page = req.query.page || 1;
-    let request = {};
     let error = req.session.error;
     if (error) {
-        request = {error: error};
         req.session.error = null;
     }
 
@@ -62,6 +61,7 @@ router.get('/item/list', function (req, res) {
         method: "get",
         headers: {
             "Content-Type": "application/json; charset=utf-8",
+            "token": req.session.token
         },
         body: JSON.stringify({
             page: page
@@ -69,17 +69,55 @@ router.get('/item/list', function (req, res) {
     };
 
     rest(configuration, function (err, response, body) {
-        let error = JSON.parse(body).error;
-        if (err || error) {
-            req.session.error = error;
+        let er = JSON.parse(body).error;
+        if (err || er) {
+            req.session.error = er;
             return res.redirect("/home");
         }
 
         body = JSON.parse(body);
         res.render('item/list', {
+            itemsList: body.array.filter(i => i.sellerUser._id !== req.session.currentUser._id),
+            actual: page,
+            totalPages: body.pages,
+            error: error
+        });
+    });
+});
+
+router.get('/item/mylist', function (req, res) {
+    let page = req.query.page || 1;
+    let error = req.session.error;
+    if (error) {
+        req.session.error = null;
+    }
+
+    let configuration = {
+        url: app.get('url') + '/api/item/list',
+        method: "get",
+        headers: {
+            "Content-Type": "application/json; charset=utf-8",
+            "token": req.session.token
+        },
+        body: JSON.stringify({
+            filter: {"sellerUser._id": req.session.currentUser._id},
+            page: page
+        })
+    };
+
+    rest(configuration, function (err, response, body) {
+        let er = JSON.parse(body).error;
+        if (err || er) {
+            req.session.error = er;
+            return res.redirect("/item/mylist");
+        }
+
+        body = JSON.parse(body);
+        res.render('item/mylist', {
             itemsList: body.array,
             actual: page,
-            totalPages: body.pages
+            totalPages: body.pages,
+            error: error
         });
     });
 });

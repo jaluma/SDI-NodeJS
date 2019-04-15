@@ -1,30 +1,30 @@
 const repo = require("../repository");
 
 module.exports = {
-    async addUser(user) {
+    async addItem(item) {
         try {
-            return await repo.insert('users', user);
+            return await repo.insert('items', item);
         } catch (error) {
             return null;
         }
     },
-    async removeUser(filter) {
+    async removeItem(filter) {
         try {
-            return await repo.delete('users', filter);
+            return await repo.delete('items', filter);
         } catch (error) {
             return null;
         }
     },
     async findOne(filter) {
         try {
-            return await repo.findOne('users', filter);
+            return await repo.findOne('items', filter);
         } catch (error) {
             return null;
         }
     },
     async findAllUsers(filter) {
         try {
-            return await repo.findAll('users', filter);
+            return await repo.findAll('items', filter);
         } catch (error) {
             return null;
         }

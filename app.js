@@ -13,6 +13,7 @@ const geolang = require("geolang-express");
 const csrf = require('csurf');
 const crypto = require('crypto');
 const mongo = require('mongodb');
+const fs = require('fs');
 
 global.express = express;
 global.__basedir = __dirname;
@@ -28,6 +29,11 @@ app.use(function (req, res, next) {
     next();
 });
 app.use(logger('dev'));
+app.use(logger('common', {
+    stream: fs.createWriteStream('./application.log', {
+        flags: 'a'
+    })
+}));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
@@ -49,14 +55,13 @@ app.use(bodyParser.urlencoded({extended: true}));
 //internatization
 app.use(i18n({
     translationsPath: path.join(__dirname, 'i18n'),
-    siteLangs: ["en", "es"],
+    siteLangs: ["es", "en"],
     textsVarName: 'translation',
-    paramLangName: "lang",
-    defaultLocale: "es",
+    paramLangName: "clang",
 }));
 app.use(geolang({
-    siteLangs: ["en", "es"],
-    cookieLangName: 'lang'
+    siteLangs: ["es", "en"],
+    cookieLangName: 'glang'
 }));
 
 // view engine setup
@@ -78,15 +83,19 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 module.exports = app;
 
 // interceptors
-require("./routes/interceptors/i_users");
+require("./routes/interceptors/i_login");
+require("./routes/interceptors/i_adminrole");
+require("./routes/interceptors/i_standardrole");
 require("./routes/interceptors/i_api_users");
 
 // api
-app.use(require("./routes/api/user/api_users"));
+app.use(require("./routes/api/api_users"));
+app.use(require("./routes/api/api_items"));
 
 // routes
-app.use(require("./controllers/user/users"));
-app.use(require("./controllers/admin/admins"));
+app.use(require("./controllers/users"));
+app.use(require("./controllers/admins"));
+app.use(require("./controllers/items"));
 
 const rother = require("./controllers/other");
 rother.home(app);

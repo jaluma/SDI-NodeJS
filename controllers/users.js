@@ -1,4 +1,4 @@
-const app = require('../../app');
+const app = require('../app');
 
 let router = global.express.Router();
 let rest = require("request");
@@ -35,12 +35,43 @@ router.get('/success', function (req, res) {
     res.redirect('/home');
 });
 
+router.get('/user/details/:id', function (req, res) {
+    let request = {};
+    let error = req.session.error;
+    if (error) {
+        request = {error: error};
+        req.session.error = null;
+    }
+
+    let configuration = {
+        url: app.get('url') + '/api/user/list',
+        method: "get",
+        headers: {
+            "Content-Type": "application/json; charset=utf-8",
+        },
+        body: JSON.stringify({
+            _id: req.params.id
+        })
+    };
+
+    rest(configuration, function (err, response, body) {
+        let error = JSON.parse(body).error;
+        if (err || error) {
+            req.session.error = error;
+            return res.redirect("/user/list");
+        }
+
+        request.user = JSON.parse(body)[0];
+        res.render('user/details', request);
+    });
+});
+
+
 /* POST users listing. */
 router.post('/login', function (req, res) {
-    let secPassword = app.get('crypto').createHmac('sha256', app.get('encrypt')).update(req.body.password).digest('hex');
     let filter = {
         email: req.body.email,
-        password: secPassword
+        password: req.body.password
     };
 
     let configuration = {

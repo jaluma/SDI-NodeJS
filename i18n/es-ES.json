@@ -18,14 +18,14 @@
       "name": "%s",
       "money": "%d %s"
     },
-    "sell": {
+    "sells": {
+      "other": "Comprar",
       "bought": "Mis compras",
-      "add": "Añadir una oferta",
       "list": "Lista de ofertas disponibles"
     },
     "sales": {
-      "other": "Comprar",
       "mySales": "Mis ofertas",
+      "add": "Añadir una oferta",
       "myList": "Lista de mis ofertas"
     },
     "admin": {
@@ -68,13 +68,13 @@
     "buyed": "Vendido",
     "seller": "Vendedor",
     "add": {
-      "header": "Inicio"
+      "header": "Añadir producto"
     },
     "details": {
       "header": "Detalles del producto"
     },
     "highlighter": {
-      "body": "Destacar objetos permite que el objeto salga en la pestaña principal del resto de personas permitiendo que pueda llegar a mucha más gente. Esta acción tiene un coste de 20€_ Se le descontará del saldo."
+      "body": "Destacar objetos permite que el objeto salga en la pestaña principal del resto de personas permitiendo que pueda llegar a mucha más gente. Esta acción tiene un coste de 20€. Se le descontará del saldo."
     }
   },
   "sell": {
@@ -142,16 +142,14 @@
       },
       "login": {
         "incorrect": "Usuario o contraseña incorrecto."
-      },
-      "buy": {
-        "insifcient": "No tiene el saldo necesario."
       }
     },
     "go": {
       "home": "Volver al Inicio"
     },
     "buy": {
-      "id": "Este objeto no se puede comprar."
+      "id": "Este objeto no se puede comprar.",
+      "insuficient": "No tiene el saldo necesario."
     },
     "highlighter": "No tiene el saldo disponible.",
     "page": "Error..."

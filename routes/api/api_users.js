@@ -6,6 +6,7 @@ const router = global.express.Router();
 // services
 let usersService = require(path.join(__basedir, "modules/services/users"));
 
+/* GET users listing. */
 router.get("/api/user/list", async function (req, res) {
     let filter = req.body.filter;
     let users = await usersService.findAllUsers(filter);
@@ -14,10 +15,14 @@ router.get("/api/user/list", async function (req, res) {
         return error(res, "email");
     }
 
+    // delete param password
+    users.forEach(u => delete u.password);
+
     res.status(200);
     return res.json(users);
 });
 
+/* POST users listing. */
 router.post("/api/signup", async function (req, res) {
     if (req.body.email === null) {
         return error(res, "email");
@@ -54,6 +59,9 @@ router.post("/api/signup", async function (req, res) {
         return error(res, "insert", 500);
     }
 
+    // delete param password
+    delete user.password;
+
     res.status(200);
     return res.json(user);
 });
@@ -66,9 +74,10 @@ router.post("/api/login", async function (req, res) {
         return error(res, "password");
     }
 
+    let secPassword = app.get('crypto').createHmac('sha256', app.get('encrypt')).update(req.body.password).digest('hex');
     let user = {
         email: req.body.email,
-        password: req.body.password
+        password: secPassword
     };
 
     let users = await usersService.findAllUsers(user);
@@ -77,6 +86,8 @@ router.post("/api/login", async function (req, res) {
     }
 
     user = users[0];
+    delete user.password;
+
     let token = app.get('jwt').sign({
         usuario: user.email,
         tiempo: Date.now() / 1000
@@ -91,6 +102,7 @@ router.post("/api/login", async function (req, res) {
     res.json(json);
 });
 
+/* DELETE users listing. */
 router.delete("/api/user/delete/:id", async function (req, res) {
     let user = {"_id": app.get('mongo').ObjectID(req.params.id)};
 

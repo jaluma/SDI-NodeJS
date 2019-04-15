@@ -1,4 +1,4 @@
-const app = require('../../app');
+const app = require('../app');
 
 let router = global.express.Router();
 let rest = require("request");

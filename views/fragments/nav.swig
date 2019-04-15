@@ -39,17 +39,17 @@
 					</a>
 					<div class="dropdown-menu dropdown-menu-right dropdown-info" id="mySellsDropdownMenuButton"
 					     aria-labelledby="mySellsDropdownMenuLink">
-						<a id="add" class="dropdown-item" href="/item/add">{{ translation.nav.add }}</a>
-						<a id="myList" class="dropdown-item" href="/item/mylist">{{ translation.nav.sells.myList }}</a>
+						<a id="add" class="dropdown-item" href="/item/add">{{ translation.nav.sales.add }}</a>
+						<a id="myList" class="dropdown-item" href="/item/mylist">{{ translation.nav.sales.myList }}</a>
 					</div>
 				</li>
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" id="sellsDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						<span>{{ translation.nav.sales.other }}</span>
+						<span>{{ translation.nav.sells.other }}</span>
 					</a>
 					<div class="dropdown-menu dropdown-menu-left dropdown-info" id="sellsDropdownMenuButton" aria-labelledby="sellsDropdownMenuLink">
-						<a id="buy" class="dropdown-item" href="/user/purchases">{{ translation.sells.bought }}</a>
-						<a id="list" class="dropdown-item" href="/item/list">{{ translation.sells.list }}</a>
+						<a id="buy" class="dropdown-item" href="/user/purchases">{{ translation.nav.sells.bought }}</a>
+						<a id="list" class="dropdown-item" href="/item/list">{{ translation.nav.sells.list }}</a>
 					</div>
 				</li>
 				<li class="nav-item">
@@ -66,11 +66,11 @@
 				</a>
 				<div class="dropdown-menu dropdown-menu-right dropdown-info" id="languageDropdownMenuButton"
 				     aria-labelledby="languajeDropdownMenuLink">
-					<a id="btnEnglish" value="EN" class="dropdown-item" href="?lang=en">
+					<a id="btnEnglish" value="EN" class="dropdown-item" href="?clang=en-US">
 						<img src="/img/if_uk_flag.png" style="border: 0; float: left; margin-right: 15px" alt="EN"/>
 						<span>{{ translation.language.en }}</span>
 					</a>
-					<a id="btnSpanish" value="ES" class="dropdown-item" href="?lang=es">
+					<a id="btnSpanish" value="ES" class="dropdown-item" href="?clang=es-ES">
 						<img src="/img/if_spain_flag.png" style="border: 0; float: left; margin-right: 15px" alt="ES"/>
 						<span>{{ translation.language.es }}</span>
 					</a>

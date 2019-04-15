@@ -20,3 +20,5 @@ router.use(async function (req, res, next) {
 
 app.use("/home", router);
 app.use("/admin/*", router);
+app.use("/item/**", router);
+app.use("/user/**", router);

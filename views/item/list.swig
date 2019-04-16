@@ -8,6 +8,8 @@
 
 		<div class="table-responsive">
 
+			{% include '../fragments/search.swig' %}
+
 			<table id="tableItems" class="table table-hover">
 				<thead>
 				<tr>

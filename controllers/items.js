@@ -3,8 +3,7 @@ const app = require('../app');
 let router = global.express.Router();
 let rest = require("request");
 
-/* GET users listing. */
-
+/* GET items listing. */
 router.get('/item/add', function (req, res) {
     let request = {};
     let error = req.session.error;
@@ -46,6 +45,81 @@ router.get('/item/details/:id', function (req, res) {
 
         request.item = JSON.parse(body).array[0];
         res.render('item/details', request);
+    });
+});
+
+router.get('/item/delete/:id', function (req, res) {
+    let id = req.params.id;
+    if (id === null) {
+        return error(res, "item");
+    }
+
+    let configuration = {
+        url: app.get('url') + '/api/item/delete/' + id,
+        method: "delete",
+        headers: {
+            "Content-Type": "application/json; charset=utf-8",
+            "token": req.session.token
+        }
+    };
+
+    rest(configuration, function (err, response, body) {
+        let er = JSON.parse(body).error;
+        if (err || er) {
+            req.session.error = er;
+        }
+
+        return res.redirect("/item/mylist");
+    });
+});
+
+router.get('/item/buy/:id', function (req, res) {
+    let id = req.params.id;
+    if (id === null) {
+        return error(res, "item");
+    }
+
+    let configuration = {
+        url: app.get('url') + '/api/item/buy/' + id,
+        method: "put",
+        headers: {
+            "Content-Type": "application/json; charset=utf-8",
+            "token": req.session.token
+        }
+    };
+
+    rest(configuration, function (err, response, body) {
+        let er = JSON.parse(body).error;
+        if (err || er) {
+            req.session.error = er;
+        }
+
+        return res.redirect("/item/mylist");
+    });
+});
+
+router.get('/item/highlighter/:id', function (req, res) {
+    let id = req.params.id;
+    if (id === null) {
+        return error(res, "item");
+    }
+
+    let configuration = {
+        url: app.get('url') + '/api/item/highlighter/' + id,
+        method: "put",
+        headers: {
+            "Content-Type": "application/json; charset=utf-8",
+            "token": req.session.token
+        }
+    };
+
+    rest(configuration, function (err, response, body) {
+        let er = JSON.parse(body).error;
+        if (err || er) {
+            req.session.error = er;
+        }
+
+        return res.redirect("/item/mylist");
     });
 });
 
@@ -119,6 +193,37 @@ router.get('/item/mylist', function (req, res) {
             totalPages: body.pages,
             error: error
         });
+    });
+});
+
+/* POST items listing. */
+router.post('/item/add', function (req, res) {
+    let item = {
+        title: req.body.title,
+        description: req.body.description,
+        date: req.body.date,
+        price: req.body.price,
+        highlighter: req.body.highlighter === 'on',
+        sellerUser: req.session.currentUser,
+    };
+
+    let configuration = {
+        url: app.get('url') + '/api/item/add',
+        method: "post",
+        headers: {
+            "Content-Type": "application/json; charset=utf-8",
+            "token": req.session.token
+        },
+        body: JSON.stringify(item)
+    };
+
+    rest(configuration, function (err, response, body) {
+        let er = JSON.parse(body).error;
+        if (err || er) {
+            req.session.error = er;
+        }
+
+        return res.redirect("/item/mylist");
     });
 });
 

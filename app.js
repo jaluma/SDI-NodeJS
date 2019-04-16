@@ -25,12 +25,6 @@ app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, token");
     next();
 });
-app.use(logger('dev'));
-app.use(logger('common', {
-    stream: fs.createWriteStream('./application.log', {
-        flags: 'a'
-    })
-}));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
@@ -39,6 +33,12 @@ app.use(expressSession({
     secret: 'abcdefg',
     resave: true,
     saveUninitialized: true
+}));
+app.use(logger('dev'));
+app.use(logger('common', {
+    stream: fs.createWriteStream('./application.log', {
+        flags: 'a'
+    })
 }));
 // post body
 app.use(bodyParser.json());
@@ -99,6 +99,4 @@ app.use(require("./controllers/users"));
 app.use(require("./controllers/admins"));
 app.use(require("./controllers/items"));
 
-const rother = require("./controllers/other");
-rother.home(app);
-rother.error(app);
+app.use(require("./controllers/other"));

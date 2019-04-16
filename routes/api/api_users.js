@@ -35,6 +35,26 @@ router.get("/api/user/list", async function (req, res) {
     return res.json(users);
 });
 
+router.get("/api/user/:id", async function (req, res) {
+    let id = req.params.id;
+
+    if (id === null) {
+        return error(res, "user");
+    }
+
+    let user = {
+        _id: app.get('mongo').ObjectID(id)
+    };
+
+    user = await usersService.findOne(user);
+    if (user === null) {
+        return error(res, "user");
+    }
+
+    res.status(200);
+    res.json(user);
+});
+
 /* POST users listing. */
 router.post("/api/signup", async function (req, res) {
     if (req.body.email === null) {
@@ -117,7 +137,15 @@ router.post("/api/login", async function (req, res) {
 
 /* DELETE users listing. */
 router.delete("/api/user/delete/:id", async function (req, res) {
-    let user = {"_id": app.get('mongo').ObjectID(req.params.id)};
+    let id = req.params.id;
+
+    if (id === null) {
+        return error(res, "user");
+    }
+
+    let user = {
+        _id: app.get('mongo').ObjectID(id)
+    };
 
     user = await usersService.removeUser(user);
     if (user === null) {

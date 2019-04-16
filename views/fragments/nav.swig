@@ -66,11 +66,11 @@
 				</a>
 				<div class="dropdown-menu dropdown-menu-right dropdown-info" id="languageDropdownMenuButton"
 				     aria-labelledby="languajeDropdownMenuLink">
-					<a id="btnEnglish" value="EN" class="dropdown-item" href="?lang=en">
+					<a id="btnEnglish" class="dropdown-item" href="?lang=en">
 						<img src="/img/if_uk_flag.png" style="border: 0; float: left; margin-right: 15px" alt="EN"/>
 						<span>{{ __("language.en") }}</span>
 					</a>
-					<a id="btnSpanish" value="ES" class="dropdown-item" href="?lang=es">
+					<a id="btnSpanish" class="dropdown-item" href="?lang=es">
 						<img src="/img/if_spain_flag.png" style="border: 0; float: left; margin-right: 15px" alt="ES"/>
 						<span>{{ __("language.es") }}</span>
 					</a>
@@ -87,7 +87,7 @@
 						<a class="dropdown-item login" href="/login">{{ __("nav.login") }}</a>
 					{% else %}
 						<a class="dropdown-item login" href="/user/details/{{ currentUser.id }}">
-							<aside class="profile-card">
+							<aside class="profile-card" style="width: 100%">
 								<header>
 									<h6 id="email" style="font-weight: bold; text-align: center">{{ currentUser.fullName }}</h6>
 									<h6 style="text-align: center">{{ currentUser.email }}</h6>

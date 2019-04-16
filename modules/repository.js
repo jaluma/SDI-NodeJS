@@ -9,12 +9,12 @@ module.exports = {
         return itemR.ops[0];
     },
 
-    async update(collection, item, filter) {
+    async update(collection, filter, item) {
         const db = await mongo.MongoClient.connect(url);
         return await db.collection(collection).updateOne(filter, {$set: item});
     },
 
-    async delete(collection, item) {
+    async remove(collection, item) {
         const db = await mongo.MongoClient.connect(url);
         return await db.collection(collection).removeOne(item);
     },
@@ -27,13 +27,13 @@ module.exports = {
     async findAll(collection, filter) {
         const db = await mongo.MongoClient.connect(url);
         let cursor = await db.collection(collection).find(filter);
-        return cursor.toArray();
+        return await cursor.toArray();
     },
 
     async findAllPage(collection, filter, pg, page) {
         const db = await mongo.MongoClient.connect(url);
         let cursor = await db.collection(collection).find(filter).skip((pg - 1) * page).limit(page);
-        let pages = Math.trunc(await db.collection(collection).count(filter) / page);
+        let pages = Math.trunc(await db.collection(collection).count(filter) / (page + 1));
         return {
             array: await cursor.toArray(),
             pages: pages + 1

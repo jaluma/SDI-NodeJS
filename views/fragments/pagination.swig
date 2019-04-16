@@ -1,8 +1,8 @@
-{% if actual and totalPages > 1 %}
+{% if actual and totalPages %}
 	<nav aria-label="pagination">
 		<ul class="pagination justify-content-center">
 			<li class="page-item">
-				<a class="page-link indigo" href="javascript:clickPageButton(0)">
+				<a class="page-link indigo" href="javascript:clickPageButton(1)">
 					<span aria-hidden="true">&#171;</span>
 				</a>
 			</li>
@@ -16,19 +16,21 @@
 				<a class="page-link indigo_dark" href="javascript:clickPageButton({{ actual }})">{{ actual }}</a>
 			</li>
 
-			{% if actual + 1 <= totalPages %}
+			{% if actual + 1 < totalPages %}
 				<li class="page-item" id="pi-{{ actual + 1 }}">
 					<a class="page-link indigo" href="javascript:clickPageButton({{ actual + 1 }})">{{ actual + 1 }}</a>
 				</li>
 			{% endif %}
 			<li class="page-item">
-				<a class="page-link indigo" href="javascript:clickPageButton( {{ totalPages }})">
+				<a class="page-link indigo" href="javascript:clickPageButton({{ totalPages }})">
 					<span aria-hidden="true">&#187;</span>
 				</a>
 			</li>
 		</ul>
 		<script th:inline="javascript">
             /*<![CDATA[*/
+            const url = require("url");
+
             function clickPageButton(page) {
                 let searchParams = new URLSearchParams(window.location.search);
                 if (searchParams.get("searchText")) {

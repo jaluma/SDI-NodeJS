@@ -46,7 +46,7 @@
 			{% include '../fragments/pagination.swig' %}
 
 			{% if error %}
-				<div id="money-error" class="alert alert-danger" th:text="#{error.highlighter}">{{ __("error.highlighter") }}</div>
+				<div id="money-error" class="alert alert-danger">{{ __("error.highlighter") }}</div>
 			{% endif %}
 
 			<script th:inline="javascript">
@@ -57,7 +57,7 @@
                 });
 
                 let rows = $("#tableItems tr").length - 1;
-                let value = (4 * 56) - (rows * 56);
+                let value = (5 * 56) - (rows * 56);
                 document.getElementById('tableItems').style.marginBottom = value + ".px";
                 /*]]>*/
 			</script>
@@ -76,7 +76,7 @@
 							<span>{{ __("modal.highlighter.body") }}</span>
 						</div>
 						<div class="modal-footer">
-							<form id="modalHighlighter" class="form-horizontal" method="post" action="/">
+							<form id="modalHighlighter" class="form-horizontal" method="get" action="/">
 								<button id="confirmButton" type="submit" class="btn btn-primary link">{{ __("modal.highlighter.button") }}</button>
 							</form>
 						</div>

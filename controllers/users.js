@@ -23,16 +23,14 @@ router.get('/signup', function (req, res) {
         req.session.error = null;
     }
 
+    delete req.session.lastPage;
+
     res.render('signup', request);
 });
 
 router.get('/logout', function (req, res) {
     req.session.currentUser = null;
     res.redirect("/");
-});
-
-router.get('/success', function (req, res) {
-    res.redirect('/home');
 });
 
 router.get('/user/details/:id', function (req, res) {
@@ -69,6 +67,43 @@ router.get('/user/details/:id', function (req, res) {
     });
 });
 
+router.get('/user/purchases', function (req, res) {
+    let page = req.query.page || 1;
+    let error = req.session.error;
+    if (error) {
+        req.session.error = null;
+    }
+
+    let configuration = {
+        url: app.get('url') + '/api/item/list',
+        method: "get",
+        headers: {
+            "Content-Type": "application/json; charset=utf-8",
+            "token": req.session.token
+        },
+        body: JSON.stringify({
+            filter: {"buyerUser._id": req.session.currentUser._id},
+            page: page
+        })
+    };
+
+    rest(configuration, function (err, response, body) {
+        let er = JSON.parse(body).error;
+        if (err || er) {
+            req.session.error = er;
+            return res.redirect("/home");
+        }
+
+        body = JSON.parse(body);
+        res.render('user/purchases', {
+            itemsList: body.array,
+            actual: page,
+            totalPages: body.pages,
+            error: error
+        });
+    });
+});
+
 
 /* POST users listing. */
 router.post('/login', function (req, res) {
@@ -95,7 +130,14 @@ router.post('/login', function (req, res) {
 
         req.session.currentUser = JSON.parse(body).user;
         req.session.token = JSON.parse(body).token;
-        res.redirect("/success");
+
+        let page = req.session.lastPage;
+        if (page) {
+            delete req.session.lastPage;
+            return res.redirect(page);
+        }
+
+        res.redirect('/home');
     });
 });
 
@@ -127,7 +169,7 @@ router.post('/signup', async function (req, res) {
 
         req.session.currentUser = JSON.parse(body).user;
         req.session.token = JSON.parse(body).token;
-        res.redirect('/success')
+        res.redirect('/home');
     });
 });
 

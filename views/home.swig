@@ -34,9 +34,9 @@
 								<tbody>
 								<tr class="tr-static-height">
 									{% for item in hightlighter_items %}
-										<td class="clickable-row" data-href="/item/details/' + {{ item.id }}">{{ item.title }}</td>
-										<td class="clickable-row" data-href="/item/details/' + {{ item.id }}">{{ item.description }}</td>
-										<td class="clickable-row" data-href="/item/details/' + {{ item.id }}">{{ item.price }}</td>
+										<td class="clickable-row" data-href="/item/details/' + {{ item._id }}">{{ item.title }}</td>
+										<td class="clickable-row" data-href="/item/details/' + {{ item._id }}">{{ item.description }}</td>
+										<td class="clickable-row" data-href="/item/details/' + {{ item._id }}">{{ item.price }}</td>
 									{% endfor %}
 								</tr>
 								</tbody>
@@ -65,10 +65,10 @@
 								<tbody>
 								{% for item in itemsList %}
 									<tr class="tr-static-height">
-										<td class="clickable-row" data-href="{{ '/item/details/' + item.id }}">{{ __("item.title") }}</td>
-										<td class="clickable-row" data-href="{{ '/item/details/' + item.id }}">{{ __("item.description") }}</td>
-										<td class="clickable-row" data-href="{{ '/item/details/' + item.id }}">{{ __("item.price") }}</td>
-										<td><a id="delete" class="link" href="{{ '/item/delete/' + item.id }}"><i
+										<td class="clickable-row" data-href="{{ '/item/details/' + item._id }}">{{ item.title }}</td>
+										<td class="clickable-row" data-href="{{ '/item/details/' + item._id }}">{{ item.description }}</td>
+										<td class="clickable-row" data-href="{{ '/item/details/' + item._id }}">{{ item.price }}</td>
+										<td><a id="delete" class="link" href="{{ '/item/delete/' + item._id }}"><i
 														class="material-icons">delete</i></a>
 										</td>
 										<td>
@@ -98,7 +98,7 @@
                                 });
 
                                 let rows = $("#tableItems tr").length - 1;
-                                let value = (4 * 56) - (rows * 56);
+                                let value = (5 * 56) - (rows * 56);
                                 document.getElementById('tableItems').style.marginBottom = value + ".px";
                                 /*]]>*/
 							</script>

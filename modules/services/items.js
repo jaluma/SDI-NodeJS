@@ -8,9 +8,16 @@ module.exports = {
             return null;
         }
     },
+    async updateItem(filter, item) {
+        try {
+            return await repo.update('items', filter, item);
+        } catch (error) {
+            return null;
+        }
+    },
     async removeItem(filter) {
         try {
-            return await repo.delete('items', filter);
+            return await repo.remove('items', filter);
         } catch (error) {
             return null;
         }

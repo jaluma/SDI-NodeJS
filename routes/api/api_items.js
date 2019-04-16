@@ -5,12 +5,21 @@ const router = global.express.Router();
 
 // services
 let itemsService = require(path.join(__basedir, "modules/services/items"));
+let usersService = require(path.join(__basedir, "modules/services/users"));
 
-/* GET users listing. */
+/* GET items listing. */
 router.get("/api/item/list", async function (req, res) {
     let filter = req.body.filter;
-    if (filter && filter._id) {
-        filter._id = app.get('mongo').ObjectID(filter._id);
+    if (filter) {
+        if (filter['_id']) {
+            filter['_id'] = app.get('mongo').ObjectID(filter['_id']);
+        }
+        if (filter['sellerUser._id']) {
+            filter['sellerUser._id'] = app.get('mongo').ObjectID(filter['sellerUser._id']);
+        }
+        if (filter['buyerUser._id']) {
+            filter['buyerUser._id'] = app.get('mongo').ObjectID(filter['buyerUser._id']);
+        }
     }
     let pages = req.body.page;
 
@@ -32,7 +41,7 @@ router.get("/api/item/list", async function (req, res) {
     return res.json(items);
 });
 
-/* POST users listing. */
+/* POST items listing. */
 router.post("/api/item/add", async function (req, res) {
     if (req.body.title === null) {
         return error(res, "title");
@@ -53,13 +62,16 @@ router.post("/api/item/add", async function (req, res) {
         return error(res, "sellerUser");
     }
 
+    let user = req.body.sellerUser;
+    user._id = app.get('mongo').ObjectID(user._id);
+
     let item = {
         title: req.body.title,
         description: req.body.description,
         date: req.body.date,
         price: req.body.price,
         highlighter: req.body.highlighter,
-        sellerUser: req.body.sellerUser,
+        sellerUser: user,
         buyerUser: null,
         chats: []
     };
@@ -71,6 +83,139 @@ router.post("/api/item/add", async function (req, res) {
 
     res.status(200);
     return res.json(item);
+});
+
+/* PUT items listing. */
+router.put("/api/item/buy", async function (req, res) {
+    let body = req.body.object;
+
+    if (body['_id'] === null) {
+        return error(res, "item");
+    }
+
+    if (body['buyerUser._id'] === null) {
+        return error(res, "buyerUser");
+    }
+
+    let filter = {
+        _id: app.get('mongo').ObjectID(body['_id'])
+    };
+
+    let buyerUser = {
+        _id: app.get('mongo').ObjectID(body['buyerUser._id'])
+    };
+
+    buyerUser = await usersService.findOne(buyerUser);
+    if (buyerUser === null) {
+        return error(res, "buyerUser");
+    }
+
+    let item = await itemsService.findAllItems(filter);
+    if (item === null) {
+        return error(res, "item");
+    }
+    item = item[0];
+
+    if (buyerUser._id.equals(item.sellerUser._id)) {
+        return error(res, "user");
+    }
+
+    if (buyerUser.money < item.price) {
+        return error(res, "money");
+    }
+
+    // update item and user
+    let result = await itemsService.updateItem(filter, {
+        buyerUser: buyerUser
+    });
+    if (result === null) {
+        return error(res, "update", 500);
+    }
+
+    result = await usersService.updateUser(buyerUser, {
+        money: buyerUser.money - item.price
+    });
+    if (result === null) {
+        return error(res, "error");
+    }
+
+    res.status(200);
+    return res.json({
+        count: result.modifiedCount
+    });
+});
+
+router.put("/api/item/highlighter/:id", async function (req, res) {
+    let id = req.params.id;
+
+    if (id === null) {
+        return error(res, "item");
+    }
+
+    let item = {
+        _id: app.get('mongo').ObjectID(id)
+    };
+
+    item = await itemsService.findAllItems(item);
+    if (item === null) {
+        return error(res, "item");
+    }
+    item = item[0];
+
+    let filter = {
+        _id: app.get('mongo').ObjectID(item.sellerUser._id)
+    };
+
+    let sellerUser = await usersService.findOne(filter);
+    if (sellerUser === null) {
+        return error(res, "sellerUser");
+    }
+
+    if (sellerUser.money < 20) {
+        return error(res, "money");
+    }
+
+    let result = await usersService.updateUser(filter, {
+        money: sellerUser.money - 20
+    });
+    if (result === null) {
+        return error(res, "error");
+    }
+
+    result = await itemsService.updateItem(item, {
+        highlighter: true
+    });
+    if (result === null) {
+        return error(res, "update", 500);
+    }
+
+    res.status(200);
+    return res.json({
+        count: result.modifiedCount
+    });
+});
+
+/* DELETE items listing. */
+router.delete("/api/item/delete/:id", async function (req, res) {
+    let id = req.params.id;
+
+    if (id === null) {
+        return error(res, "item");
+    }
+
+    let item = {
+        _id: app.get('mongo').ObjectID(id)
+    };
+
+    let result = await itemsService.removeItem(item);
+    if (result === null) {
+        return error(res, "remove", 500);
+    }
+
+    res.status(200);
+    return res.json({
+        count: result.deletedCount
+    });
 });
 
 module.exports = router;

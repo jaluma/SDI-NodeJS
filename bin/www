@@ -30,7 +30,7 @@ let server = https.createServer({
  */
 
 server.listen(app.get('port'));
-server.on('error.swig.html', onError);
+server.on('error.swig', onError);
 server.on('listening', onListening);
 
 /**

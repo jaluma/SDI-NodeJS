@@ -30,6 +30,16 @@
     },
     "admin": {
       "log": "System log"
+    },
+    "sales": {
+      "mySales": "nav.sales.mySales",
+      "add": "nav.sales.add",
+      "myList": "nav.sales.myList"
+    },
+    "sells": {
+      "other": "nav.sells.other",
+      "bought": "nav.sells.bought",
+      "list": "nav.sells.list"
     }
   },
   "signup": {
@@ -92,7 +102,8 @@
       "personal": "Personal zone",
       "details": "Details of my account"
     },
-    "Highlighter": "Featured Offers"
+    "Highlighter": "Featured Offers",
+    "highlighter": "home.highlighter"
   },
   "index": {
     "header": "Home",
@@ -131,8 +142,7 @@
     }
   },
   "error": {
-    "synup": {
-    },
+    "synup": {},
     "password": {
       "length": "Password must be between 6 and 24 characters.",
       "conincidence": "Passwords do not match."

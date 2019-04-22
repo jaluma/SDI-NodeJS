@@ -16,7 +16,7 @@
 				<a class="page-link indigo_dark" href="javascript:clickPageButton({{ actual }})">{{ actual }}</a>
 			</li>
 
-			{% if actual + 1 < totalPages %}
+			{% if actual + 1 <= totalPages %}
 				<li class="page-item" id="pi-{{ actual + 1 }}">
 					<a class="page-link indigo" href="javascript:clickPageButton({{ actual + 1 }})">{{ actual + 1 }}</a>
 				</li>
@@ -42,9 +42,6 @@
                 $().load(url);
             }
 
-            // enable diferent class actual page
-            let actual = {{ actual }};
-            $("#pi-{{ actual }}").addClass("indigo-dark");
             /*]]>*/
 		</script>
 	</nav>

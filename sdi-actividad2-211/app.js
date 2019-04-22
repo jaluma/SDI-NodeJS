@@ -79,6 +79,7 @@ app.set('jwt', jwt);
 app.set('encrypt', "javi");
 app.set('crypto', crypto);
 app.set('mongo', mongo);
+app.set('i18n', i18n);
 
 app.set('url', "https://localhost:8081");
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";

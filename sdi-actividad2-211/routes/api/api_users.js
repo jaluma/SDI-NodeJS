@@ -62,7 +62,6 @@ router.post("/api/signup", async function (req, res) {
     }
 
     let users = await usersService.findAllUsers({email: req.body.email});
-
     if (users === null || users.length > 0) {
         return error(res, "email");
     }

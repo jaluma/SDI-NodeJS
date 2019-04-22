@@ -19,17 +19,17 @@ router.get('/signup', function (req, res) {
     let request = {};
     let error = req.session.error;
     if (error) {
-        request = {error: error};
-        req.session.error = null;
+        request = {error: app.get("i18n").__("error.signup." + error)};
+        delete req.session.error;
     }
-
-    delete req.session.lastPage;
 
     res.render('signup', request);
 });
 
 router.get('/logout', function (req, res) {
-    req.session.currentUser = null;
+    delete req.session.lastPage;
+    delete req.session.currentUser;
+
     res.redirect("/");
 });
 
@@ -169,6 +169,8 @@ router.post('/signup', async function (req, res) {
 
         req.session.currentUser = JSON.parse(body).user;
         req.session.token = JSON.parse(body).token;
+        res.locals.currentUser = JSON.parse(body).user;
+        res.locals.token = JSON.parse(body).token;
         res.redirect('/home');
     });
 });

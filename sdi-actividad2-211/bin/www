@@ -21,8 +21,8 @@ app.set('port', port);
  */
 
 let server = https.createServer({
-    key: fs.readFileSync('certificates/alice.key'),
-    cert: fs.readFileSync('certificates/alice.crt')
+    key: fs.readFileSync('./certificates/alice.key'),
+    cert: fs.readFileSync('./certificates/alice.crt')
 }, app);
 
 /**

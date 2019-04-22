@@ -32,13 +32,13 @@
 								</tr>
 								</thead>
 								<tbody>
-								<tr class="tr-static-height">
-									{% for item in hightlighter_items %}
+								{% for item in hightlighter_items %}
+									<tr class="tr-static-height">
 										<td class="clickable-row" data-href="/item/details/' + {{ item._id }}">{{ item.title }}</td>
 										<td class="clickable-row" data-href="/item/details/' + {{ item._id }}">{{ item.description }}</td>
 										<td class="clickable-row" data-href="/item/details/' + {{ item._id }}">{{ item.price }}</td>
-									{% endfor %}
-								</tr>
+									</tr>
+								{% endfor %}
 								</tbody>
 							</table>
 						{% endif %}

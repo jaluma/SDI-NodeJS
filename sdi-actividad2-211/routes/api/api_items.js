@@ -72,9 +72,27 @@ router.post("/api/item/add", async function (req, res) {
         price: req.body.price,
         highlighter: req.body.highlighter,
         sellerUser: user,
-        buyerUser: null,
-        chats: []
+        buyerUser: null
     };
+
+    if (item.highlighter === true) {
+        let sellerUser = await usersService.findOne(user);
+        if (sellerUser === null) {
+            return error(res, "sellerUser");
+        }
+
+        if (sellerUser.money < 20) {
+            return error(res, "money");
+        }
+
+        let result = await usersService.updateUser(sellerUser, {
+            money: sellerUser.money - 20
+        });
+
+        if (result === null) {
+            return error(res, "money");
+        }
+    }
 
     item = await itemsService.addItem(item);
     if (item === null) {

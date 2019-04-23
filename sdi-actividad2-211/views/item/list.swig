@@ -29,8 +29,7 @@
 						{% if item.buyerUser === null %}
 							<td class="align-middle clickable-row" data-href="{{ '/item/details/' + item._id }}">
 								<a id="buyButton" class="btn btn-secondary link" href="{{ '/item/buy/' + item._id }}">{{ __("item.buy") }}</a>
-								<a id="chatButton" class="btn btn-secondary link"
-								   href="{{ '/chat/create/' + item.id }}">{{ __("chat.contact") }}</a>
+								<a id="chatButton" class="btn btn-secondary link" href="{{ '/chat/create/' + item.id }}">{{ __("chat.contact") }}</a>
 							</td>
 						{% else %}
 							<td class="align-middle">

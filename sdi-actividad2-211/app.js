@@ -35,7 +35,7 @@ app.use(expressSession({
 }));
 app.use(logger('dev'));
 app.use(logger('common', {
-    stream: fs.createWriteStream('./public/application.log', {
+    stream: fs.createWriteStream('./application.log', {
         flags: 'a'
     })
 }));
@@ -92,10 +92,14 @@ require("./routes/interceptors/i_api_users");
 // api
 app.use(require("./routes/api/api_users"));
 app.use(require("./routes/api/api_items"));
+app.use(require("./routes/api/api_chats"));
 
 // routes
 app.use(require("./controllers/users"));
 app.use(require("./controllers/admins"));
 app.use(require("./controllers/items"));
+app.use(require("./controllers/chats"));
 
 app.use(require("./controllers/other"));
+
+

@@ -15,6 +15,12 @@ module.exports = {
         return await db.collection(collection).updateOne(filter, {$set: item});
     },
 
+    async updateP(collection, filter, item) {
+        const db = await mongo.MongoClient.connect(url);
+        await changeIds(filter);
+        return await db.collection(collection).updateOne(filter, {$push: item});
+    },
+
     async remove(collection, item) {
         const db = await mongo.MongoClient.connect(url);
         return await db.collection(collection).removeOne(item);

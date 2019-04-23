@@ -82,8 +82,8 @@ public class InsertSampleDataService {
 			createChats(user, user4, items4);
 		}
 
-		chatsService.addAll(chatList);
 		messagesService.addAll(messagesList);
+		chatsService.addAll(chatList);
 
 		//generamos valores para tener 20 usuarios registrados
 		String[] names = new String[]{"Maria", "Cristina", "Elena", "Ivan", "Pedro", "Fernando"};

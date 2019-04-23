@@ -1,9 +1,6 @@
 package com.uniovi.tests;
 
-import com.uniovi.services.ChatsService;
-import com.uniovi.services.InsertSampleDataService;
-import com.uniovi.services.ItemsService;
-import com.uniovi.services.UsersService;
+import com.uniovi.services.*;
 import com.uniovi.tests.pageobjects.*;
 import org.junit.*;
 import org.junit.runner.RunWith;
@@ -47,6 +44,8 @@ public class MyWallapopTests {
 	@Autowired
 	private ItemsService itemsService;
 	@Autowired
+	private MessagesService messagesService;
+	@Autowired
 	private InsertSampleDataService insertSampleDataService;
 
 	@BeforeClass
@@ -67,6 +66,7 @@ public class MyWallapopTests {
 		chatsService.deleteAll();
 		itemsService.deleteAll();
 		usersService.deleteAll();
+		messagesService.deleteAll();
 		insertSampleDataService.init();
 	}
 

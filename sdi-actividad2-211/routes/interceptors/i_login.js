@@ -35,7 +35,7 @@ router.use(async function (req, res, next) {
         }
     };
 
-    rest(configuration, function (err, response, body) {
+    await rest(configuration, await function (err, response, body) {
         let user = JSON.parse(body);
         if (err || user.error) {
             req.session.error = user.error;

@@ -18,4 +18,8 @@ public class MessagesService {
 	void addAll(Iterable<Message> messagesList) {
 		messagesRepository.saveAll(messagesList);
 	}
+
+	public void deleteAll() {
+		messagesRepository.deleteAll();
+	}
 }

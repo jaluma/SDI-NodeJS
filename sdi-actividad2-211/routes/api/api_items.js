@@ -1,6 +1,5 @@
 const path = require('path');
 
-const app = require(path.join(__basedir, "app"));
 const router = global.express.Router();
 
 // services
@@ -10,17 +9,6 @@ let usersService = require(path.join(__basedir, "modules/services/users"));
 /* GET items listing. */
 router.get("/api/item/list", async function (req, res) {
     let filter = req.body.filter;
-    if (filter) {
-        if (filter['_id']) {
-            filter['_id'] = app.get('mongo').ObjectID(filter['_id']);
-        }
-        if (filter['sellerUser._id']) {
-            filter['sellerUser._id'] = app.get('mongo').ObjectID(filter['sellerUser._id']);
-        }
-        if (filter['buyerUser._id']) {
-            filter['buyerUser._id'] = app.get('mongo').ObjectID(filter['buyerUser._id']);
-        }
-    }
     let pages = req.body.page;
 
     let items;
@@ -63,7 +51,6 @@ router.post("/api/item/add", async function (req, res) {
     }
 
     let user = req.body.sellerUser;
-    user._id = app.get('mongo').ObjectID(user._id);
 
     let item = {
         title: req.body.title,
@@ -116,11 +103,11 @@ router.put("/api/item/buy", async function (req, res) {
     }
 
     let filter = {
-        _id: app.get('mongo').ObjectID(body['_id'])
+        _id: body['_id']
     };
 
     let buyerUser = {
-        _id: app.get('mongo').ObjectID(body['buyerUser._id'])
+        _id: body['buyerUser._id']
     };
 
     buyerUser = await usersService.findOne(buyerUser);
@@ -171,7 +158,7 @@ router.put("/api/item/highlighter/:id", async function (req, res) {
     }
 
     let item = {
-        _id: app.get('mongo').ObjectID(id)
+        _id: id
     };
 
     item = await itemsService.findAllItems(item);
@@ -181,7 +168,7 @@ router.put("/api/item/highlighter/:id", async function (req, res) {
     item = item[0];
 
     let filter = {
-        _id: app.get('mongo').ObjectID(item.sellerUser._id)
+        _id: item.sellerUser._id
     };
 
     let sellerUser = await usersService.findOne(filter);
@@ -222,7 +209,7 @@ router.delete("/api/item/delete/:id", async function (req, res) {
     }
 
     let item = {
-        _id: app.get('mongo').ObjectID(id)
+        _id: id
     };
 
     let result = await itemsService.removeItem(item);
@@ -242,4 +229,3 @@ function error(res, param, status = 442) {
     res.status(status);
     return res.json({error: param});
 }
-

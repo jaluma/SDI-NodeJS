@@ -1,4 +1,5 @@
-const app = require('../app');
+const path = require('path');
+const app = require(path.join(__basedir, "app"));
 
 let router = global.express.Router();
 let rest = require("request");
@@ -125,9 +126,26 @@ router.get('/item/highlighter/:id', function (req, res) {
 
 router.get('/item/list', function (req, res) {
     let page = req.query.page || 1;
+    let searchText = req.query.searchText;
     let error = req.session.error;
     if (error) {
         req.session.error = null;
+    }
+
+    let filter = {
+        page: page,
+        filter: {
+            "sellerUser._id": {
+                $ne: req.session.currentUser._id
+            }
+        }
+    };
+
+    if (searchText) {
+        filter.filter.title = {
+            $regex: ".*" + searchText + ".*",
+            $options: 'i'
+        }
     }
 
     let configuration = {
@@ -137,9 +155,7 @@ router.get('/item/list', function (req, res) {
             "Content-Type": "application/json; charset=utf-8",
             "token": req.session.token
         },
-        body: JSON.stringify({
-            page: page
-        })
+        body: JSON.stringify(filter)
     };
 
     rest(configuration, function (err, response, body) {
@@ -151,7 +167,7 @@ router.get('/item/list', function (req, res) {
 
         body = JSON.parse(body);
         res.render('item/list', {
-            itemsList: body.array.filter(i => i.sellerUser._id !== req.session.currentUser._id),
+            itemsList: body.array,
             actual: page,
             totalPages: body.pages,
             error: error

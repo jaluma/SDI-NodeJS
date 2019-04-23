@@ -1,4 +1,5 @@
-const app = require('../app');
+const path = require('path');
+const app = require(path.join(__basedir, "app"));
 
 let router = global.express.Router();
 let rest = require("request");
@@ -29,6 +30,10 @@ router.get('/admin/list', async function (req, res) {
     });
 });
 
+router.get('/admin/logging', async function (req, res) {
+    res.download('./application.log', 'app.log');
+});
+
 /* POST users listing. */
 router.post('/admin/remove', async function (req, res) {
     let list = req.body.checkbox;
@@ -37,17 +42,19 @@ router.post('/admin/remove', async function (req, res) {
         list.push(req.body.checkbox);
     }
     for (let c in list) {
-        let check = list[c];
-        let configuration = {
-            url: app.get('url') + '/api/user/delete/' + check,
-            method: "delete",
-            headers: {
-                "token": req.session.token
-            }
-        };
+        if (list.hasOwnProperty(c)) {
+            let check = list[c];
+            let configuration = {
+                url: app.get('url') + '/api/user/delete/' + check,
+                method: "delete",
+                headers: {
+                    "token": req.session.token
+                }
+            };
 
-        await rest(configuration, await function (err, response, body) {
-        });
+            await rest(configuration, await function (err, response, body) {
+            });
+        }
     }
     res.redirect('/admin/list');
 });

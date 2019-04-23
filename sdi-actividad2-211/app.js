@@ -8,7 +8,6 @@ const expressSession = require('express-session');
 const swig = require('swig');
 const bodyParser = require('body-parser');
 const crypto = require('crypto');
-const mongo = require('mongodb');
 const fs = require('fs');
 const i18n = require('i18n');
 
@@ -36,7 +35,7 @@ app.use(expressSession({
 }));
 app.use(logger('dev'));
 app.use(logger('common', {
-    stream: fs.createWriteStream('./application.log', {
+    stream: fs.createWriteStream('./public/application.log', {
         flags: 'a'
     })
 }));
@@ -78,7 +77,6 @@ app.set('rest', rest);
 app.set('jwt', jwt);
 app.set('encrypt', "javi");
 app.set('crypto', crypto);
-app.set('mongo', mongo);
 app.set('i18n', i18n);
 
 app.set('url', "https://localhost:8081");

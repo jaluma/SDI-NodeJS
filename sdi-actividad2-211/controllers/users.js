@@ -1,4 +1,5 @@
-const app = require('../app');
+const path = require('path');
+const app = require(path.join(__basedir, "app"));
 
 let router = global.express.Router();
 let rest = require("request");
@@ -132,7 +133,7 @@ router.post('/login', function (req, res) {
         req.session.token = JSON.parse(body).token;
 
         let page = req.session.lastPage;
-        if (page) {
+        if (page && req.session.currentUser && req.session.token) {
             delete req.session.lastPage;
             return res.redirect(page);
         }

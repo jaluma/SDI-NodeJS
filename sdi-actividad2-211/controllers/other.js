@@ -1,9 +1,14 @@
-const app = require('../app');
+const path = require('path');
+const app = require(path.join(__basedir, "app"));
 
 let router = global.express.Router();
 let rest = require("request");
 
 router.get('/', function (req, res) {
+    if (req.session.currentUser) {
+        res.redirect('/home');
+    }
+
     res.render('index');
 });
 router.get('/home', async function (req, res) {

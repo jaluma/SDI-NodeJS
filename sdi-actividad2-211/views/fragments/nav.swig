@@ -27,7 +27,7 @@
 					<a class="nav-link" id="adminListMenu" href="/admin/list">{{ __("nav.users") }}</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" id="adminLog" href="/admin/logging">{{ __("nav.log") }}</a>
+					<a class="nav-link" id="adminLog" href="/admin/logging">{{ __("nav.admin.log") }}</a>
 				</li>
 			{% endif %}
 

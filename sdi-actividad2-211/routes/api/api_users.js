@@ -1,5 +1,4 @@
 const path = require('path');
-
 const app = require(path.join(__basedir, "app"));
 const router = global.express.Router();
 
@@ -9,9 +8,6 @@ let usersService = require(path.join(__basedir, "modules/services/users"));
 /* GET users listing. */
 router.get("/api/user/list", async function (req, res) {
     let filter = req.body.filter;
-    if (filter && filter._id) {
-        filter._id = app.get('mongo').ObjectID(filter._id);
-    }
     let pages = req.body.page;
 
     let users;
@@ -37,13 +33,12 @@ router.get("/api/user/list", async function (req, res) {
 
 router.get("/api/user/:id", async function (req, res) {
     let id = req.params.id;
-
     if (id === null) {
         return error(res, "user");
     }
 
     let user = {
-        _id: app.get('mongo').ObjectID(id)
+        _id: id
     };
 
     user = await usersService.findOne(user);
@@ -143,7 +138,7 @@ router.delete("/api/user/delete/:id", async function (req, res) {
     }
 
     let user = {
-        _id: app.get('mongo').ObjectID(id)
+        _id: id
     };
 
     user = await usersService.removeUser(user);

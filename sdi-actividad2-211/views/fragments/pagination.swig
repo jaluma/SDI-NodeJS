@@ -16,11 +16,13 @@
 				<a class="page-link indigo_dark" href="javascript:clickPageButton({{ actual }})">{{ actual }}</a>
 			</li>
 
-			{% if actual + 1 <= totalPages %}
-				<li class="page-item" id="pi-{{ actual + 1 }}">
-					<a class="page-link indigo" href="javascript:clickPageButton({{ actual + 1 }})">{{ actual + 1 }}</a>
+			{% if actual < totalPages %}
+				{% set next = actual - 1 + 2 %}   {# dejar asi, sino lo detecta como string #}
+				<li class="page-item" id="pi-{{ next }}">
+					<a class="page-link indigo" href="javascript:clickPageButton({{ next }})">{{ next }}</a>
 				</li>
 			{% endif %}
+
 			<li class="page-item">
 				<a class="page-link indigo" href="javascript:clickPageButton({{ totalPages }})">
 					<span aria-hidden="true">&#187;</span>
@@ -29,8 +31,6 @@
 		</ul>
 		<script th:inline="javascript">
             /*<![CDATA[*/
-            const url = require("url");
-
             function clickPageButton(page) {
                 let searchParams = new URLSearchParams(window.location.search);
                 if (searchParams.get("searchText")) {

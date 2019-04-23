@@ -1,4 +1,5 @@
-let app = require('../../app');
+const path = require('path');
+const app = require(path.join(__basedir, "app"));
 let router = global.express.Router();
 let createError = require('http-errors');
 

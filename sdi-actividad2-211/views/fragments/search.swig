@@ -13,13 +13,12 @@
 
 	<script th:inline="javascript">
         /*<![CDATA[*/
-        const url = require("url");
         $(document).ready(function () {
             $("#searchButton").click(function () {
                 let searchParams = new URLSearchParams(window.location.search);
                 let value = $("#searchText").val();
                 searchParams.set("searchText", value);
-                searchParams.set("page", "0");
+                searchParams.set("page", "1");
                 window.location.search = searchParams.toString();
                 $().load(url);
             });

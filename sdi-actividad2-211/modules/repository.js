@@ -11,6 +11,7 @@ module.exports = {
 
     async update(collection, filter, item) {
         const db = await mongo.MongoClient.connect(url);
+        await changeIds(filter);
         return await db.collection(collection).updateOne(filter, {$set: item});
     },
 
@@ -21,17 +22,20 @@ module.exports = {
 
     async findOne(collection, filter) {
         const db = await mongo.MongoClient.connect(url);
+        await changeIds(filter);
         return await db.collection(collection).findOne(filter);
     },
 
     async findAll(collection, filter) {
         const db = await mongo.MongoClient.connect(url);
+        await changeIds(filter);
         let cursor = await db.collection(collection).find(filter);
         return await cursor.toArray();
     },
 
     async findAllPage(collection, filter, pg, page) {
         const db = await mongo.MongoClient.connect(url);
+        await changeIds(filter);
         let cursor = await db.collection(collection).find(filter).skip((pg - 1) * page).limit(page);
         let pages = Math.trunc(await db.collection(collection).count(filter) / (page + 1));
         return {
@@ -42,6 +46,21 @@ module.exports = {
 
     async count(collection, filter) {
         const db = await mongo.MongoClient.connect(url);
+        await changeIds(filter);
         return await db.collection(collection).count(filter);
     },
 };
+
+async function changeIds(filter, propertyBefore) {
+    for (let property in filter) {
+        if (filter.hasOwnProperty(property)) {
+            if (typeof filter[property] == "object") {
+                await changeIds(filter[property], property);
+            } else {
+                if (property.includes('_id') || propertyBefore && propertyBefore.includes('_id')) {
+                    filter[property] = mongo.ObjectID(filter[property]);
+                }
+            }
+        }
+    }
+}

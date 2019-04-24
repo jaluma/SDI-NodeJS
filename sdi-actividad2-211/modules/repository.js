@@ -23,6 +23,7 @@ module.exports = {
 
     async remove(collection, item) {
         const db = await mongo.MongoClient.connect(url);
+        await changeIds(filter);
         return await db.collection(collection).removeOne(item);
     },
 

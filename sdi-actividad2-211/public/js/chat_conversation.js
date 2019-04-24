@@ -2,6 +2,7 @@ $(function () {
     let socket = io.connect('https://localhost:8081', {secure: true});
 
     let email = $("#currentUser");
+    let token = $("#token");
     let chatId = $("#chatId");
 
     let message = $("#messageInput");
@@ -10,7 +11,8 @@ $(function () {
 
     socket.emit('init', {
         email: email.text(),
-        chatId: chatId.text()
+        chatId: chatId.text(),
+        token: token.text()
     });
 
     send_message.click(() => {
@@ -23,17 +25,17 @@ $(function () {
         message.val('');
     });
 
-    socket.on("new_message", (data) => {
+    socket.on("receive_message", (data) => {
         let urlSplit = window.location.href.split('/');
         let chatId = urlSplit[urlSplit.length - 1];
 
-        if (data.chat === chatId) {
+        if (data.chat._id === chatId) {
             let copy = $('#copy').find('#message').clone();
             copy.find('#username_data').text(data.message.user.fullName);
             copy.find('#time_data').text(moment(data.message.date).format('lll'));
             copy.find('#message_text').text(data.message.message);
 
-            if (data.user.email === data.message.user.email) {
+            if (email.text() === data.message.user.email) {
                 copy.find('.message-data').addClass("my-message-data");
                 copy.find('.message').addClass("my-message");
             } else {

@@ -93,6 +93,7 @@ require("./routes/interceptors/i_api_users");
 app.use(require("./routes/api/api_users"));
 app.use(require("./routes/api/api_items"));
 app.use(require("./routes/api/api_chats"));
+app.use(require("./routes/api/api_messages"));
 
 // routes
 app.use(require("./controllers/users"));

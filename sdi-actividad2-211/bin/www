@@ -36,7 +36,8 @@ server.on('listening', onListening);
 /**
  * Add chats sockets
  */
-app.set('sockets', require('../sockets/chats')(server));
+const io = require("socket.io")(server);
+require('../sockets/chats')(io);
 
 /**
  * Normalize a port into a number, string, or false.

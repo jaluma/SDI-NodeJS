@@ -90,12 +90,11 @@ router.get('/chat/conversation/:id', async function (req, res) {
             req.session.error = er;
         }
 
-        body = JSON.parse(body);
+        let chat = JSON.parse(body);
 
         res.locals.moment = require('moment');
-
         res.render('chat/conversation', {
-            chat: body
+            chat: chat
         });
     });
 });

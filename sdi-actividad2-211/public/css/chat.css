@@ -46,6 +46,19 @@
     background: #86BB71;
 }
 
+.read_message {
+    font-size: 9px;
+    font-style: italic;
+}
+
+.right {
+    float: right;
+}
+
+.left {
+    float: left;
+}
+
 .other-message {
     background: #6C86D2;
     text-align: right;

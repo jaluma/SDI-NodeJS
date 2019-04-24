@@ -17,11 +17,19 @@
 					<li id="message" style="list-style: none;">
 						<div class="message-data{% if message.user._id === currentUser._id %} my-message-data {% else %} other-message-data {% endif %}">
 							<span id="username_data" class="message-data-name">{{ message.user.fullName }}</span>
-							<span id="time_data" class="message-data-time">{{ moment(message.time).format('lll') }}</span>
+							<span id="time_data" class="message-data-time">{{ moment(strToDate(message.time)).format('lll') }}</span>
 						</div>
 
 						<div class="text_wrapper message{% if message.user._id === currentUser._id %} my-message {% else %} other-message {% endif %}">
 							<span id="message_text" class="text">{{ message.message }}</span>
+							<span id="read_text"
+							      class="text read_message {% if message.user._id === currentUser._id %} right {% else %} left {% endif %}">
+								{% if message.read %}
+									{{ __("chat.read") }}
+								{% else %}
+									{{ __("chat.no_read") }}
+								{% endif %}
+							</span>
 						</div>
 					</li>
 				{% endfor %}
@@ -38,6 +46,14 @@
 		</div>
 	</div>
 
+	<script>
+        function strToDate(str) {
+            return new Date(str);
+        }
+
+        moment.locale('es');
+	</script>
+
 	<span id="currentUser" style="display: none">{{ currentUser.email }}</span>
 	<span id="token" style="display: none">{{ token }}</span>
 	<span id="chatId" style="display: none">{{ chat._id }}</span>
@@ -52,6 +68,10 @@
 
 				<div class="text_wrapper message">
 					<span id="message_text" class="text"></span>
+					<span id="read_text"
+					      class="text read_message">
+							{{ __("chat.no_read") }}
+					</span>
 				</div>
 			</li>
 		</ul>

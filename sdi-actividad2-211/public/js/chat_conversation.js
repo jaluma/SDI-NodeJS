@@ -3,15 +3,18 @@ $(function () {
 
     let email = $("#currentUser");
     let token = $("#token");
-    let chatId = $("#chatId");
+    let chat = $("#chatId");
 
     let message = $("#messageInput");
     let send_message = $("#sendButton");
     let chatroom = $("#messages");
 
+    let urlSplit = window.location.href.split('/');
+    let chatId = urlSplit[urlSplit.length - 1];
+
     socket.emit('init', {
         email: email.text(),
-        chatId: chatId.text(),
+        chatId: chat.text(),
         token: token.text()
     });
 
@@ -25,26 +28,47 @@ $(function () {
         message.val('');
     });
 
-    socket.on("receive_message", (data) => {
-        let urlSplit = window.location.href.split('/');
-        let chatId = urlSplit[urlSplit.length - 1];
+    socket.on("read_messages_mine", (data) => {
+        $('.read_message[class*="left"]').text('Leido');
+    });
 
+    socket.on("read_messages_other", (data) => {
+        $('.read_message[class*="right"]').text('Leido');
+    });
+
+    socket.on("receive_message", (data) => {
         if (data.chat._id === chatId) {
             let copy = $('#copy').find('#message').clone();
             copy.find('#username_data').text(data.message.user.fullName);
             copy.find('#time_data').text(moment(data.message.date).format('lll'));
             copy.find('#message_text').text(data.message.message);
+            copy.find('#read_text').text(data.message.read ? "Leído" : "No leido");
 
             if (email.text() === data.message.user.email) {
                 copy.find('.message-data').addClass("my-message-data");
                 copy.find('.message').addClass("my-message");
+                copy.find('#read_text').addClass("right");
             } else {
                 copy.find('.message-data').addClass("other-message-data");
                 copy.find('.message').addClass("other-message");
+                copy.find('#read_text').addClass("left");
             }
 
             copy.insertAfter(chatroom.children().last());
             init();
+        }
+
+        // socket.emit('read_messages', {
+        //     currentUser: data.user
+        // });
+    });
+
+    socket.emit('viewed_messages', {
+        chat: {
+            _id: chatId
+        },
+        currentUser: {
+            email: email.text()
         }
     });
 

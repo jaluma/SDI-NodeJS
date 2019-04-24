@@ -29,6 +29,34 @@ router.get("/api/item/list", async function (req, res) {
     return res.json(items);
 });
 
+router.get("/api/item/list/distint", async function (req, res) {
+    let filter = req.body.filter;
+    let pages = req.body.page;
+
+    filter = {
+        "sellerUser._id": {
+            $ne: filter.currentUser._id
+        }
+    };
+
+    let items;
+    if (pages) {
+        items = await itemsService.findAllItemsPage(filter, pages);
+    } else {
+        items = {
+            array: await itemsService.findAllItems(filter),
+            pages: 0
+        };
+    }
+
+    if (items === null) {
+        return error(res, "list");
+    }
+
+    res.status(200);
+    return res.json(items);
+});
+
 /* POST items listing. */
 router.post("/api/item/add", async function (req, res) {
     if (req.body.title === null) {

@@ -10,8 +10,12 @@ module.exports = {
             return null;
         }
     },
-    async updateChat(filter, chat) {
+    async updateChat(filter, chat, type) {
         try {
+            if (type) {
+                return await repo.update(collection, filter, chat);
+            }
+
             return await repo.updateP(collection, filter, chat);
         } catch (error) {
             return null;

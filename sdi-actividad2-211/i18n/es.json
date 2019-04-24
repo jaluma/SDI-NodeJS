@@ -107,7 +107,9 @@
   "chat": {
     "header": "Conversación",
     "conversation": "Chat con %s",
-    "contact": "Contactar"
+    "contact": "Contactar",
+    "read": "Leido",
+    "no_read": "No leido"
   },
   "login": {
     "header": "Inicio de sesion"

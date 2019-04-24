@@ -30,6 +30,38 @@ module.exports = async function (io) {
             });
         });
 
+        socket.on('viewed_messages', async (data) => {
+            let chat = data.chat;
+            let currentUser = socket.user;
+
+            let configuration = {
+                url: app.get('url') + '/api/messages/read',
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                    "token": socket.token
+                },
+                body: JSON.stringify({
+                    chat: chat,
+                    currentUser: currentUser
+                })
+            };
+
+            await rest(configuration, function (err, response, body) {
+            });
+        });
+
+        socket.on('read_messages', async (data) => {
+            let red = 'read_messages_other';
+            if (data.currentUser === socket.user) {
+                red = 'read_messages_mine';
+            }
+
+            io.to(socket.chat).emit(red, {
+                chat: data
+            });
+        });
+
         socket.on('new_message', async (data) => {
             let chat = {
                 _id: socket.chat
@@ -38,7 +70,7 @@ module.exports = async function (io) {
             let message = {
                 message: data.message,
                 user: data.user,
-                date: new Date(),
+                date: new Date().toISOString(),
                 read: false
             };
 

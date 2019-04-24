@@ -17,9 +17,12 @@ public class Message {
 
 	private User user;
 
+	private boolean read;
+
 	public Message(String message, LocalDateTime time) {
 		setMessage(message);
 		setTime(time);
+		read = false;
 	}
 
 	Message() {
@@ -55,6 +58,14 @@ public class Message {
 
 	void setUser(User user) {
 		this.user = user;
+	}
+
+	public boolean isRead() {
+		return read;
+	}
+
+	public void setRead(boolean read) {
+		this.read = read;
 	}
 
 	@Override

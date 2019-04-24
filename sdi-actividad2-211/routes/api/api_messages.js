@@ -24,7 +24,7 @@ router.post("/api/messages/send", async function (req, res) {
     let chat = req.body.chat;
     let currentUser = req.body.currentUser;
 
-    message.user = await usersService.findOne(message.user);
+    message.user = await usersService.findOne(currentUser);
     message = await messagesService.addMessage(message);
     await chatsService.updateChat(chat, {
         messages: message
@@ -40,6 +40,69 @@ router.post("/api/messages/send", async function (req, res) {
 
     res.status(200);
     return res.json(message);
+});
+
+router.post("/api/messages/read", async function (req, res) {
+    let body = req.body;
+    if (body.chat === null) {
+        return error(res, "chat");
+    }
+    if (body.currentUser === null) {
+        return error(res, "user");
+    }
+
+    let chat = body.chat;
+    let currentUser = body.currentUser;
+    let status = body.status || true;
+
+    currentUser = await usersService.findOne(currentUser);
+    chat = await chatsService.findOne(chat);
+
+    if (!currentUser || !chat) {
+        return error(res, "find");
+    }
+
+    let currentUserF = {
+        _id: currentUser._id.toString()
+    };
+
+    let count = 0;
+    for (let index in chat.messages) {
+        let message = chat.messages[index];
+        if (message.read) {
+            continue;
+        }
+
+        if (currentUserF._id === message.user._id.toString()) {
+            continue;
+        }
+
+        let filter = {
+            messages: {
+                $elemMatch: {
+                    _id: message._id.toString()
+
+                }
+            }
+        };
+
+        let result = await chatsService.updateChat(filter, {
+            "messages.$.read": status
+        }, 'set');
+        count += result.modifiedCount;
+
+        chat.messages[index].read = status;
+    }
+
+    app.get('io').sockets.emit('read_messages', {
+        chat: chat,
+        currentUser: currentUser
+    });
+
+    res.status(200);
+    return res.json({
+        count: count
+    });
 });
 
 module.exports = router;

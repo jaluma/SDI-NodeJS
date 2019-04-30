@@ -49,7 +49,7 @@ router.get("/api/item/list/distint", async function (req, res) {
         };
     }
 
-    if (items === null) {
+    if (items.array === null) {
         return error(res, "list");
     }
 
@@ -118,24 +118,23 @@ router.post("/api/item/add", async function (req, res) {
     return res.json(item);
 });
 
-/* PUT items listing. */
-router.put("/api/item/buy", async function (req, res) {
+router.post("/api/item/buy", async function (req, res) {
     let body = req.body.object;
 
-    if (body['_id'] === null) {
+    if (body._id === null) {
         return error(res, "item");
     }
 
-    if (body['buyerUser._id'] === null) {
+    if (body.buyerUser._id === null) {
         return error(res, "buyerUser");
     }
 
     let filter = {
-        _id: body['_id']
+        _id: body._id
     };
 
     let buyerUser = {
-        _id: body['buyerUser._id']
+        _id: body.buyerUser._id
     };
 
     buyerUser = await usersService.findOne(buyerUser);
@@ -149,7 +148,7 @@ router.put("/api/item/buy", async function (req, res) {
     }
     item = item[0];
 
-    if (buyerUser._id.equals(item.sellerUser._id)) {
+    if (item.buyerUser || buyerUser._id.equals(item.sellerUser._id)) {
         return error(res, "user");
     }
 
@@ -174,10 +173,12 @@ router.put("/api/item/buy", async function (req, res) {
 
     res.status(200);
     return res.json({
-        count: result.modifiedCount
+        count: result.modifiedCount,
+        price: item.price
     });
 });
 
+/* PUT items listing. */
 router.put("/api/item/highlighter/:id", async function (req, res) {
     let id = req.params.id;
 

@@ -21,6 +21,7 @@ module.exports = async function (io) {
             socket.token = data.token;
 
             socket.join(socket.chat);
+            socket.join(socket.user._id)
         });
 
         socket.on('receive_message', async (data) => {
@@ -28,6 +29,11 @@ module.exports = async function (io) {
                 message: data.message,
                 user: data.user,
             });
+            if (message.read) {
+                io.to(data.user._id).emit('read_messages_mine', {
+                    chat: data
+                });
+            }
         });
 
         socket.on('viewed_messages', async (data) => {
@@ -47,17 +53,18 @@ module.exports = async function (io) {
                 })
             };
 
-            await rest(configuration, function (err, response, body) {
+            rest(configuration, function (err, response, body) {
+                io.to(socket.chat).emit('read_messages_other', {
+                    chat: data
+                });
             });
         });
 
         socket.on('read_messages', async (data) => {
-            let red = 'read_messages_other';
-            if (data.currentUser === socket.user) {
-                red = 'read_messages_mine';
-            }
+            let messages = data.chat.messages;
+            let otherUser = messages.filter(m => m.user._id !== socket.user._id)[0].user;
 
-            io.to(socket.chat).emit(red, {
+            io.to(otherUser._id).emit('read_messages_mine', {
                 chat: data
             });
         });
@@ -88,7 +95,7 @@ module.exports = async function (io) {
                 })
             };
 
-            await rest(configuration, function (err, response, body) {
+            rest(configuration, function (err, response, body) {
             });
 
         });

@@ -26,7 +26,9 @@ router.get('/home', async function (req, res) {
             "token": req.session.token
         },
         body: JSON.stringify({
-            filter: {"sellerUser._id": req.session.currentUser._id}
+            filter: {
+                "sellerUser._id": req.session.currentUser._id
+            }
         })
     };
 
@@ -38,6 +40,7 @@ router.get('/home', async function (req, res) {
             error: error
         };
 
+
         configuration = {
             url: app.get('url') + '/api/item/list',
             method: "get",
@@ -46,7 +49,9 @@ router.get('/home', async function (req, res) {
                 "token": req.session.token
             },
             body: JSON.stringify({
-                filter: {highlighter: true}
+                filter: {
+                    highlighter: true
+                }
             })
         };
 
@@ -59,11 +64,11 @@ router.get('/home', async function (req, res) {
 
 module.exports = router;
 
-// catch 404 and forward to error handler
-app.get(function (req, res, next) {
-    let createError = require('http-errors');
-    next(createError(404));
-});
+// // catch 404 and forward to error handler
+// app.get(function (req, res, next) {
+//     let createError = require('http-errors');
+//     next(createError(404));
+// });
 
 app.get(function (err, req, res) {
     // set locals, only providing error in development

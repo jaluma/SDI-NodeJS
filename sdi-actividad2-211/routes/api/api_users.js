@@ -7,8 +7,8 @@ let usersService = require(path.join(__basedir, "modules/services/users"));
 
 /* GET users listing. */
 router.get("/api/user/list", async function (req, res) {
-    let filter = req.body.filter;
-    let pages = req.body.page;
+    let filter = req.body.filter || {};
+    let pages = req.body.page || 1;
 
     let users;
     if (pages) {
@@ -20,7 +20,7 @@ router.get("/api/user/list", async function (req, res) {
         };
     }
 
-    if (users === null) {
+    if (!users.array) {
         return error(res, "find");
     }
 
@@ -89,8 +89,18 @@ router.post("/api/signup", async function (req, res) {
     // delete param password
     delete user.password;
 
+    let token = app.get('jwt').sign({
+        usuario: user.email,
+        tiempo: Date.now() / 1000
+    }, app.get('encrypt'));
+
+    let json = {
+        authenticated: true,
+        user: user,
+        token: token
+    };
     res.status(200);
-    return res.json(user);
+    res.json(json);
 });
 
 router.post("/api/login", async function (req, res) {

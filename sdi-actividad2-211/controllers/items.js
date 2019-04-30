@@ -33,7 +33,9 @@ router.get('/item/details/:id', function (req, res) {
             "token": req.session.token
         },
         body: JSON.stringify({
-            _id: req.params.id
+            filter: {
+                _id: req.params.id
+            }
         })
     };
 
@@ -81,12 +83,20 @@ router.get('/item/buy/:id', function (req, res) {
     }
 
     let configuration = {
-        url: app.get('url') + '/api/item/buy/' + id,
-        method: "put",
+        url: app.get('url') + '/api/item/buy',
+        method: "post",
         headers: {
             "Content-Type": "application/json; charset=utf-8",
             "token": req.session.token
-        }
+        },
+        body: JSON.stringify({
+            object: {
+                _id: id,
+                buyerUser: {
+                    _id: req.session.currentUser._id
+                }
+            }
+        })
     };
 
     rest(configuration, function (err, response, body) {
@@ -95,7 +105,7 @@ router.get('/item/buy/:id', function (req, res) {
             req.session.error = er;
         }
 
-        return res.redirect("/item/mylist");
+        return res.redirect("/user/purchases");
     });
 });
 
@@ -199,7 +209,7 @@ router.get('/item/mylist', function (req, res) {
         let er = JSON.parse(body).error;
         if (err || er) {
             req.session.error = er;
-            return res.redirect("/item/mylist");
+            return res.redirect("/home");
         }
 
         body = JSON.parse(body);

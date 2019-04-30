@@ -1,5 +1,5 @@
 $(function () {
-    let socket = io.connect('https://localhost:8081', {secure: true});
+    let socket = io.connect('http://localhost:8081', {secure: true});
 
     let email = $("#currentUser");
     let token = $("#token");
@@ -29,11 +29,11 @@ $(function () {
     });
 
     socket.on("read_messages_mine", (data) => {
-        $('.read_message[class*="left"]').text('Leido');
+        $('.read_message[class*="right"]').text('Leido');
     });
 
     socket.on("read_messages_other", (data) => {
-        $('.read_message[class*="right"]').text('Leido');
+        $('.read_message[class*="left"]').text('Leido');
     });
 
     socket.on("receive_message", (data) => {
@@ -58,9 +58,16 @@ $(function () {
             init();
         }
 
-        // socket.emit('read_messages', {
-        //     currentUser: data.user
-        // });
+        socket.emit('viewed_messages', {
+            chat: {
+                _id: data.chat._id
+            },
+            currentUser: {
+                email: email.text()
+            }
+        });
+
+
     });
 
     socket.emit('viewed_messages', {

@@ -36,7 +36,7 @@ router.post("/api/messages/send", async function (req, res) {
         chat: chat
     };
 
-    await app.get('io').sockets.emit('receive_message', send);
+    app.get('io').sockets.emit('receive_message', send);
 
     res.status(200);
     return res.json(message);
@@ -95,8 +95,8 @@ router.post("/api/messages/read", async function (req, res) {
     }
 
     app.get('io').sockets.emit('read_messages', {
-        chat: chat,
-        currentUser: currentUser
+        chat: body.chat,
+        currentUser: currentUser._id.toString()
     });
 
     res.status(200);

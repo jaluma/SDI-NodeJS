@@ -34,7 +34,7 @@
 				<button type="submit" class="btn btn-outline-success waves-effects">{{ __("util.send") }}</button>
 			</div>
 			{% if error %}
-				<div id="login-error" class="alert alert-danger">{{ error }}</div>
+				<div id="signup-error" class="alert alert-danger">{{ error }}</div>
 			{% endif %}
 
 			<input type="hidden" name="_csrf" value="{{ csrftoken }}"/>

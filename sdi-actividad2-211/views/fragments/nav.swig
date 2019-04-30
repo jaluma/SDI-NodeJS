@@ -91,7 +91,7 @@
 								<header>
 									<h6 id="email" style="font-weight: bold; text-align: center">{{ currentUser.fullName }}</h6>
 									<h6 style="text-align: center">{{ currentUser.email }}</h6>
-									<h6 id="money" style="font-weight: bold; font-size: 24px; text-align: center;">{{ currentUser.money }} '€'</h6>
+									<h6 id="money" style="font-weight: bold; font-size: 24px; text-align: center;">{{ currentUser.money }} €</h6>
 								</header>
 							</aside>
 						</a>

@@ -19,7 +19,7 @@ module.exports = {
     },
     async removeUser(filter) {
         try {
-            return await repo.delete(collection, filter);
+            return await repo.remove(collection, filter);
         } catch (error) {
             return null;
         }

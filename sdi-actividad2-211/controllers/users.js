@@ -31,7 +31,7 @@ router.get('/logout', function (req, res) {
     delete req.session.lastPage;
     delete req.session.currentUser;
 
-    res.redirect("/");
+    res.redirect("/login");
 });
 
 router.get('/user/details/:id', function (req, res) {
@@ -105,7 +105,6 @@ router.get('/user/purchases', function (req, res) {
     });
 });
 
-
 /* POST users listing. */
 router.post('/login', function (req, res) {
     let filter = {
@@ -129,8 +128,7 @@ router.post('/login', function (req, res) {
             return res.redirect("/login");
         }
 
-        req.session.currentUser = JSON.parse(body).user;
-        req.session.token = JSON.parse(body).token;
+        saveCurrentUser(req, JSON.parse(body));
 
         let page = req.session.lastPage;
         if (page && req.session.currentUser && req.session.token) {
@@ -168,12 +166,16 @@ router.post('/signup', async function (req, res) {
             return res.redirect("/signup");
         }
 
-        req.session.currentUser = JSON.parse(body).user;
-        req.session.token = JSON.parse(body).token;
-        res.locals.currentUser = JSON.parse(body).user;
-        res.locals.token = JSON.parse(body).token;
+        saveCurrentUser(req, JSON.parse(body));
+
         res.redirect('/home');
     });
 });
 
 module.exports = router;
+
+function saveCurrentUser(req, body) {
+    req.session.currentUser = body.user;
+    req.session.currentUser.money = req.session.currentUser.money.toFixed(2);
+    req.session.token = body.token;
+}

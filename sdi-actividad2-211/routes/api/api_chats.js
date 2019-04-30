@@ -50,63 +50,41 @@ router.get("/api/chat/:id", async function (req, res) {
 
 /* POST chats listing. */
 router.post("/api/chat/create", async function (req, res) {
-    if (req.body.title === null) {
-        return error(res, "title");
-    }
-    if (req.body.description === null) {
-        return error(res, "description");
-    }
-    if (req.body.date === null) {
-        return error(res, "date");
-    }
-    if (req.body.price === null) {
-        return error(res, "price");
-    }
-    if (req.body.highlighter === null) {
-        return error(res, "highlighter");
-    }
-    if (req.body.sellerUser === null) {
-        return error(res, "sellerUser");
-    }
 
-    let user = req.body.sellerUser;
+    let idItem = req.body._id;
+    let currentUserId = req.body.currentUser._id;
 
-    let item = {
-        title: req.body.title,
-        description: req.body.description,
-        date: req.body.date,
-        price: req.body.price,
-        highlighter: req.body.highlighter,
-        sellerUser: user,
-        buyerUser: null
+    // buscar algun chat de ese item donde haya mensajes de ese usuario
+    let filter = {
+        "item._id": idItem,
+        "messages": {
+            $elemMatch: {
+                "user._id": currentUserId
+            }
+        }
     };
 
-    if (item.highlighter === true) {
-        let sellerUser = await usersService.findOne(user);
-        if (sellerUser === null) {
-            return error(res, "sellerUser");
-        }
+    let chat = await chatsService.findOne(filter);
 
-        if (sellerUser.money < 20) {
-            return error(res, "money");
-        }
-
-        let result = await usersService.updateUser(sellerUser, {
-            money: sellerUser.money - 20
+    // sino existe crear uno nuevo
+    if (!chat) {
+        let item = await itemsService.findOne({
+            _id: idItem
         });
 
-        if (result === null) {
-            return error(res, "money");
-        }
-    }
+        chat = {
+            messages: [],
+            item: item
+        };
 
-    item = await itemsService.addItem(item);
-    if (item === null) {
-        return error(res, "insert", 500);
+        chat = await chatsService.createChat(chat);
+        if (chat === null) {
+            return error(res, "create", 500);
+        }
     }
 
     res.status(200);
-    return res.json(item);
+    return res.json(chat);
 });
 
 /* DELETE chats listing. */

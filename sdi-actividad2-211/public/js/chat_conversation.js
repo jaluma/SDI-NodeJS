@@ -21,9 +21,8 @@ $(function () {
     send_message.click(() => {
         socket.emit('new_message', {
             message: message.val(),
-            user: {
-                email: email.text()
-            }
+            user: email.text(),
+            chat: chat.text()
         });
         message.val('');
     });
@@ -40,7 +39,7 @@ $(function () {
         if (data.chat._id === chatId) {
             let copy = $('#copy').find('#message').clone();
             copy.find('#username_data').text(data.message.user.fullName);
-            copy.find('#time_data').text(moment(data.message.date).format('lll'));
+            copy.find('#time_data').text(moment(data.message.time).format('lll'));
             copy.find('#message_text').text(data.message.message);
             copy.find('#read_text').text(data.message.read ? "Leído" : "No leido");
 
@@ -54,7 +53,12 @@ $(function () {
                 copy.find('#read_text').addClass("left");
             }
 
-            copy.insertAfter(chatroom.children().last());
+            if (chatroom.children().length > 0) {
+                copy.insertAfter(chatroom.children().last());
+            } else {
+                chatroom.html(copy);
+            }
+
             init();
         }
 

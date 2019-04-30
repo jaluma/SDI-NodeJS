@@ -29,7 +29,7 @@
 						{% if item.buyerUser === null %}
 							<td class="align-middle clickable-row" data-href="{{ '/item/details/' + item._id }}">
 								<a id="buyButton" class="btn btn-secondary link" href="{{ '/item/buy/' + item._id }}">{{ __("item.buy") }}</a>
-								<a id="chatButton" class="btn btn-secondary link" href="{{ '/chat/create/' + item.id }}">{{ __("chat.contact") }}</a>
+								<a id="chatButton" class="btn btn-secondary link" href="{{ '/chat/create/' + item._id }}">{{ __("chat.contact") }}</a>
 							</td>
 						{% else %}
 							<td class="align-middle">
@@ -44,7 +44,7 @@
 			{% include '../fragments/pagination.swig' %}
 
 			{% if error %}
-				<div id="money-error" class="alert alert-danger">{{ __("item.buy.insuficient") }}</div>
+				<div id="money-error" class="alert alert-danger">{{ __("error.buy.insuficient") }}</div>
 			{% endif %}
 
 			<script th:inline="javascript">

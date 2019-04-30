@@ -36,6 +36,10 @@ router.get('/admin/logging', async function (req, res) {
 
 /* POST users listing. */
 router.post('/admin/remove', async function (req, res) {
+    if (req.body.checkbox === null) {
+        res.redirect('/admin/list');
+    }
+
     let list = req.body.checkbox;
     if (Array.isArray(list) === false) {
         list = [];

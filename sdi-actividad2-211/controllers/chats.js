@@ -30,14 +30,34 @@ router.get('/chat/list', async function (req, res) {
     await rest(configuration, await function (err, response, body) {
         body = JSON.parse(body);
 
-        body.array.forEach(c => {
+        if (!body.array) {
+            res.redirect()
+        }
+
+        body.array.forEach(async c => {
+            // emails contrarios
             c.otherUser = c.item.sellerUser;
-            c.messages.forEach(m => {
-                if (c.otherUser._id !== m.user._id) {
-                    c.otherUser = m.user._id;
+
+            if (c.otherUser._id === req.session.currentUser._id) {
+                for (let index in c.messages) {
+                    let m = c.messages[index];
+                    if (m.user != null && c.otherUser._id !== m.user._id) {
+                        c.otherUser = m.user;
+                        return;
+                    }
                 }
-            });
+            }
+            // count
+            c.notRead = 0;
+
+            for (let index in c.messages) {
+                let m = c.messages[index];
+                if (m.read === false) {
+                    c.notRead++;
+                }
+            }
         });
+
 
         res.render('chat/list', {
             chatsList: body.array,
@@ -47,7 +67,7 @@ router.get('/chat/list', async function (req, res) {
     });
 });
 
-router.get('/chat/create', async function (req, res) {
+router.get('/chat/create/:id', async function (req, res) {
     let configuration = {
         url: app.get('url') + '/api/chat/create',
         method: "post",
@@ -56,7 +76,10 @@ router.get('/chat/create', async function (req, res) {
             "token": req.session.token
         },
         body: JSON.stringify({
-            _id: req.params.id
+            _id: req.params.id,
+            currentUser: {
+                _id: req.session.currentUser._id
+            }
         })
     };
 
@@ -87,6 +110,9 @@ router.get('/chat/conversation/:id', async function (req, res) {
     await rest(configuration, await function (err, response, body) {
         let er = JSON.parse(body).error;
         if (err || er) {
+            if (err === "list") {        // no existe
+                return res.redirect('/chat/create/' + id);
+            }
             req.session.error = er;
         }
 

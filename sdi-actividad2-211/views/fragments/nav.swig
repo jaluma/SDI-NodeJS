@@ -66,11 +66,11 @@
 				</a>
 				<div class="dropdown-menu dropdown-menu-right dropdown-info" id="languageDropdownMenuButton"
 				     aria-labelledby="languajeDropdownMenuLink">
-					<a id="btnEnglish" class="dropdown-item" href="?lang=en">
+					<a id="btnEnglish" class="dropdown-item" href="?lang=en" value="en">
 						<img src="/img/if_uk_flag.png" style="border: 0; float: left; margin-right: 15px" alt="EN"/>
 						<span>{{ __("language.en") }}</span>
 					</a>
-					<a id="btnSpanish" class="dropdown-item" href="?lang=es">
+					<a id="btnSpanish" class="dropdown-item" href="?lang=es" value="es">
 						<img src="/img/if_spain_flag.png" style="border: 0; float: left; margin-right: 15px" alt="ES"/>
 						<span>{{ __("language.es") }}</span>
 					</a>
@@ -102,3 +102,18 @@
 		</ul>
 	</div>
 </nav>
+
+<script>
+    $(document).ready(function () {
+        $("#languageDropdownMenuButton a").click(function (e) {
+            e.preventDefault(); // cancel the link behaviour
+            let date = new Date();
+            let languageSelectedText = $(this).text();
+            let languageSelectedValue = $(this).attr('value');
+            document.cookie = "cookieLang=" + languageSelectedValue + ";expires=" + date + ";path=/";
+            $("#btnLanguage").text(languageSelectedText);
+            window.location.replace('?lang=' + languageSelectedValue);
+            return false;
+        });
+    });
+</script>

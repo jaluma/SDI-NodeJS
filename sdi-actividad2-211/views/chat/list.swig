@@ -10,6 +10,7 @@
 			<table id="tableChats" class="table table-hover">
 				<thead>
 				<tr>
+					<th>{{ __("chat.not_readed") }}</th>
 					<th>{{ __("item.title") }}</th>
 					<th>{{ __("user.email") }}</th>
 				</tr>
@@ -17,6 +18,9 @@
 				<tbody>
 				{% for chat in chatsList %}
 					<tr id="chat" class="tr-static-height" style="cursor: pointer;">
+						<td class="clickable-row" data-href="{{ '/chat/conversation/' + chat._id }}">
+							{{ chat.notRead - 2 + 2 }}
+						</td>
 						<td class="clickable-row" data-href="{{ '/chat/conversation/' + chat._id }}">
 							{{ chat.item.title }}
 						</td>

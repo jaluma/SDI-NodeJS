@@ -8,6 +8,30 @@ let messagesService = require(path.join(__basedir, "modules/services/messages"))
 let chatsService = require(path.join(__basedir, "modules/services/chats"));
 let usersService = require(path.join(__basedir, "modules/services/users"));
 
+/* GET items listing. */
+router.get("/api/messages/not_readed/:id", async function (req, res) {
+    let filter = {
+        _id: req.params.id,
+        messages: {
+            $elemMatch: {
+                read: {
+                    $ne: true
+                }
+            }
+        }
+    };
+
+    let chat = await chatsService.findOne(filter);
+    if (chat === null) {
+        return error(res, "list");
+    }
+
+    res.status(200);
+    return res.json({
+        count: chat.messages.length
+    });
+});
+
 /* POST chats listing. */
 router.post("/api/messages/send", async function (req, res) {
     if (req.body.message === null) {
@@ -20,11 +44,22 @@ router.post("/api/messages/send", async function (req, res) {
         return error(res, "user");
     }
 
-    let message = req.body.message;
-    let chat = req.body.chat;
-    let currentUser = req.body.currentUser;
+    let chat = {
+        _id: req.body.chat
+    };
 
-    message.user = await usersService.findOne(currentUser);
+    let currentUser = {
+        email: req.body.currentUser
+    };
+    let user = await usersService.findOne(currentUser);
+
+    let message = {
+        message: req.body.message,
+        time: new Date(),
+        read: false,
+        user: user
+    };
+
     message = await messagesService.addMessage(message);
     await chatsService.updateChat(chat, {
         messages: message
@@ -32,7 +67,7 @@ router.post("/api/messages/send", async function (req, res) {
 
     let send = {
         message: message,
-        user: currentUser,
+        user: user,
         chat: chat
     };
 

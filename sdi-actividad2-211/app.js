@@ -48,6 +48,7 @@ i18n.configure({
     locales: ['es', 'en'],
     directory: __dirname + '/i18n',
     defaultLocale: 'es',
+    cookie: 'cookieLang',
     queryParameter: 'lang',
     objectNotation: true,
     api: {

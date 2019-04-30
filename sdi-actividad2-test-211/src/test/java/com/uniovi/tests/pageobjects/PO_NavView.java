@@ -94,6 +94,6 @@ public class PO_NavView extends PO_View {
 		SeleniumUtils.EsperaCargaPagina(driver, "id", "dropdownMenuAccount", getTimeout());
 
 		WebElement money = driver.findElement(By.id("money"));
-		return money.getText().replace(" €", "").replace(",", ".");
+		return money.getText().split(" €")[0].replace(",", ".");
 	}
 }

@@ -1,159 +1,159 @@
 {
-  "welcome": {
-    "message": "Bienvenid@"
-  },
-  "language": {
-    "en": "Ingles",
-    "es": "Español"
-  },
-  "nav": {
-    "title": "MyWallapop",
-    "login": "Identíficate",
-    "signup": "Registrarse",
-    "signout": "Desconectar",
-    "users": "Gestión de usuarios",
-    "chats": "Chats",
-    "home": "Página principal",
-    "user": {
-      "name": "%s",
-      "money": "%d %s"
-    },
-    "sells": {
-      "other": "Comprar",
-      "bought": "Mis compras",
-      "list": "Lista de ofertas disponibles"
-    },
-    "sales": {
-      "mySales": "Mis ofertas",
-      "add": "Añadir una oferta",
-      "myList": "Lista de mis ofertas"
-    },
-    "admin": {
-      "log": "Log del sistema"
-    },
-    "log": "nav.log"
-  },
-  "signup": {
-    "header": "Registráte como usuario",
-    "repitPassword": "Repita la contraseña"
-  },
-  "footer": {
-    "text": "©2019 Copyright: SDI - MyWallaPop, Javier Martínez Álvarez"
-  },
-  "util": {
-    "send": "Enviar"
-  },
-  "user": {
-    "email": "Email",
-    "name": "Nombre",
-    "lastName": "Apellidos",
-    "password": "Contraseña",
-    "money": "Saldo",
-    "list": {
-      "header": "Usuarios"
-    },
-    "details": {
-      "header": "Detalles del usuario"
-    },
-    "buyed": {
-      "list": "Compras de: %s"
-    },
-    "signout": "Desconectar"
-  },
-  "item": {
-    "title": "Título",
-    "description": "Descripción",
-    "date": "Fecha",
-    "price": "Precio",
-    "buy": "Comprar",
-    "buyed": "Vendido",
-    "seller": "Vendedor",
-    "add": {
-      "header": "Añadir producto"
-    },
-    "details": {
-      "header": "Detalles del producto"
-    },
-    "highlighter": {
-      "body": "Destacar objetos permite que el objeto salga en la pestaña principal del resto de personas permitiendo que pueda llegar a mucha más gente. Esta acción tiene un coste de 20€. Se le descontará del saldo."
-    }
-  },
-  "sell": {
-    "list": {
-      "header": "Lista de Objetos",
-      "title": "Comprar"
-    },
-    "mylist": {
-      "header": "Mis productos en venta",
-      "title": "Mis ofertas"
-    }
-  },
-  "home": {
-    "user": {
-      "personal": "Zona personal",
-      "details": "Detalles de mi cuenta"
-    },
-    "highlighter": "Ofertas destacadas"
-  },
-  "index": {
-    "header": "Inicio",
-    "signup": "¿Estás ya registrado?",
-    "new": "¿Eres nuevo?",
-    "searching": "Hola, ¿qué andas buscando?",
-    "user": {
-      "details": "Detalles de mi cuenta"
-    }
-  },
-  "chat": {
-    "header": "Conversación",
-    "conversation": "Chat con %s",
-    "contact": "Contactar",
-    "read": "Leido",
-    "no_read": "No leido"
-  },
-  "login": {
-    "header": "Inicio de sesion"
-  },
-  "admin": {
-    "list": {
-      "header": "Lista de usuarios"
-    }
-  },
-  "placeholder": {
-    "search": "texto a buscar",
-    "chat": "Escriba un mensaje"
-  },
-  "tooltip": {
-    "hightlighter": "Destacar oferta"
-  },
-  "modal": {
-    "highlighter": {
-      "title": "Destacar oferta",
-      "body": "Esto tiene un coste de 20€ que se restaran del saldo disponible. ¿Esta seguro que quiere hacerlo?",
-      "button": "Destacar"
-    }
-  },
-  "error": {
-    "signup": {
-      "email": "Error con el email introducido. Debe de ser un Email y no debe de existir ya.",
-      "password": "Error con la contraseña introducida. Deben de ser iguales y mínimo 6 caracteres.",
-      "login": {
-        "incorrect": "Usuario o contraseña incorrecto."
-      }
-    },
-    "go": {
-      "home": "Volver al Inicio"
-    },
-    "buy": {
-      "id": "Este objeto no se puede comprar.",
-      "insuficient": "No tiene el saldo necesario."
-    },
-    "highlighter": "No tiene el saldo disponible.",
-    "page": "Error..."
-  },
-  "url": {
-    "default": {
-      "ico": "http://icons.iconarchive.com/icons/papirus-team/papirus-status/256/avatar-default-icon.png"
-    }
-  }
+	"welcome": {
+		"message": "Bienvenid@"
+	},
+	"language": {
+		"en": "Ingles",
+		"es": "Español"
+	},
+	"nav": {
+		"title": "MyWallapop",
+		"login": "Identíficate",
+		"signup": "Registrarse",
+		"signout": "Desconectar",
+		"users": "Gestión de usuarios",
+		"chats": "Chats",
+		"home": "Página principal",
+		"user": {
+			"name": "%s",
+			"money": "%d %s"
+		},
+		"sells": {
+			"other": "Comprar",
+			"bought": "Mis compras",
+			"list": "Lista de ofertas disponibles"
+		},
+		"sales": {
+			"mySales": "Mis ofertas",
+			"add": "Añadir una oferta",
+			"myList": "Lista de mis ofertas"
+		},
+		"admin": {
+			"log": "Log del sistema"
+		}
+	},
+	"signup": {
+		"header": "Registráte como usuario",
+		"repitPassword": "Repita la contraseña"
+	},
+	"footer": {
+		"text": "©2019 Copyright: SDI - MyWallaPop, Javier Martínez Álvarez"
+	},
+	"util": {
+		"send": "Enviar"
+	},
+	"user": {
+		"email": "Email",
+		"name": "Nombre",
+		"lastName": "Apellidos",
+		"password": "Contraseña",
+		"money": "Saldo",
+		"list": {
+			"header": "Usuarios"
+		},
+		"details": {
+			"header": "Detalles del usuario"
+		},
+		"buyed": {
+			"list": "Compras de: %s"
+		},
+		"signout": "Desconectar"
+	},
+	"item": {
+		"title": "Título",
+		"description": "Descripción",
+		"date": "Fecha",
+		"price": "Precio",
+		"buy": "Comprar",
+		"buyed": "Vendido",
+		"seller": "Vendedor",
+		"add": {
+			"header": "Añadir producto"
+		},
+		"details": {
+			"header": "Detalles del producto"
+		},
+		"highlighter": {
+			"body": "Destacar objetos permite que el objeto salga en la pestaña principal del resto de personas permitiendo que pueda llegar a mucha más gente. Esta acción tiene un coste de 20€. Se le descontará del saldo."
+		}
+	},
+	"sell": {
+		"list": {
+			"header": "Lista de Objetos",
+			"title": "Comprar"
+		},
+		"mylist": {
+			"header": "Mis productos en venta",
+			"title": "Mis ofertas"
+		}
+	},
+	"home": {
+		"user": {
+			"personal": "Zona personal",
+			"details": "Detalles de mi cuenta"
+		},
+		"highlighter": "Ofertas destacadas"
+	},
+	"index": {
+		"header": "Inicio",
+		"signup": "¿Estás ya registrado?",
+		"new": "¿Eres nuevo?",
+		"searching": "Hola, ¿qué andas buscando?",
+		"user": {
+			"details": "Detalles de mi cuenta"
+		}
+	},
+	"chat": {
+		"header": "Conversación",
+		"conversation": "Chat con %s",
+		"contact": "Contactar",
+		"read": "Leido",
+		"no_read": "No leido",
+		"not_readed": "No leídos"
+	},
+	"login": {
+		"header": "Inicio de sesion"
+	},
+	"admin": {
+		"list": {
+			"header": "Lista de usuarios"
+		}
+	},
+	"placeholder": {
+		"search": "texto a buscar",
+		"chat": "Escriba un mensaje"
+	},
+	"tooltip": {
+		"hightlighter": "Destacar oferta"
+	},
+	"modal": {
+		"highlighter": {
+			"title": "Destacar oferta",
+			"body": "Esto tiene un coste de 20€ que se restaran del saldo disponible. ¿Esta seguro que quiere hacerlo?",
+			"button": "Destacar"
+		}
+	},
+	"error": {
+		"signup": {
+			"email": "Error con el email introducido. Debe de ser un Email y no debe de existir ya.",
+			"password": "Error con la contraseña introducida. Deben de ser iguales y mínimo 6 caracteres.",
+			"login": {
+				"incorrect": "Usuario o contraseña incorrecto."
+			}
+		},
+		"go": {
+			"home": "Volver al Inicio"
+		},
+		"buy": {
+			"id": "Este objeto no se puede comprar.",
+			"insuficient": "No tiene el saldo necesario."
+		},
+		"highlighter": "No tiene el saldo disponible.",
+		"page": "Error..."
+	},
+	"url": {
+		"default": {
+			"ico": "http://icons.iconarchive.com/icons/papirus-team/papirus-status/256/avatar-default-icon.png"
+		}
+	}
 }

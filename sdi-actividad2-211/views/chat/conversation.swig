@@ -17,7 +17,7 @@
 					<li id="message" style="list-style: none;">
 						<div class="message-data{% if message.user._id === currentUser._id %} my-message-data {% else %} other-message-data {% endif %}">
 							<span id="username_data" class="message-data-name">{{ message.user.fullName }}</span>
-							<span id="time_data" class="message-data-time">{{ moment(strToDate(message.time)).format('lll') }}</span>
+							<span id="time_data" class="message-data-time">{{ moment(message.time).format('lll') }}</span>
 						</div>
 
 						<div class="text_wrapper message{% if message.user._id === currentUser._id %} my-message {% else %} other-message {% endif %}">
@@ -47,10 +47,6 @@
 	</div>
 
 	<script>
-        function strToDate(str) {
-            return new Date(str);
-        }
-
         moment.locale('es');
 	</script>
 

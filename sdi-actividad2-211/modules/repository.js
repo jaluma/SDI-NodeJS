@@ -5,9 +5,10 @@ const url = "mongodb://admin:oyp2XjWbzg2xGidG@cluster0-shard-00-00-ixeb7.mongodb
 module.exports = {
     async insert(collection, item) {
         const db = await mongo.MongoClient.connect(url);
+        item = await convertTypesMongo(item);
         let itemR = await db.collection(collection).insertOne(item);
         db.close();
-        return itemR.ops[0];
+        return await itemR.ops[0];
     },
 
     async update(collection, filter, item) {
@@ -96,11 +97,18 @@ async function convertTypesMongo(filter, propertyBefore) {
             if (typeof filter[property] == "object") {
                 filter[property] = await convertTypesMongo(filter[property], property);
             } else {
-                if (property.includes('_id') || propertyBefore && propertyBefore.includes('_id') && !propertyBefore.includes('$')) {
+                if (includeProperty(property, propertyBefore, "_id")) {
                     filter[property] = mongo.ObjectID(filter[property]);
+                }
+                if (includeProperty(property, propertyBefore, "date") || includeProperty(property, propertyBefore, "time")) {
+                    filter[property] = new Date(filter[property]);
                 }
             }
         }
     }
     return filter;
+}
+
+function includeProperty(property, propertyBefore, searchString) {
+    return property.includes(searchString) || propertyBefore && propertyBefore.includes(searchString) && !propertyBefore.includes('$')
 }

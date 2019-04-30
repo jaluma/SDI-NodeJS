@@ -103,6 +103,7 @@ router.get('/item/buy/:id', function (req, res) {
         let er = JSON.parse(body).error;
         if (err || er) {
             req.session.error = er;
+            return res.redirect("/item/list")
         }
 
         return res.redirect("/user/purchases");
@@ -139,7 +140,7 @@ router.get('/item/list', function (req, res) {
     let searchText = req.query.searchText;
     let error = req.session.error;
     if (error) {
-        req.session.error = null;
+        delete req.session.error;
     }
 
     let filter = {
@@ -176,6 +177,7 @@ router.get('/item/list', function (req, res) {
         }
 
         body = JSON.parse(body);
+
         res.render('item/list', {
             itemsList: body.array,
             actual: page,
@@ -227,10 +229,10 @@ router.post('/item/add', function (req, res) {
     let item = {
         title: req.body.title,
         description: req.body.description,
-        date: req.body.date,
+        date: new Date(req.body.date),
         price: req.body.price,
         highlighter: req.body.highlighter === 'on',
-        sellerUser: req.session.currentUser,
+        sellerUser: req.session.currentUser._id
     };
 
     let configuration = {
@@ -247,6 +249,7 @@ router.post('/item/add', function (req, res) {
         let er = JSON.parse(body).error;
         if (err || er) {
             req.session.error = er;
+            return res.redirect('/item/add');
         }
 
         return res.redirect("/item/mylist");

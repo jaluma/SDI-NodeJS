@@ -24,4 +24,11 @@ module.exports = {
             return null;
         }
     },
+    async countMessages(filter) {
+        try {
+            return await repo.count(collection, filter);
+        } catch (error) {
+            return null;
+        }
+    },
 };

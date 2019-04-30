@@ -25,13 +25,13 @@ module.exports = async function (io) {
         });
 
         socket.on('receive_message', async (data) => {
-            io.to(socket.chat).emit('receive_message', {
+            io.to(data.chat).emit('receive_message', {
                 message: data.message,
                 user: data.user,
             });
             if (message.read) {
                 io.to(data.user._id).emit('read_messages_mine', {
-                    chat: data
+                    chat: data.chat
                 });
             }
         });
@@ -70,17 +70,6 @@ module.exports = async function (io) {
         });
 
         socket.on('new_message', async (data) => {
-            let chat = {
-                _id: socket.chat
-            };
-
-            let message = {
-                message: data.message,
-                user: data.user,
-                date: new Date().toISOString(),
-                read: false
-            };
-
             let configuration = {
                 url: app.get('url') + '/api/messages/send',
                 method: "post",
@@ -89,9 +78,9 @@ module.exports = async function (io) {
                     "token": socket.token
                 },
                 body: JSON.stringify({
-                    message: message,
-                    chat: chat,
-                    currentUser: socket.user
+                    message: data.message,
+                    chat: data.chat,
+                    currentUser: data.user
                 })
             };
 

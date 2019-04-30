@@ -20,7 +20,7 @@ public class PO_ItemView extends PO_NavView {
 		description.click();
 		description.clear();
 		description.sendKeys(descriptionp);
-		WebElement dateFormat = driver.findElement(By.name("dateFormat"));
+		WebElement dateFormat = driver.findElement(By.name("date"));
 		WebElement price = driver.findElement(By.name("price"));
 		price.click();
 		price.clear();
@@ -56,9 +56,10 @@ public class PO_ItemView extends PO_NavView {
 		return money;
 	}
 
-	public static void buyItem(WebDriver driver, int index, double money) {
+	public static void buyItem(WebDriver driver, int index, String moneyS) {
+		double money = Double.parseDouble(moneyS.split("")[0]);
 		double moneyCost = Double.parseDouble(buy(driver, index).replace(",", "."));
-		double moneyActual = Double.parseDouble(PO_NavView.money(driver).replace(",", "."));
+		double moneyActual = Double.parseDouble(PO_NavView.money(driver));
 		if(money - moneyCost >= 0) {
 			assertEquals(money - moneyCost, moneyActual, 0.1);
 		}

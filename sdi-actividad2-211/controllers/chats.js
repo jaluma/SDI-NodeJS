@@ -119,7 +119,9 @@ router.get('/chat/conversation/:id', async function (req, res) {
         let chat = JSON.parse(body);
 
         res.locals.moment = require('moment');
-        res.locals.moment.locale(app.get('i18n').getLocale());
+        let locale = app.get('i18n').getLocale();
+        let str = locale.toString();
+        res.locals.moment.locale(str);
 
         res.render('chat/conversation', {
             chat: chat

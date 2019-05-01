@@ -28,11 +28,11 @@ $(function () {
     });
 
     socket.on("read_messages_mine", () => {
-        $('.read_message[class*="right"]').text('Leido');
+        $('.read_message[class*="right"]').html('<i class=\"material-icons\">done_all</i>');
     });
 
     socket.on("read_messages_other", () => {
-        $('.read_message[class*="left"]').text('Leido');
+        $('.read_message[class*="left"]').html('<i class=\"material-icons\">done_all</i>');
     });
 
     socket.on("receive_message", (data) => {
@@ -41,7 +41,11 @@ $(function () {
             copy.find('#username_data').text(data.message.user.fullName);
             copy.find('#time_data').text(moment(data.message.time).format('lll'));
             copy.find('#message_text').text(data.message.message);
-            copy.find('#read_text').text(data.message.read ? "Leído" : "No leido");
+            if (data.message.read) {
+                copy.find('#read_text').html("<i class=\"material-icons\">done_all</i>");
+            } else {
+                copy.find('#read_text').html("<i class=\"material-icons\">done</i>");
+            }
 
             if (email.text() === data.message.user.email) {
                 copy.find('.message-data').addClass("my-message-data");

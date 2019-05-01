@@ -49,6 +49,8 @@
 .read_message {
     font-size: 9px;
     font-style: italic;
+    border-radius: 50%;
+    color: white;
 }
 
 .right {
@@ -97,4 +99,8 @@
 
 #messageInput:focus {
     border-color: #4d90fe;
+}
+
+.round {
+    border-radius: 50%;
 }

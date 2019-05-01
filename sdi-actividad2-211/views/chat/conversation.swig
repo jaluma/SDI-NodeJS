@@ -25,9 +25,9 @@
 							<span id="read_text"
 							      class="text read_message {% if message.user._id === currentUser._id %} right {% else %} left {% endif %}">
 								{% if message.read %}
-									{{ __("chat.read") }}
+									<i class="material-icons round">done_all</i>
 								{% else %}
-									{{ __("chat.no_read") }}
+									<i class="material-icons">done</i>
 								{% endif %}
 							</span>
 						</div>
@@ -60,13 +60,16 @@
 
 				<div class="text_wrapper message">
 					<span id="message_text" class="text"></span>
-					<span id="read_text"
-					      class="text read_message">
-							{{ __("chat.no_read") }}
+					<span id="read_text" class="text read_message">
+						<i class="material-icons">done</i>
 					</span>
 				</div>
 			</li>
 		</ul>
 	</div>
+
+	<script>
+        moment.locale("{{ locale }}");
+	</script>
 
 {% endblock %}

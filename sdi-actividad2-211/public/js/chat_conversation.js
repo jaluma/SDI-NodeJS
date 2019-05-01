@@ -27,11 +27,11 @@ $(function () {
         message.val('');
     });
 
-    socket.on("read_messages_mine", (data) => {
+    socket.on("read_messages_mine", () => {
         $('.read_message[class*="right"]').text('Leido');
     });
 
-    socket.on("read_messages_other", (data) => {
+    socket.on("read_messages_other", () => {
         $('.read_message[class*="left"]').text('Leido');
     });
 
@@ -51,6 +51,16 @@ $(function () {
                 copy.find('.message-data').addClass("other-message-data");
                 copy.find('.message').addClass("other-message");
                 copy.find('#read_text').addClass("left");
+
+                // he leido su mensaje
+                socket.emit('viewed_messages', {
+                    chat: {
+                        _id: data.chat._id
+                    },
+                    user: {
+                        email: email.text()
+                    }
+                });
             }
 
             if (chatroom.children().length > 0) {
@@ -61,24 +71,14 @@ $(function () {
 
             init();
         }
-
-        socket.emit('viewed_messages', {
-            chat: {
-                _id: data.chat._id
-            },
-            currentUser: {
-                email: email.text()
-            }
-        });
-
-
     });
 
+    // he leido todos sus mensajes
     socket.emit('viewed_messages', {
         chat: {
             _id: chatId
         },
-        currentUser: {
+        user: {
             email: email.text()
         }
     });
@@ -90,7 +90,6 @@ $(function () {
             $(this).removeAttr("disabled");
         }
     });
-
     init();
 
     function init() {

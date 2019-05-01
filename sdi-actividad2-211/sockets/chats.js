@@ -21,7 +21,7 @@ module.exports = async function (io) {
             socket.token = data.token;
 
             socket.join(socket.chat);
-            socket.join(socket.user._id)
+            socket.join(socket.user._id.toString())
         });
 
         socket.on('receive_message', async (data) => {
@@ -29,16 +29,11 @@ module.exports = async function (io) {
                 message: data.message,
                 user: data.user,
             });
-            if (message.read) {
-                io.to(data.user._id).emit('read_messages_mine', {
-                    chat: data.chat
-                });
-            }
         });
 
         socket.on('viewed_messages', async (data) => {
             let chat = data.chat;
-            let currentUser = socket.user;
+            let currentUser = data.user;
 
             let configuration = {
                 url: app.get('url') + '/api/messages/read',
@@ -54,17 +49,18 @@ module.exports = async function (io) {
             };
 
             rest(configuration, function (err, response, body) {
-                io.to(socket.chat).emit('read_messages_other', {
-                    chat: data
-                });
+
             });
         });
 
         socket.on('read_messages', async (data) => {
             let messages = data.chat.messages;
-            let otherUser = messages.filter(m => m.user._id !== socket.user._id)[0].user;
+            let otherUser = messages.filter(m => m.user._id !== data.currentUser._id)[0].user;
 
-            io.to(otherUser._id).emit('read_messages_mine', {
+            io.to(data.currentUser._id).emit('read_messages_mine', {
+                chat: data
+            });
+            io.to(otherUser._id).emit('read_messages_other', {
                 chat: data
             });
         });

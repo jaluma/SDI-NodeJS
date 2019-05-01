@@ -46,10 +46,6 @@
 		</div>
 	</div>
 
-	<script>
-        moment.locale('es');
-	</script>
-
 	<span id="currentUser" style="display: none">{{ currentUser.email }}</span>
 	<span id="token" style="display: none">{{ token }}</span>
 	<span id="chatId" style="display: none">{{ chat._id }}</span>

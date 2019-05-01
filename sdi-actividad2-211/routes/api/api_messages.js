@@ -79,10 +79,10 @@ router.post("/api/messages/send", async function (req, res) {
 
 router.post("/api/messages/read", async function (req, res) {
     let body = req.body;
-    if (body.chat === null) {
+    if (!body.chat) {
         return error(res, "chat");
     }
-    if (body.currentUser === null) {
+    if (!body.currentUser) {
         return error(res, "user");
     }
 
@@ -129,10 +129,17 @@ router.post("/api/messages/read", async function (req, res) {
         chat.messages[index].read = status;
     }
 
-    app.get('io').sockets.emit('read_messages', {
-        chat: body.chat,
-        currentUser: currentUser._id.toString()
-    });
+    if (count > 0) {
+        let messages = chat.messages;
+        let otherUser = messages.filter(m => m.user._id.toString() !== currentUser._id.toString())[0].user;
+
+        app.get('io').to(otherUser._id.toString()).emit('read_messages_mine', {
+            chat: chat
+        });
+        app.get('io').to(currentUser._id.toString()).emit('read_messages_other', {
+            chat: chat
+        });
+    }
 
     res.status(200);
     return res.json({

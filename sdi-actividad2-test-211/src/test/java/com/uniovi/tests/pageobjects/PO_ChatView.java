@@ -8,13 +8,16 @@ import java.util.List;
 
 public class PO_ChatView extends PO_View {
 
-	public static void sendMessage(WebDriver driver, String message) {
+	public static void sendMessage(WebDriver driver, String message) throws InterruptedException {
+		Thread.sleep(500);
 		WebElement element = driver.findElement(By.id("messageInput"));
 		element.click();
 		element.clear();
 		element.sendKeys(message);
+		Thread.sleep(500);
 		WebElement chatButton = driver.findElement(By.id("sendButton"));
 		chatButton.click();
+		Thread.sleep(2000);
 	}
 
 	public static int getNumberMessages(WebDriver driver) {

@@ -23,16 +23,13 @@ public class Item {
 	private String title;
 	private String description;
 
-	private String date;
+	private Date date;
 
 	private double price;
 	private boolean highlighter = false;
 
 	private User sellerUser;
 	private User buyerUser;
-
-	@Transient
-	private Date dateFormat;
 
 	public Item(String title, String description, Date date, double price) {
 		setTitle(title);
@@ -69,13 +66,11 @@ public class Item {
 	}
 
 	public Date getDate() {
-		return dateFormat;
+		return date;
 	}
 
 	private void setDate(Date date) {
-		this.dateFormat = date;
-
-		this.date = new SimpleDateFormat("yyyy-MM-dd").format(date);
+		this.date = date;
 	}
 
 	public double getPrice() {

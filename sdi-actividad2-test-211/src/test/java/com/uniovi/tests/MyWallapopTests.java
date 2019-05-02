@@ -19,8 +19,8 @@ import static org.junit.Assert.*;
 public class MyWallapopTests {
 
 	static String URLlocal = "http://localhost:8081";
-	private static final String URL = URLlocal;
-	static String URLremota = "http://ec2-35-180-117-233.eu-west-3.compute.amazonaws.com:8081";         // cambiar luego
+	static String URLremota = "http://ec2-35-180-117-233.eu-west-3.compute.amazonaws.com:8081";
+	private static final String URL = URLremota;
 	//En Windows (Debe ser la versión 65.0.1 y desactivar las actualizacioens automáticas)):
 	private static String PathFirefox65 = "C:\\Program Files\\Mozilla Firefox\\firefox.exe";
 	private static String Geckdriver024 = "C:\\Path\\geckodriver024win64.exe";
@@ -530,16 +530,44 @@ public class MyWallapopTests {
 	//aparece en el chat. Identificarse después con el usuario propietario de la oferta y validar que tiene un
 	//mensaje sin leer, entrar en el chat y comprobar que el mensaje pasa a tener el estado leído.
 	@Test
-	public void PR38() {
-		fail();
+	public void PR38() throws InterruptedException {
+		goHome("juan@email.com");
+		PO_NavView.clickOption(driver, "/chat/list");
+		PO_ChatView.selectChatList(driver, 0);
+		int oldNumber = PO_ChatView.getNumberMessages(driver);
+		PO_ChatView.sendMessage(driver, "Hola buen amigo!");
+		assertEquals(oldNumber + 1, PO_ChatView.getNumberMessages(driver));
+		assertEquals(2+1, PO_ChatView.getUnread(driver));
+		PO_NavView.logout(driver);
+		goHome("javier@email.com");
+		PO_NavView.clickOption(driver, "/chat/list");
+		PO_ChatView.selectChatList(driver, 0);
+		assertEquals(3, PO_ChatView.getUnread(driver));
+		Thread.sleep(5000);
+		assertEquals(0, PO_ChatView.getUnread(driver));
 	}
 
 	//PR39. Identificarse en la aplicación y enviar tres mensajes a una oferta, validar que los mensajes
 	//enviados aparecen en el chat. Identificarse después con el usuario propietario de la oferta y validar que el
 	//número de mensajes sin leer aparece en la en su oferta.
 	@Test
-	public void PR39() {
-		fail();
+	public void PR39() throws InterruptedException {
+		goHome("juan@email.com");
+		PO_NavView.clickOption(driver, "/chat/list");
+		PO_ChatView.selectChatList(driver, 0);
+		int oldNumber = PO_ChatView.getNumberMessages(driver);
+		int oldNumberUnread = PO_ChatView.getUnread(driver);
+		PO_ChatView.sendMessage(driver, "Hola buen amigo!");
+		PO_ChatView.sendMessage(driver, "Has leido el Quijote?");
+		PO_ChatView.sendMessage(driver, "Es muy interesante");
+		Thread.sleep(5000);
+		assertEquals(oldNumber + 3, PO_ChatView.getNumberMessages(driver));
+		int numberUnread = PO_ChatView.getUnread(driver);
+		assertEquals(oldNumberUnread + 3, numberUnread);
+		PO_NavView.logout(driver);
+		goHome("javier@email.com");
+		PO_NavView.clickOption(driver, "/chat/list");
+		assertEquals(numberUnread, PO_ChatView.getUnreadCountList(driver, 0));
 	}
 
 	/* ADICCIONALES */

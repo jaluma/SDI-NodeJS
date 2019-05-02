@@ -24,6 +24,12 @@ module.exports = async function (io) {
             socket.join(socket.user._id.toString())
         });
 
+        socket.on('init_list', async (data) => {
+            for (let index in data.chats) {
+                socket.join(data.chats[index]); // nos añadimos a la lista room
+            }
+        });
+
         socket.on('receive_message', async (data) => {
             io.to(data.chat).emit('receive_message', {
                 message: data.message,

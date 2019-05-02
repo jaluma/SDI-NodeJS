@@ -119,6 +119,7 @@ public class InsertSampleDataService {
 
 	private void createConversation(User user1, User user2, Chat chat, String send, String receive) {
 		Message message1 = new Message(send, getTime());
+		message1.setRead(true);
 		Association.Chats.sendMessage(user1, chat, message1);
 		messagesList.add(message1);
 

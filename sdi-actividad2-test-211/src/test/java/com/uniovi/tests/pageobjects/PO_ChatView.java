@@ -20,6 +20,16 @@ public class PO_ChatView extends PO_View {
 		Thread.sleep(2000);
 	}
 
+	public static int getUnread(WebDriver driver) {
+		List<WebElement> list = driver.findElements(By.xpath("//i[text() ='done']"));
+		return list.size() - 1;
+	}
+
+	public static int getUnreadCountList(WebDriver driver, int index) {
+		List<WebElement> list = driver.findElements(By.xpath("//table/tbody/tr[" + (index + 1) + "]/td[1]"));
+		return Integer.parseInt(list.get(0).getText());
+	}
+
 	public static int getNumberMessages(WebDriver driver) {
 		List<WebElement> list = driver.findElements(By.id("message"));
 		return list.size();

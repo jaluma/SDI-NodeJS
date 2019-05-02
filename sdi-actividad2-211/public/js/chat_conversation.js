@@ -1,5 +1,6 @@
 $(function () {
-    let socket = io.connect('http://localhost:8081', {secure: true});
+    let URL = window.location.protocol + "//" + window.location.host;
+    let socket = io.connect(URL);
 
     let email = $("#currentUser");
     let token = $("#token");

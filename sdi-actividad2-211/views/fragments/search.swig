@@ -27,7 +27,11 @@
                 searchParams.delete("searchText");
                 searchParams.delete("page");
                 window.location.search = searchParams.toString();
-            })
+            });
+
+            let searchParams = new URLSearchParams(window.location.search);
+            let value = searchParams.get("searchText");
+            $("#searchText").val(value);
         });
         /*]]>*/
 	</script>

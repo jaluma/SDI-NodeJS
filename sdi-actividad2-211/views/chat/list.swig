@@ -2,6 +2,11 @@
 
 {% block title %} {{ __("nav.chats") }} {% endblock %}
 
+{% block scripts %}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+	<script src="/js/chat_list.js"></script>
+{% endblock %}
+
 {% block body %}
 	<div class="container">
 		<h2>{{ __("nav.chats") }}</h2>
@@ -17,7 +22,7 @@
 				</thead>
 				<tbody>
 				{% for chat in chatsList %}
-					<tr id="chat" class="tr-static-height" style="cursor: pointer;">
+					<tr id="{{ chat._id }}" class="tr-static-height" style="cursor: pointer;">
 						<td class="clickable-row" data-href="{{ '/chat/conversation/' + chat._id }}">
 							{{ chat.notRead - 2 + 2 }}
 						</td>

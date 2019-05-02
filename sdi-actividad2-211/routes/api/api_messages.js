@@ -139,6 +139,10 @@ router.post("/api/messages/read", async function (req, res) {
         app.get('io').to(currentUser._id.toString()).emit('read_messages_other', {
             chat: chat
         });
+        app.get('io').to(chat._id).emit('read_messages_list', {
+            chat: chat,
+            count: count
+        });
     }
 
     res.status(200);

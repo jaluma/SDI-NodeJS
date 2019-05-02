@@ -2,6 +2,7 @@ const path = require('path');
 const app = require(path.join(__basedir, "app"));
 
 const router = global.express.Router();
+const error = require('./util/api_error');
 
 // services
 let messagesService = require(path.join(__basedir, "modules/services/messages"));
@@ -152,8 +153,3 @@ router.post("/api/messages/read", async function (req, res) {
 });
 
 module.exports = router;
-
-function error(res, param, status = 442) {
-    res.status(status);
-    return res.json({error: param});
-}

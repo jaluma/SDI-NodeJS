@@ -1,6 +1,8 @@
 const path = require('path');
 const app = require(path.join(__basedir, "app"));
+
 const router = global.express.Router();
+const error = require('./util/api_error');
 
 // services
 let usersService = require(path.join(__basedir, "modules/services/users"));
@@ -8,7 +10,7 @@ let usersService = require(path.join(__basedir, "modules/services/users"));
 /* GET users listing. */
 router.get("/api/user/list", async function (req, res) {
     let filter = req.body.filter || {};
-    let pages = req.body.page || 1;
+    let pages = req.body.page;
 
     let users;
     if (pages) {
@@ -90,8 +92,8 @@ router.post("/api/signup", async function (req, res) {
     delete user.password;
 
     let token = app.get('jwt').sign({
-        usuario: user.email,
-        tiempo: Date.now() / 1000
+        currentUser: user,
+        time: Date.now() / 1000
     }, app.get('encrypt'));
 
     let json = {
@@ -123,18 +125,7 @@ router.post("/api/login", async function (req, res) {
     }
 
     user = users[0];
-    delete user.password;
-
-    let token = app.get('jwt').sign({
-        usuario: user.email,
-        tiempo: Date.now() / 1000
-    }, app.get('encrypt'));
-
-    let json = {
-        authenticated: true,
-        user: user,
-        token: token
-    };
+    let json = loginSuccesfully(user);
     res.status(200);
     res.json(json);
 });
@@ -160,9 +151,19 @@ router.delete("/api/user/delete/:id", async function (req, res) {
     res.json(user);
 });
 
-function error(res, param, status = 442) {
-    res.status(status);
-    return res.json({error: param});
-}
-
 module.exports = router;
+
+function loginSuccesfully(user) {
+    delete user.password;
+
+    let token = app.get('jwt').sign({
+        currentUser: user,
+        time: Date.now() / 1000
+    }, app.get('encrypt'));
+
+    return {
+        authenticated: true,
+        user: user,
+        token: token
+    };
+}

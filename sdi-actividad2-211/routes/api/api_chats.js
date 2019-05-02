@@ -1,6 +1,7 @@
 const path = require('path');
 
 const router = global.express.Router();
+const error = require('./util/api_error');
 
 // services
 let itemsService = require(path.join(__basedir, "modules/services/items"));
@@ -111,8 +112,3 @@ router.delete("/api/chat/delete/:id", async function (req, res) {
 });
 
 module.exports = router;
-
-function error(res, param, status = 442) {
-    res.status(status);
-    return res.json({error: param});
-}

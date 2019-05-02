@@ -13,13 +13,14 @@ router.use(function (req, res, next) {
     }
 
     app.get('jwt').verify(token, app.get('encrypt'), function (err, request) {
-        if (err || (Date.now() / 1000 - request.tiempo) > 240) {
+        if (err || (Date.now() / 1000 - request.time) > 240) {
             res.status(403); // Forbidden
             return res.json({
                 authenticated: false,
-                error: 'invalid'
+                error: 'invalid token'
             });
         }
+        res.currentUser = request.currentUser;
         next();
     });
 });

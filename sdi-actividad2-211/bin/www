@@ -16,24 +16,33 @@ let port = normalizePort(process.env.PORT || '8081');
 app.set('port', port);
 
 /**
- * Create HTTP server.
+ * Create server
  */
 
-let server = http.createServer(app);
+let server = createServer();
 
-/**
- * Listen on provided port, on all network interfaces.
- */
+function createServer() {
+    /**
+     * Create HTTP server.
+     */
 
-server.listen(app.get('port'));
-server.on('error.swig', onError);
-server.on('listening', onListening);
+    let server = http.createServer(app);
 
-/**
- * Add chats sockets
- */
-const io = require("socket.io")(server);
-require('../sockets/chats')(io);
+    /**
+     * Listen on provided port, on all network interfaces.
+     */
+
+    server.listen(app.get('port'));
+    server.on('error.swig', onError);
+    server.on('listening', onListening);
+
+    /**
+     * Add chats sockets
+     */
+    const io = require("socket.io")(server);
+    require('../sockets/chats')(io);
+    return server;
+}
 
 /**
  * Normalize a port into a number, string, or false.
@@ -81,6 +90,8 @@ function onError(error) {
         default:
             throw error;
     }
+
+    server = createServer();
 }
 
 /**

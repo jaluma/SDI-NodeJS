@@ -2,27 +2,17 @@ const path = require('path');
 const app = require(path.join(__basedir, "app"));
 
 let router = global.express.Router();
-let rest = require("request");
+const rest = require('./util/rest_call');
+const error_control = require('./util/error_control');
 
 /* GET users listing. */
 router.get('/login', function (req, res) {
-    let request = {};
-    let error = req.session.error;
-    if (error) {
-        request = {error: error};
-        req.session.error = null;
-    }
-
+    let request = error_control(req);
     res.render('login', request);
 });
 
 router.get('/signup', function (req, res) {
-    let request = {};
-    let error = req.session.error;
-    if (error) {
-        request = {error: app.get("i18n").__("error.signup." + error)};
-        delete req.session.error;
-    }
+    let request = error_control(req, app.get("i18n").__("error.signup." + req.session.error));
 
     res.render('signup', request);
 });
@@ -35,108 +25,76 @@ router.get('/logout', function (req, res) {
 });
 
 router.get('/user/details/:id', function (req, res) {
-    let request = {};
-    let error = req.session.error;
-    if (error) {
-        request = {error: error};
-        req.session.error = null;
-    }
+    let request = error_control(req);
 
-    let configuration = {
-        url: app.get('url') + '/api/user/list',
-        method: "get",
-        headers: {
-            "Content-Type": "application/json; charset=utf-8",
-            "token": req.session.token
-        },
-        body: JSON.stringify({
+    rest({
+        url: '/api/user/list',
+        method: "GET",
+        req: req,
+        res: res,
+        body: {
             filter: {
                 _id: req.params.id
             }
-        })
-    };
-
-    rest(configuration, function (err, response, body) {
-        let error = JSON.parse(body).error;
-        if (err || error) {
-            req.session.error = error;
-            return res.redirect("/home");
+        },
+        error: '/home',
+        success: function (result) {
+            request.user = result.array[0];
+            res.render('user/details', request);
         }
-
-        request.user = JSON.parse(body).array[0];
-        res.render('user/details', request);
     });
 });
 
 router.get('/user/purchases', function (req, res) {
     let page = req.query.page || 1;
-    let error = req.session.error;
-    if (error) {
-        req.session.error = null;
-    }
+    let request = error_control(req);
 
-    let configuration = {
-        url: app.get('url') + '/api/item/list',
-        method: "get",
-        headers: {
-            "Content-Type": "application/json; charset=utf-8",
-            "token": req.session.token
-        },
-        body: JSON.stringify({
-            filter: {"buyerUser._id": req.session.currentUser._id},
+    rest({
+        url: '/api/item/list',
+        method: "GET",
+        req: req,
+        res: res,
+        body: {
+            filter: {
+                "buyerUser._id": req.session.currentUser._id
+            },
             page: page
-        })
-    };
-
-    rest(configuration, function (err, response, body) {
-        let er = JSON.parse(body).error;
-        if (err || er) {
-            req.session.error = er;
-            return res.redirect("/home");
+        },
+        error: '/home',
+        success: function (result) {
+            res.render('user/purchases', {
+                itemsList: result.array,
+                actual: page,
+                totalPages: result.pages,
+                error: request.error
+            });
         }
-
-        body = JSON.parse(body);
-        res.render('user/purchases', {
-            itemsList: body.array,
-            actual: page,
-            totalPages: body.pages,
-            error: error
-        });
     });
 });
 
 /* POST users listing. */
 router.post('/login', function (req, res) {
-    let filter = {
-        email: req.body.email,
-        password: req.body.password
-    };
-
-    let configuration = {
-        url: app.get('url') + '/api/login',
-        method: "post",
-        headers: {
-            "Content-Type": "application/json; charset=utf-8",
+    rest({
+        url: '/api/login',
+        method: "POST",
+        req: req,
+        res: res,
+        body: {
+            email: req.body.email,
+            password: req.body.password
         },
-        body: JSON.stringify(filter)
-    };
+        error: '/login',
+        success: function (result) {
+            saveCurrentUser(req, result);
 
-    rest(configuration, function (err, response, body) {
-        let error = JSON.parse(body).error;
-        if (err || error) {
-            req.session.error = error;
-            return res.redirect("/login");
+            let page = req.session.lastPage;
+            if (page && req.session.currentUser && req.session.token) {
+                delete req.session.lastPage;
+                return res.redirect(page);
+            }
+
+            res.redirect('/home');
         }
-
-        saveCurrentUser(req, JSON.parse(body));
-
-        let page = req.session.lastPage;
-        if (page && req.session.currentUser && req.session.token) {
-            delete req.session.lastPage;
-            return res.redirect(page);
-        }
-
-        res.redirect('/home');
     });
 });
 
@@ -150,25 +108,18 @@ router.post('/signup', async function (req, res) {
         passwordConfirm: req.body.passwordConfirm,
     };
 
-    let configuration = {
-        url: app.get('url') + '/api/signup',
-        method: "post",
-        headers: {
-            "Content-Type": "application/json; charset=utf-8",
-        },
-        body: JSON.stringify(user)
-    };
+    rest({
+        url: '/api/signup',
+        method: "POST",
+        req: req,
+        res: res,
+        body: user,
+        error: '/signup',
+        success: function (result) {
+            saveCurrentUser(req, result);
 
-    await rest(configuration, await function (err, response, body) {
-        let error = JSON.parse(body).error;
-        if (err || error) {
-            req.session.error = error;
-            return res.redirect("/signup");
+            res.redirect('/home');
         }
-
-        saveCurrentUser(req, JSON.parse(body));
-
-        res.redirect('/home');
     });
 });
 

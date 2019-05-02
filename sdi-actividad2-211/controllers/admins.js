@@ -2,32 +2,31 @@ const path = require('path');
 const app = require(path.join(__basedir, "app"));
 
 let router = global.express.Router();
-let rest = require("request");
+const rest = require('./util/rest_call');
+const error_control = require('./util/error_control');
 
 /* GET users listing. */
 router.get('/admin/list', async function (req, res) {
     let page = req.query.page || 1;
 
-    let configuration = {
-        url: app.get('url') + '/api/user/list',
-        method: "get",
-        headers: {
-            "Content-Type": "application/json; charset=utf-8",
-            "token": req.session.token
-        },
-        body: JSON.stringify({
+    await rest({
+        url: '/api/user/list',
+        method: "GET",
+        req: req,
+        res: res,
+        body: {
             page: page
-        })
-    };
-
-    await rest(configuration, await function (err, response, body) {
-        body = JSON.parse(body);
-        res.render('admin/list', {
-            usersList: body.array,
-            actual: page,
-            totalPages: body.pages
-        });
+        },
+        error: '/home',
+        success: await function (result) {
+            res.render('admin/list', {
+                usersList: result.array,
+                actual: page,
+                totalPages: result.pages
+            });
+        }
     });
+
 });
 
 router.get('/admin/logging', async function (req, res) {
@@ -45,21 +44,21 @@ router.post('/admin/remove', async function (req, res) {
         list = [];
         list.push(req.body.checkbox);
     }
+
     for (let c in list) {
         if (list.hasOwnProperty(c)) {
             let check = list[c];
-            let configuration = {
-                url: app.get('url') + '/api/user/delete/' + check,
-                method: "delete",
-                headers: {
-                    "token": req.session.token
-                }
-            };
 
-            await rest(configuration, await function (err, response, body) {
+            await rest({
+                url: '/api/user/delete/' + check,
+                method: "DELETE",
+                req: req,
+                res: res,
+                error: '/admin/list'
             });
         }
     }
+
     res.redirect('/admin/list');
 });
 

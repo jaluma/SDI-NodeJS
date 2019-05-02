@@ -13,7 +13,7 @@ router.use(async function (req, res, next) {
     }
 
     await app.get('jwt').verify(token, app.get('encrypt'), await function (err, request) {
-        if (err || (Date.now() / 1000 - request.tiempo) > 240) {
+        if (err || (Date.now() / 1000 - request.time) > 240) {
             req.session.lastPage = req.originalUrl;
             return res.redirect('/login');
         }
@@ -44,24 +44,6 @@ router.use(async function (req, res, next) {
         res.locals.currentUser = user;
         next();
     });
-});
-
-router.use(async function (req, res, next) {
-    // redirect save 10 request
-    let url = req.originalUrl;
-    if (req.session.lastPage) {
-        for (let i = 0; i < 9; i++) {
-            req.session.lastPage[i] = req.session.lastPage[i + 1];
-        }
-        req.session.lastPage[10] = url;
-    } else {
-        req.session.lastPage = [];
-        req.session.lastPage.push(url);
-        for (let i = 1; i < 10; i++) {
-            req.session.lastPage.push(null);
-        }
-    }
-    next();
 });
 
 app.use("/success", router);

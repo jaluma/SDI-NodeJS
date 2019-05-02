@@ -46,7 +46,7 @@ module.exports = async function (io) {
                 method: "post",
                 headers: {
                     "Content-Type": "application/json; charset=utf-8",
-                    "token": socket.token
+                    "token": data.token
                 },
                 body: JSON.stringify({
                     chat: chat,
@@ -77,7 +77,7 @@ module.exports = async function (io) {
                 method: "post",
                 headers: {
                     "Content-Type": "application/json; charset=utf-8",
-                    "token": socket.token
+                    "token": data.token
                 },
                 body: JSON.stringify({
                     message: data.message,

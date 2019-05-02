@@ -31,12 +31,11 @@ router.get("/api/item/list", async function (req, res) {
 });
 
 router.get("/api/item/list/distint", async function (req, res) {
-    let filter = req.body.filter;
     let pages = req.body.page;
 
     filter = {
         "sellerUser._id": {
-            $ne: filter.currentUser._id
+            $ne: res.locals.currentUser
         }
     };
 
@@ -79,12 +78,7 @@ router.post("/api/item/add", async function (req, res) {
         return error(res, "sellerUser");
     }
 
-    let sellerUser = await usersService.findOne({
-        _id: req.body.sellerUser
-    });
-    if (sellerUser === null) {
-        return error(res, "sellerUser");
-    }
+    let sellerUser = res.locals.currentUser;
 
     let item = {
         title: req.body.title,
@@ -134,14 +128,7 @@ router.post("/api/item/buy", async function (req, res) {
         _id: body._id
     };
 
-    let buyerUser = {
-        _id: body.buyerUser._id
-    };
-
-    buyerUser = await usersService.findOne(buyerUser);
-    if (buyerUser === null) {
-        return error(res, "buyerUser");
-    }
+    let buyerUser = res.locals.currentUser;
 
     let item = await itemsService.findAllItems(filter);
     if (item === null) {

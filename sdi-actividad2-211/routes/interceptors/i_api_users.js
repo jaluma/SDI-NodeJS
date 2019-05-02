@@ -20,11 +20,12 @@ router.use(function (req, res, next) {
                 error: 'invalid token'
             });
         }
-        res.currentUser = request.currentUser;
+        res.locals.currentUser = request.currentUser;
         next();
     });
 });
 
-app.use("/api/user/*", router);
-app.use("/api/item/*", router);
-app.use("/api/chat/*", router);
+app.use("/api/user/**", router);
+app.use("/api/item/**", router);
+app.use("/api/chat/**", router);
+app.use("/api/messages/**", router);

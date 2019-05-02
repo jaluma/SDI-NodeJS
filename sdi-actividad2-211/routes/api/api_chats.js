@@ -5,7 +5,6 @@ const error = require('./util/api_error');
 
 // services
 let itemsService = require(path.join(__basedir, "modules/services/items"));
-let usersService = require(path.join(__basedir, "modules/services/users"));
 let chatsService = require(path.join(__basedir, "modules/services/chats"));
 
 /* GET chats listing. */
@@ -53,7 +52,7 @@ router.get("/api/chat/:id", async function (req, res) {
 router.post("/api/chat/create", async function (req, res) {
 
     let idItem = req.body._id;
-    let currentUserId = req.body.currentUser._id;
+    let currentUserId = res.locals.currentUser;
 
     // buscar algun chat de ese item donde haya mensajes de ese usuario
     let filter = {

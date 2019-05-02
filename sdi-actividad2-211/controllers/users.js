@@ -73,8 +73,8 @@ router.get('/user/purchases', function (req, res) {
 });
 
 /* POST users listing. */
-router.post('/login', function (req, res) {
-    rest({
+router.post('/login', async function (req, res) {
+    await rest({
         url: '/api/login',
         method: "POST",
         req: req,
@@ -84,7 +84,7 @@ router.post('/login', function (req, res) {
             password: req.body.password
         },
         error: '/login',
-        success: function (result) {
+        success: await function (result) {
             saveCurrentUser(req, result);
 
             let page = req.session.lastPage;

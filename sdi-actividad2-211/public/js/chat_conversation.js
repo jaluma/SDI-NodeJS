@@ -23,7 +23,8 @@ $(function () {
         socket.emit('new_message', {
             message: message.val(),
             user: email.text(),
-            chat: chat.text()
+            chat: chat.text(),
+            token: token.text()
         });
         message.val('');
     });
@@ -64,7 +65,8 @@ $(function () {
                     },
                     user: {
                         email: email.text()
-                    }
+                    },
+                    token: token.text()
                 });
             }
 
@@ -85,7 +87,8 @@ $(function () {
         },
         user: {
             email: email.text()
-        }
+        },
+        token: token.text()
     });
 
     message.on('keypress', function (e) {

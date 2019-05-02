@@ -41,16 +41,13 @@ router.post("/api/messages/send", async function (req, res) {
     if (req.body.chat === null) {
         return error(res, "chat");
     }
-    if (req.body.currentUser === null) {
-        return error(res, "user");
-    }
 
     let chat = {
         _id: req.body.chat
     };
 
     let currentUser = {
-        email: req.body.currentUser
+        email: res.locals.currentUser.email
     };
     let user = await usersService.findOne(currentUser);
 
@@ -83,12 +80,9 @@ router.post("/api/messages/read", async function (req, res) {
     if (!body.chat) {
         return error(res, "chat");
     }
-    if (!body.currentUser) {
-        return error(res, "user");
-    }
 
     let chat = body.chat;
-    let currentUser = body.currentUser;
+    let currentUser = res.locals.currentUser;
     let status = body.status || true;
 
     currentUser = await usersService.findOne(currentUser);
@@ -104,30 +98,32 @@ router.post("/api/messages/read", async function (req, res) {
 
     let count = 0;
     for (let index in chat.messages) {
-        let message = chat.messages[index];
-        if (message.read) {
-            continue;
-        }
-
-        if (currentUserF._id === message.user._id.toString()) {
-            continue;
-        }
-
-        let filter = {
-            messages: {
-                $elemMatch: {
-                    _id: message._id.toString()
-
-                }
+        if (chat.messages.hasOwnProperty(index)) {
+            let message = chat.messages[index];
+            if (message.read) {
+                continue;
             }
-        };
 
-        let result = await chatsService.updateChat(filter, {
-            "messages.$.read": status
-        }, 'set');
-        count += result.modifiedCount;
+            if (currentUserF._id === message.user._id.toString()) {
+                continue;
+            }
 
-        chat.messages[index].read = status;
+            let filter = {
+                messages: {
+                    $elemMatch: {
+                        _id: message._id.toString()
+
+                    }
+                }
+            };
+
+            let result = await chatsService.updateChat(filter, {
+                "messages.$.read": status
+            }, 'set');
+            count += result.modifiedCount;
+
+            chat.messages[index].read = status;
+        }
     }
 
     if (count > 0) {

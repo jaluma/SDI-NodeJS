@@ -13,7 +13,7 @@
 
 <link rel="stylesheet" href="/css/style.css">
 
-<script src="/js/tableClick.js"></script>
+<script src="/js/table_click.js"></script>
 
 <script src="https://code.jquery.com/jquery-3.3.1.js"
         integrity="sha384-fJU6sGmyn07b+uD1nMk7/iSb4yvaowcueiQhfVgQuD98rfva8mcr1eSvjchfpMrH"

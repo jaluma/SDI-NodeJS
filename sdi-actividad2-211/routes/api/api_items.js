@@ -146,6 +146,11 @@ router.put("/api/item/buy/:id", async function (req, res) {
         _id: res.locals.currentUser._id
     };
 
+    buyerUser = await usersService.findOne(buyerUser);
+    if (buyerUser === null) {
+        return error(res, "buyerUser");
+    }
+
     let item = await itemsService.findAllItems(filter);
     if (item === null) {
         return error(res, "item");

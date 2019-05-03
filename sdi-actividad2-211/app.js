@@ -34,7 +34,10 @@ app.use(expressSession({
     saveUninitialized: true
 }));
 app.use(logger('dev'));
-app.use(logger('common', {
+app.use(logger(':status - :method \t :url', {
+    skip: function (req, res) {
+        return !req.originalUrl.includes('/api/') || req.originalUrl.includes('list') || req.method === "GET";
+    },
     stream: fs.createWriteStream('./application.log', {
         flags: 'a'
     })

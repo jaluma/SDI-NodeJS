@@ -78,7 +78,9 @@ router.get("/api/chat/:id", async function (req, res) {
         return error(res, "list");
     }
 
-    chat.messages.sort(m => m.time);
+    chat.messages.sort(function (a, b) {
+        return a.time - b.time
+    });
 
     res.status(200);
     return res.json(chat);

@@ -9,15 +9,15 @@ import java.util.List;
 public class PO_ChatView extends PO_View {
 
 	public static void sendMessage(WebDriver driver, String message) throws InterruptedException {
-		Thread.sleep(500);
+		Thread.sleep(200);
 		WebElement element = driver.findElement(By.id("messageInput"));
 		element.click();
 		element.clear();
 		element.sendKeys(message);
-		Thread.sleep(500);
+		Thread.sleep(200);
 		WebElement chatButton = driver.findElement(By.id("sendButton"));
 		chatButton.click();
-		Thread.sleep(2000);
+		Thread.sleep(1500);
 	}
 
 	public static int getUnread(WebDriver driver) {

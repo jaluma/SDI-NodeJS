@@ -2,37 +2,12 @@ const path = require('path');
 const app = require(path.join(__basedir, "app"));
 
 const router = global.express.Router();
-const error = require('./util/api_error');
+const error = require(path.join(__basedir, "routes/api/util/api_error"));
 
 // services
 let usersService = require(path.join(__basedir, "modules/services/users"));
 
 /* GET users listing. */
-router.get("/api/user/list", async function (req, res) {
-    let filter = req.body.filter || {};
-    let pages = req.body.page;
-
-    let users;
-    if (pages) {
-        users = await usersService.findAllUsersPage(filter, pages);
-    } else {
-        users = {
-            array: await usersService.findAllUsers(filter),
-            pages: 0
-        };
-    }
-
-    if (!users.array) {
-        return error(res, "find");
-    }
-
-    // delete param password
-    users.array.forEach(u => delete u.password);
-
-    res.status(200);
-    return res.json(users);
-});
-
 router.get("/api/user/:id", async function (req, res) {
     let id = req.params.id;
     if (id === null) {
@@ -128,6 +103,31 @@ router.post("/api/login", async function (req, res) {
     let json = loginSuccesfully(user);
     res.status(200);
     res.json(json);
+});
+
+router.post("/api/user/list", async function (req, res) {
+    let filter = req.body.filter || {};
+    let pages = req.body.page;
+
+    let users;
+    if (pages) {
+        users = await usersService.findAllUsersPage(filter, pages);
+    } else {
+        users = {
+            array: await usersService.findAllUsers(filter),
+            pages: 0
+        };
+    }
+
+    if (!users.array) {
+        return error(res, "find");
+    }
+
+    // delete param password
+    users.array.forEach(u => delete u.password);
+
+    res.status(200);
+    return res.json(users);
 });
 
 /* DELETE users listing. */

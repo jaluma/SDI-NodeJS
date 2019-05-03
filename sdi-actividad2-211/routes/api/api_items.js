@@ -1,60 +1,69 @@
 const path = require('path');
 
 const router = global.express.Router();
-const error = require('./util/api_error');
+const error = require(path.join(__basedir, "routes/api/util/api_error"));
 
 // services
 let itemsService = require(path.join(__basedir, "modules/services/items"));
 let usersService = require(path.join(__basedir, "modules/services/users"));
 
 /* GET items listing. */
-router.get("/api/item/list", async function (req, res) {
-    let filter = req.body.filter;
-    let pages = req.body.page;
+router.get("/api/item/list/distint/:page", async function (req, res) {
+    let pages = req.params.page;
 
-    let items;
-    if (pages) {
-        items = await itemsService.findAllItemsPage(filter, pages);
-    } else {
-        items = {
-            array: await itemsService.findAllItems(filter),
-            pages: 0
-        };
-    }
-
-    if (items === null) {
-        return error(res, "list");
-    }
-
-    res.status(200);
-    return res.json(items);
-});
-
-router.get("/api/item/list/distint", async function (req, res) {
-    let pages = req.body.page;
-
-    filter = {
+    let filter = {
         "sellerUser._id": {
             $ne: res.locals.currentUser
         }
     };
 
-    let items;
-    if (pages) {
-        items = await itemsService.findAllItemsPage(filter, pages);
-    } else {
-        items = {
-            array: await itemsService.findAllItems(filter),
-            pages: 0
-        };
+    return await getList(pages, filter, res);
+});
+
+router.get("/api/item/purchases/:page", async function (req, res) {
+    let filter = {
+        "buyerUser._id": res.locals.currentUser._id
+    };
+    let pages = req.params.page;
+
+    return await getList(pages, filter, res);
+});
+
+router.get("/api/item/mylist/:page", async function (req, res) {
+    let filter = {
+        "sellerUser._id": res.locals.currentUser._id
+    };
+    let pages = req.params.page;
+
+    return await getList(pages, filter, res);
+});
+
+router.get("/api/item/hightlighterlist/:page", async function (req, res) {
+    let filter = {
+        highlighter: true
+    };
+    let pages = req.params.page;
+
+    return await getList(pages, filter, res);
+});
+
+router.get("/api/item/:id", async function (req, res) {
+    let id = req.params.id;
+    if (id === null) {
+        return error(res, "item");
     }
 
-    if (items.array === null) {
-        return error(res, "list");
+    let item = {
+        _id: id
+    };
+
+    item = await itemsService.findOne(item);
+    if (item === null) {
+        return error(res, "item");
     }
 
     res.status(200);
-    return res.json(items);
+    res.json(item);
 });
 
 /* POST items listing. */
@@ -113,19 +122,21 @@ router.post("/api/item/add", async function (req, res) {
     return res.json(item);
 });
 
-router.post("/api/item/buy", async function (req, res) {
-    let body = req.body.object;
+router.post("/api/item/list", async function (req, res) {
+    let filter = req.body.filter;
+    let pages = req.body.page;
 
-    if (body._id === null) {
+    return await getList(pages, filter, res);
+});
+
+/* PUT items listing. */
+router.put("/api/item/buy/:id", async function (req, res) {
+    if (!req.params.id) {
         return error(res, "item");
     }
 
-    if (body.buyerUser._id === null) {
-        return error(res, "buyerUser");
-    }
-
     let filter = {
-        _id: body._id
+        _id: req.params.id
     };
 
     let buyerUser = res.locals.currentUser;
@@ -136,7 +147,7 @@ router.post("/api/item/buy", async function (req, res) {
     }
     item = item[0];
 
-    if (item.buyerUser || buyerUser._id.equals(item.sellerUser._id)) {
+    if (item.buyerUser || buyerUser._id.toString() === item.sellerUser._id.toString()) {
         return error(res, "user");
     }
 
@@ -166,7 +177,6 @@ router.post("/api/item/buy", async function (req, res) {
     });
 });
 
-/* PUT items listing. */
 router.put("/api/item/highlighter/:id", async function (req, res) {
     let id = req.params.id;
 
@@ -241,3 +251,22 @@ router.delete("/api/item/delete/:id", async function (req, res) {
 });
 
 module.exports = router;
+
+async function getList(pages, filter, res) {
+    let items;
+    if (pages) {
+        items = await itemsService.findAllItemsPage(filter, pages);
+    } else {
+        items = {
+            array: await itemsService.findAllItems(filter),
+            pages: 0
+        };
+    }
+
+    if (items === null) {
+        return error(res, "list");
+    }
+
+    res.status(200);
+    return res.json(items);
+}

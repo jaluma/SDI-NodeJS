@@ -2,8 +2,8 @@ const path = require('path');
 const app = require(path.join(__basedir, "app"));
 
 let router = global.express.Router();
-const rest = require('./util/rest_call');
-const error_control = require('./util/error_control');
+const rest = require(path.join(__basedir, "routes/util/rest_call"));
+const error_control = require(path.join(__basedir, "routes/util/error_control"));
 
 router.get('/', function (req, res) {
     if (req.session.currentUser) {
@@ -16,15 +16,10 @@ router.get('/home', async function (req, res) {
     let request = error_control(req);
     // añadir lista de mis compras y destacados
     await rest({
-        url: '/api/item/list',
+        url: '/api/item/mylist/1',
         method: "GET",
         req: req,
         res: res,
-        body: {
-            filter: {
-                "sellerUser._id": req.session.currentUser._id
-            }
-        },
         error: '/home',
         success: async function (result) {
             let ret = {
@@ -34,15 +29,10 @@ router.get('/home', async function (req, res) {
             };
 
             await rest({
-                url: '/api/item/list',
+                url: '/api/item/hightlighterlist/1',
                 method: "GET",
                 req: req,
                 res: res,
-                body: {
-                    filter: {
-                        highlighter: true
-                    }
-                },
                 error: '/home',
                 success: async function (result2) {
                     ret.hightlighter_items = result2.array.filter(i => i.sellerUser._id !== req.session.currentUser._id);

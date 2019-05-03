@@ -1,7 +1,8 @@
 const path = require('path');
 let app = require(path.join(__basedir, "app"));
 let debug = require('debug')('sdi-actividad2-211:server');
-let rest = require("request");
+
+const rest = require(path.join(__basedir, "/routes/util/rest_call"));
 
 let usersService = require(path.join(__basedir, "modules/services/users"));
 
@@ -19,6 +20,7 @@ module.exports = async function (io) {
             });
             socket.chat = data.chatId;
             socket.token = data.token;
+
 
             socket.join(socket.chat);
             socket.join(socket.user._id.toString())
@@ -38,24 +40,14 @@ module.exports = async function (io) {
         });
 
         socket.on('viewed_messages', async (data) => {
-            let chat = data.chat;
-            let currentUser = data.user;
-
-            let configuration = {
-                url: app.get('url') + '/api/messages/read',
-                method: "post",
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                    "token": data.token
+            await rest({
+                url: '/api/messages/read',
+                method: "POST",
+                body: {
+                    chat: data.chat,
+                    currentUser: data.user
                 },
-                body: JSON.stringify({
-                    chat: chat,
-                    currentUser: currentUser
-                })
-            };
-
-            rest(configuration, function (err, response, body) {
-
+                token: data.token
             });
         });
 
@@ -72,21 +64,15 @@ module.exports = async function (io) {
         });
 
         socket.on('new_message', async (data) => {
-            let configuration = {
-                url: app.get('url') + '/api/messages/send',
-                method: "post",
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                    "token": data.token
-                },
-                body: JSON.stringify({
+            await rest({
+                url: '/api/messages/send',
+                method: "POST",
+                body: {
                     message: data.message,
                     chat: data.chat,
                     currentUser: data.user
-                })
-            };
-
-            rest(configuration, function (err, response, body) {
+                },
+                token: data.token
             });
 
         });

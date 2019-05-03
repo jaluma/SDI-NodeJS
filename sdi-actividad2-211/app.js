@@ -96,11 +96,11 @@ app.use(require("./routes/api/api_chats"));
 app.use(require("./routes/api/api_messages"));
 
 // routes
-app.use(require("./controllers/users"));
-app.use(require("./controllers/admins"));
-app.use(require("./controllers/items"));
-app.use(require("./controllers/chats"));
+app.use(require("./routes/controllers/users"));
+app.use(require("./routes/controllers/admins"));
+app.use(require("./routes/controllers/items"));
+app.use(require("./routes/controllers/chats"));
 
-app.use(require("./controllers/other"));
+app.use(require("./routes/controllers/other"));
 
 

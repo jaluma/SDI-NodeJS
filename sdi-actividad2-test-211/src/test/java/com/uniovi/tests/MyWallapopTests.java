@@ -543,7 +543,7 @@ public class MyWallapopTests {
 		PO_NavView.clickOption(driver, "/chat/list");
 		PO_ChatView.selectChatList(driver, 0);
 		assertEquals(3, PO_ChatView.getUnread(driver));
-		Thread.sleep(5000);
+		Thread.sleep(1500);
 		assertEquals(0, PO_ChatView.getUnread(driver));
 	}
 
@@ -560,7 +560,7 @@ public class MyWallapopTests {
 		PO_ChatView.sendMessage(driver, "Hola buen amigo!");
 		PO_ChatView.sendMessage(driver, "Has leido el Quijote?");
 		PO_ChatView.sendMessage(driver, "Es muy interesante");
-		Thread.sleep(5000);
+		Thread.sleep(1500);
 		assertEquals(oldNumber + 3, PO_ChatView.getNumberMessages(driver));
 		int numberUnread = PO_ChatView.getUnread(driver);
 		assertEquals(oldNumberUnread + 3, numberUnread);

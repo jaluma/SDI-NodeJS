@@ -2,7 +2,7 @@ const path = require('path');
 const app = require(path.join(__basedir, "app"));
 let router = global.express.Router();
 
-let rest = require("request");
+const rest = require(path.join(__basedir, "routes/util/rest_call"));
 
 router.use(async function (req, res, next) {
     let token = req.session.token || res.locals.token;
@@ -26,23 +26,16 @@ router.use(async function (req, res, next) {
 router.use(async function (req, res, next) {
     let currentUser = res.locals.currentUser;
 
-    let configuration = {
-        url: app.get('url') + '/api/user/' + currentUser._id,
-        method: "get",
-        headers: {
-            "Content-Type": "application/json; charset=utf-8",
-            "token": req.session.token
+    await rest({
+        url: '/api/user/' + currentUser._id,
+        method: "GET",
+        req: req,
+        res: res,
+        error: '/home',
+        success: await function (result) {
+            res.locals.currentUser = result;
+            next();
         }
-    };
-
-    await rest(configuration, await function (err, response, body) {
-        let user = JSON.parse(body);
-        if (err || user.error) {
-            req.session.error = user.error;
-        }
-
-        res.locals.currentUser = user;
-        next();
     });
 });
 

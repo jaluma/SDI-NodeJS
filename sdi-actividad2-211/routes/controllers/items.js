@@ -2,8 +2,8 @@ const path = require('path');
 const app = require(path.join(__basedir, "app"));
 
 let router = global.express.Router();
-const rest = require('./util/rest_call');
-const error_control = require('./util/error_control');
+const rest = require(path.join(__basedir, "routes/util/rest_call"));
+const error_control = require(path.join(__basedir, "routes/util/error_control"));
 
 /* GET items listing. */
 router.get('/item/add', function (req, res) {
@@ -16,8 +16,12 @@ router.get('/item/add', function (req, res) {
 router.get('/item/details/:id', async function (req, res) {
     let request = error_control(req);
 
+    if (!req.params.id) {
+        res.redirect('/item/list');
+    }
+
     await rest({
-        url: '/api/item/list/',
+        url: '/api/item/' + req.params.id,
         method: "GET",
         req: req,
         res: res,
@@ -28,7 +32,7 @@ router.get('/item/details/:id', async function (req, res) {
         },
         error: '/item/list/',
         success: await function (result) {
-            request.item = result.array[0];
+            request.item = result;
             res.render('item/details', request);
         }
     });
@@ -62,18 +66,10 @@ router.get('/item/buy/:id', async function (req, res) {
     }
 
     await rest({
-        url: '/api/item/buy',
-        method: "POST",
+        url: '/api/item/buy/' + id,
+        method: "PUT",
         req: req,
         res: res,
-        body: {
-            object: {
-                _id: id,
-                buyerUser: {
-                    _id: req.session.currentUser._id
-                }
-            }
-        },
         error: '/item/list',
         success: await function (result) {
             return res.redirect("/user/purchases");
@@ -123,7 +119,7 @@ router.get('/item/list', async function (req, res) {
 
     await rest({
         url: '/api/item/list',
-        method: "GET",
+        method: "POST",
         req: req,
         res: res,
         body: filter,
@@ -144,14 +140,10 @@ router.get('/item/mylist', async function (req, res) {
     let request = error_control(req);
 
     await rest({
-        url: '/api/item/list',
+        url: '/api/item/mylist/' + page,
         method: "GET",
         req: req,
         res: res,
-        body: {
-            filter: {"sellerUser._id": req.session.currentUser._id},
-            page: page
-        },
         error: '/home',
         success: await function (result) {
             res.render('item/mylist', {

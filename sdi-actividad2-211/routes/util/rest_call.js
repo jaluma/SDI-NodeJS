@@ -4,17 +4,17 @@ const app = require(path.join(__basedir, "app"));
 let rest = require("request");
 
 module.exports = async function (config) {
-    await restFunction(config.url, config.req, config.res, config.error, config.success, config.method, config.body);
+    await restFunction(config.url, config.req, config.res, config.error, config.success, config.method, config.body, config.token);
 };
 
 async function restFunction(urlPath, req, res, urlError = '/home', callback = () => {
-}, method = 'GET', body = {}) {
+}, method = 'GET', body = {}, token = req.session.hasOwnProperty('token') ? req.session.token : undefined) {
     let configuration = {
         url: app.get('url') + urlPath,
         method: method,
         headers: {
             "Content-Type": "application/json; charset=utf-8",
-            "token": req.session.hasOwnProperty('token') ? req.session.token : undefined
+            "token": token
         },
         body: isObject(body) ? JSON.stringify(body) : undefined
     };
@@ -22,6 +22,10 @@ async function restFunction(urlPath, req, res, urlError = '/home', callback = ()
     deleteUndefined(configuration);
 
     await rest(configuration, await function (err, response, result) {
+        if (!res && !req) {
+            return callback(result);
+        }
+
         if (isParseJSON(result)) {
             result = JSON.parse(result);
             if (result.error) {

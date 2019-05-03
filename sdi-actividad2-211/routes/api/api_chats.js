@@ -1,7 +1,7 @@
 const path = require('path');
 
 const router = global.express.Router();
-const error = require('./util/api_error');
+const error = require(path.join(__basedir, "routes/api/util/api_error"));
 
 // services
 let itemsService = require(path.join(__basedir, "modules/services/items"));
@@ -11,6 +11,34 @@ let chatsService = require(path.join(__basedir, "modules/services/chats"));
 router.get("/api/chat/list", async function (req, res) {
     let filter = req.body.filter;
     let pages = req.body.page;
+
+    let items;
+    if (pages) {
+        items = await chatsService.findAllChatsPage(filter, pages);
+    } else {
+        items = {
+            array: await chatsService.findAllChats(filter),
+            pages: 0
+        };
+    }
+
+    if (items === null) {
+        return error(res, "list");
+    }
+
+    res.status(200);
+    return res.json(items);
+});
+
+router.get("/api/chat/mylist/:page", async function (req, res) {
+    let filter = {
+        messages: {
+            $elemMatch: {
+                "user._id": res.locals.currentUser._id
+            }
+        }
+    };
+    let pages = req.params.page;
 
     let items;
     if (pages) {
@@ -50,9 +78,8 @@ router.get("/api/chat/:id", async function (req, res) {
 
 /* POST chats listing. */
 router.post("/api/chat/create", async function (req, res) {
-
     let idItem = req.body._id;
-    let currentUserId = res.locals.currentUser;
+    let currentUserId = res.locals.currentUser._id;
 
     // buscar algun chat de ese item donde haya mensajes de ese usuario
     let filter = {

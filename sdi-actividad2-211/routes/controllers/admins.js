@@ -2,8 +2,8 @@ const path = require('path');
 const app = require(path.join(__basedir, "app"));
 
 let router = global.express.Router();
-const rest = require('./util/rest_call');
-const error_control = require('./util/error_control');
+const rest = require(path.join(__basedir, "routes/util/rest_call"));
+const error_control = require(path.join(__basedir, "routes/util/error_control"));
 
 /* GET users listing. */
 router.get('/admin/list', async function (req, res) {
@@ -11,7 +11,7 @@ router.get('/admin/list', async function (req, res) {
 
     await rest({
         url: '/api/user/list',
-        method: "GET",
+        method: "POST",
         req: req,
         res: res,
         body: {

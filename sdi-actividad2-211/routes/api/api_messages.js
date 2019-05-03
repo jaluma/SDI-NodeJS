@@ -2,7 +2,7 @@ const path = require('path');
 const app = require(path.join(__basedir, "app"));
 
 const router = global.express.Router();
-const error = require('./util/api_error');
+const error = require(path.join(__basedir, "routes/api/util/api_error"));
 
 // services
 let messagesService = require(path.join(__basedir, "modules/services/messages"));

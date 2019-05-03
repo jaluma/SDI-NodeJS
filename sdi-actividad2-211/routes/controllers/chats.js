@@ -2,28 +2,18 @@ const path = require('path');
 const app = require(path.join(__basedir, "app"));
 
 let router = global.express.Router();
-const rest = require('./util/rest_call');
-const error_control = require('./util/error_control');
+const rest = require(path.join(__basedir, "routes/util/rest_call"));
+const error_control = require(path.join(__basedir, "routes/util/error_control"));
 
 /* GET users listing. */
 router.get('/chat/list', async function (req, res) {
     let page = req.query.page || 1;
 
     await rest({
-        url: '/api/chat/list',
+        url: '/api/chat/mylist/' + page,
         method: "GET",
         req: req,
         res: res,
-        body: {
-            filter: {
-                messages: {
-                    $elemMatch: {
-                        "user._id": req.session.currentUser._id
-                    }
-                }
-            },
-            page: page
-        },
         error: '/home',
         success: await function (result) {
             result.array.forEach(async c => {
@@ -69,9 +59,6 @@ router.get('/chat/create/:id', async function (req, res) {
         res: res,
         body: {
             _id: req.params.id,
-            currentUser: {
-                _id: req.session.currentUser._id
-            }
         },
         error: '/chat/list',
         success: await function (result) {
@@ -92,7 +79,7 @@ router.get('/chat/conversation/:id', async function (req, res) {
         success: await function (result) {
             let chat = result;
 
-            res.locals.moment = require('moment');
+            res.locals.moment = require('moment/moment');
             let locale = app.get('i18n').getLocale();
             let str = locale.toString();
             res.locals.moment.locale(str);

@@ -40,7 +40,7 @@ function createServer() {
      * Add chats sockets
      */
     const io = require("socket.io")(server);
-    require('../sockets/chats')(io);
+    require('../routes/sockets/chats')(io);
     return server;
 }
 

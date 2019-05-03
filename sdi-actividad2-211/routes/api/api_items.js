@@ -40,7 +40,10 @@ router.get("/api/item/mylist/:page", async function (req, res) {
 
 router.get("/api/item/hightlighterlist/:page", async function (req, res) {
     let filter = {
-        highlighter: true
+        highlighter: true,
+        "sellerUser._id": {
+            $ne: res.locals.currentUser._id
+        }
     };
     let pages = req.params.page;
 
@@ -139,7 +142,9 @@ router.put("/api/item/buy/:id", async function (req, res) {
         _id: req.params.id
     };
 
-    let buyerUser = res.locals.currentUser;
+    let buyerUser = {
+        _id: res.locals.currentUser._id
+    };
 
     let item = await itemsService.findAllItems(filter);
     if (item === null) {

@@ -39,7 +39,7 @@
 	"footer": {
 		"text": "©2019 Copyright: SDI - MyWallaPop, Javier Martínez Álvarez"
 	},
-	"useful": {
+  "util": {
 		"send": "Send"
 	},
 	"user": {
@@ -121,8 +121,7 @@
 	},
 	"placeholder": {
 		"search": "text to search",
-		"Chat": "Write a message",
-		"chat": "placeholder.chat"
+      "chat": "Write a message"
 	},
 	"tooltip": {
 		"hightlighter": "Highlight offer"
@@ -149,15 +148,12 @@
 			"id": "This object cannot be bought.",
 			"insuficient": "You don't have the necessary balance."
 		},
-		"Highlighter": "You don't have the available balance.",
+      "highlighter": "You don't have the available balance.",
 		"page": "Error..."
 	},
 	"url": {
 		"default": {
 			"ico": "http://icons.iconarchive.com/icons/papirus-team/papirus-status/256/avatar-default-icon.png"
 		}
-	},
-	"util": {
-		"send": "util.send"
 	}
 }

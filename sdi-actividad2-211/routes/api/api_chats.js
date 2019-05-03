@@ -32,11 +32,19 @@ router.get("/api/chat/list", async function (req, res) {
 
 router.get("/api/chat/mylist/:page", async function (req, res) {
     let filter = {
-        messages: {
-            $elemMatch: {
-                "user._id": res.locals.currentUser._id
+        $or: [
+            {
+                messages: {
+                    $elemMatch: {
+                        "user._id": res.locals.currentUser._id
+                    }
+                }
+            },
+            {
+                "item.sellerUser._id": res.locals.currentUser._id
             }
-        }
+        ]
+
     };
     let pages = req.params.page;
 

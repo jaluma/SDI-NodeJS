@@ -17,6 +17,7 @@ router.get('/item/details/:id', async function (req, res) {
     let request = error_control(req);
 
     if (!req.params.id) {
+        res.status(400);
         res.redirect('/item/list');
     }
 

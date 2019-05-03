@@ -34,9 +34,9 @@
 								<tbody>
 								{% for item in hightlighter_items %}
 									<tr class="tr-static-height">
-										<td class="clickable-row" data-href="/item/details/' + {{ item._id }}">{{ item.title }}</td>
-										<td class="clickable-row" data-href="/item/details/' + {{ item._id }}">{{ item.description }}</td>
-										<td class="clickable-row" data-href="/item/details/' + {{ item._id }}">{{ item.price }}</td>
+										<td class="clickable-row" data-href="{{ '/item/details/' + item._id }}">{{ item.title }}</td>
+										<td class="clickable-row" data-href="{{ '/item/details/' + item._id }}">{{ item.description }}</td>
+										<td class="clickable-row" data-href="{{ '/item/details/' + item._id }}">{{ item.price }}</td>
 									</tr>
 								{% endfor %}
 								</tbody>

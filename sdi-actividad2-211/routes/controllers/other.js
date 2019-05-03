@@ -35,7 +35,7 @@ router.get('/home', async function (req, res) {
                 res: res,
                 error: '/home',
                 success: async function (result2) {
-                    ret.hightlighter_items = result2.array.filter(i => i.sellerUser._id !== req.session.currentUser._id);
+                    ret.hightlighter_items = result2.array;
                     res.render('home', ret);
                 }
             });

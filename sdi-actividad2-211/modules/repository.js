@@ -103,6 +103,11 @@ async function convertTypesMongo(filter, propertyBefore) {
                 if (includeProperty(property, propertyBefore, "date") || includeProperty(property, propertyBefore, "time")) {
                     filter[property] = new Date(filter[property]);
                 }
+                if (Array.isArray(filter[property])) {
+                    for (let index in filter[property]) {
+                        filter[property] = await convertTypesMongo(filter[property], property);
+                    }
+                }
             }
         }
     }

@@ -67,7 +67,7 @@ router.get('/chat/create/:id', async function (req, res) {
     });
 });
 
-router.get('/chat/conversation/:id', async function (req, res) {
+router.get('/chat/conversation/:id', async function (req, res, next) {
     let id = req.params.id;
 
     await rest({
@@ -75,7 +75,8 @@ router.get('/chat/conversation/:id', async function (req, res) {
         method: "GET",
         req: req,
         res: res,
-        error: '/chat/create/' + id,
+        next: next,
+        error: '/chat/list/',
         success: await function (result) {
             let chat = result;
 

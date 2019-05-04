@@ -39,7 +39,7 @@ router.get('/item/details/:id', async function (req, res) {
     });
 });
 
-router.get('/item/delete/:id', async function (req, res) {
+router.get('/item/delete/:id', async function (req, res, next) {
     let id = req.params.id;
     if (id === null) {
         return error(res, "item");
@@ -50,9 +50,7 @@ router.get('/item/delete/:id', async function (req, res) {
         method: "DELETE",
         req: req,
         res: res,
-        body: {
-            page: page
-        },
+        next: next,
         error: '/item/mylist',
         success: await function (result) {
             return res.redirect("/item/mylist");

@@ -139,7 +139,8 @@
 			"password": "Error con la contraseña introducida. Deben de ser iguales y mínimo 6 caracteres.",
 			"login": {
 				"incorrect": "Usuario o contraseña incorrecto."
-			}
+            },
+          "undefined": "error.signup.undefined"
 		},
 		"go": {
 			"home": "Volver al Inicio"

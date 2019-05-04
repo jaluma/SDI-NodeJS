@@ -213,6 +213,10 @@ router.put("/api/item/highlighter/:id", async function (req, res) {
         return error(res, "sellerUser");
     }
 
+    if (sellerUser._id.toString() !== res.locals.currentUser._id.toString()) {
+        return error(res, "forbidden", 403);
+    }
+
     if (sellerUser.money < 20) {
         return error(res, "money");
     }

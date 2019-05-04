@@ -1,6 +1,6 @@
 $(function () {
     let URL = window.location.protocol + "//" + window.location.host;
-    let socket = io.connect(URL);
+    let socket = io.connect(URL, {'forceNew': true});
 
     let email = $("#currentUser");
     let token = $("#token");

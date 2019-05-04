@@ -12,7 +12,7 @@ module.exports = async function (io) {
     app.set('io', io);
 
     async function onConnect(socket) {
-        debug('[SOCKET] Listening on ' + app.get('port'));
+        debug('[Socket] Connected client');
 
         socket.on('init', async (data) => {
             socket.user = await usersService.findOne({

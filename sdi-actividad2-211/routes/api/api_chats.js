@@ -78,6 +78,12 @@ router.get("/api/chat/:id", async function (req, res) {
         return error(res, "list");
     }
 
+    let users = chat.messages.map(m => m.user._id.toString());
+
+    if (users > 2 && !users.includes(res.locals.currentUser._id.toString())) {
+        return error(res, "forbidden", 403);
+    }
+
     chat.messages.sort(function (a, b) {
         return a.time - b.time
     });

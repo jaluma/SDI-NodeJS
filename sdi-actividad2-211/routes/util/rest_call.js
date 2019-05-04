@@ -2,12 +2,13 @@ const path = require('path');
 const app = require(path.join(__basedir, "app"));
 
 let rest = require("request");
+let createErrorHttp = require('http-errors');
 
 module.exports = async function (config) {
-    await restFunction(config.url, config.req, config.res, config.error, config.success, config.method, config.body, config.token);
+    await restFunction(config.url, config.req, config.res, config.next, config.error, config.success, config.method, config.body, config.token);
 };
 
-async function restFunction(urlPath, req, res, urlError = '/home', callback = () => {
+async function restFunction(urlPath, req, res, next, urlError = '/home', callback = () => {
 }, method = 'GET', body = {}, token = req.session.hasOwnProperty('token') ? req.session.token : undefined) {
     let configuration = {
         url: app.get('url') + urlPath,
@@ -26,9 +27,14 @@ async function restFunction(urlPath, req, res, urlError = '/home', callback = ()
             return callback(result);
         }
 
+        if (response.statusCode === 403) {  // forbidden
+            return next(createErrorHttp(403));
+        }
+
         if (isParseJSON(result)) {
             result = JSON.parse(result);
             if (result.error) {
+
                 return createError(req, res, result.error, urlError);
             }
             if (callback) {

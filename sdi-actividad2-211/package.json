@@ -7,21 +7,20 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
-    "body-parser": "^1.18.3",
+    "body-parser": "^1.19.0",
     "cookie-parser": "~1.4.3",
-    "debug": "~2.6.9",
+    "debug": "^4.1.1",
     "express": "~4.16.0",
     "express-session": "^1.15.6",
-    "http-errors": "~1.6.2",
+    "http-errors": "^1.7.2",
     "i18n": "^0.8.3",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
     "mongodb": "^2.2.33",
     "morgan": "~1.9.0",
-    "nodemon": "^1.18.11",
+    "nodemon": "^1.19.0",
     "request": "^2.88.0",
     "socket.io": "^2.2.0",
-    "swig": "^1.4.2",
-    "socket.io-client": "latest"
+    "swig": "^1.4.2"
   }
 }

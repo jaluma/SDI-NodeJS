@@ -114,7 +114,7 @@ public class MyWallapopTests {
 		goHome("javier@email.com");
 	}
 
-	//PR05.  Inicio de sesión con datos INválidos (usuario estándar, email existente, pero contraseña incorrecta).
+	//PR05.  Inicio de sesión con datos inválidos (usuario estándar, email existente, pero contraseña incorrecta).
 	@Test
 	public void PR05() {
 		String email = "javier@email.com";
@@ -122,6 +122,16 @@ public class MyWallapopTests {
 		PO_NavView.login(driver);
 		PO_LoginView.fillForm(driver, email, password);
 		PO_RegisterView.checkElement(driver, "id", "login-error");
+	}
+
+	//PR06.  Inicio de sesión con datos inválidos (email existente, pero contraseña incorrecta).
+	@Test
+	public void PR06() {
+		String email = "javier@email.com";
+		String password = "";
+		PO_NavView.login(driver);
+		PO_LoginView.fillForm(driver, email, password);
+		assertEquals(1, PO_RegisterView.checkElement(driver, "class", "is-focused").size());
 	}
 
 	//PR07.  Inicio de sesión con datos inválidos (usuario estándar, email no existente en la aplicación).
@@ -472,6 +482,7 @@ public class MyWallapopTests {
 		assertEquals(1, PO_ItemView.checkNumberList(driver));
 		PO_ItemView.chatButton(driver, 0);
 		int oldNumber = PO_ChatView.getNumberMessages(driver);
+		Thread.sleep(200);
 		PO_ChatView.sendMessage(driver, "Hola buen amigo!");
 		assertEquals(oldNumber + 1, PO_ChatView.getNumberMessages(driver));
 	}
@@ -519,11 +530,12 @@ public class MyWallapopTests {
 		PO_NavView.clickOption(driver, "/chat/list");
 		assertEquals(10, PO_ChatView.checkNumberList(driver));
 		PO_ChatView.changePage(driver, 2);
-		assertEquals(10, PO_ChatView.checkNumberList(driver));
-		PO_ChatView.deleteCharList(driver, 9);
+		int number = PO_ChatView.checkNumberList(driver);
+		assertEquals(10, number);
+		PO_ChatView.deleteCharList(driver, number-1);
 		assertEquals(10, PO_ChatView.checkNumberList(driver));
 		PO_ChatView.changePage(driver, 2);
-		assertEquals(9, PO_ChatView.checkNumberList(driver));
+		assertEquals(number-1, PO_ChatView.checkNumberList(driver));
 	}
 
 	//PR38. Identificarse en la aplicación y enviar un mensaje a una oferta, validar que el mensaje enviado
@@ -535,15 +547,16 @@ public class MyWallapopTests {
 		PO_NavView.clickOption(driver, "/chat/list");
 		PO_ChatView.selectChatList(driver, 0);
 		int oldNumber = PO_ChatView.getNumberMessages(driver);
+		int oldNumberNotRead = PO_ChatView.getUnread(driver);
 		PO_ChatView.sendMessage(driver, "Hola buen amigo!");
 		assertEquals(oldNumber + 1, PO_ChatView.getNumberMessages(driver));
-		assertEquals(2+1, PO_ChatView.getUnread(driver));
+		assertEquals(oldNumberNotRead+1, PO_ChatView.getUnread(driver));
 		PO_NavView.logout(driver);
 		goHome("javier@email.com");
 		PO_NavView.clickOption(driver, "/chat/list");
 		PO_ChatView.selectChatList(driver, 0);
-		assertEquals(3, PO_ChatView.getUnread(driver));
-		Thread.sleep(1500);
+		assertEquals(oldNumberNotRead+1, PO_ChatView.getUnread(driver));
+		Thread.sleep(2000);
 		assertEquals(0, PO_ChatView.getUnread(driver));
 	}
 
